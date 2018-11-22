@@ -1,0 +1,14 @@
+cassandra:
+  active: false
+  host: localhost
+  port: 9042
+  keyspace: ns_svg_db
+  username:
+  password:
+
+services:
+  ns-main-service:
+    host: localhost
+    port: 8080
+    ssl: false
+

@@ -1,0 +1,124 @@
+/*
+ * Copyright 2017-present, Nam Seob Seo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.8.1'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-bin.zip"
+}
+
+buildscript {
+	ext {
+		springBootVersion = '2.0.3.RELEASE'
+        buildDateTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+	}
+	repositories {
+        jcenter()
+        mavenCentral()
+//		maven { url "https://repo.spring.io/snapshot" }
+//		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+	}
+}
+
+apply from: file('gradle/bdd.gradle')
+
+allprojects {
+	group = "$appGroupName"
+	version = "$appVersion"
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+
+	dependencies {
+		compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
+		compile('org.springframework.boot:spring-boot-starter-security')
+        compile('org.springframework.boot:spring-boot-starter-webflux')
+        compile('org.springframework.boot:spring-boot-starter-actuator')
+        compile('org.springframework.boot:spring-boot-starter-validation')
+        compile('org.springframework.boot:spring-boot-configuration-processor')
+
+        compile(group: 'com.google.guava', name: 'guava', version: '22.0') // or 22.0-android for the Android flavor
+//        compile group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.2.Final'
+//        compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
+//        compile group: 'org.glassfish.web', name: 'javax.el', version: '2.2.6'
+
+        compileOnly('org.projectlombok:lombok')
+		testCompile('org.springframework.boot:spring-boot-starter-test')
+		testCompile('io.projectreactor:reactor-test')
+		testCompile('org.springframework.security:spring-security-test')
+	}
+
+    dependencyManagement {
+        imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+    }
+}
+
+def angularProjectDir = "$projectDir/ns-svg-converter-angular"
+task buildAngular(type: Exec) {
+    workingDir = "$angularProjectDir"
+    group = 'angular'
+
+    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+        commandLine "ng.cmd", "build"
+    } else {
+        commandLine "ng", "build"
+    }
+}
+
+
+def springBootStaticDir = "$projectDir/ns-main-service/src/main/resources/static"
+
+task deleteWebStaticFiles(type: Delete) {
+    doLast {
+        delete fileTree("$springBootStaticDir") {
+            include '**/*'
+        }
+    }
+}
+
+task deployAngularDist(dependsOn: ['buildAngular', 'deleteWebStaticFiles']) {
+    doLast {
+        copy {
+            from "$angularProjectDir/dist"
+            into "$springBootStaticDir"
+            include '**/*.html'
+            include '**/*.js'
+            include '**/*.jpg'
+            include '**/*.png'
+            include '**/*.svg'
+        }
+    }
+}

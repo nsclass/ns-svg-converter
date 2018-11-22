@@ -1,0 +1,136 @@
+/*
+ * Copyright 2017-present, Nam Seob Seo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+ext {
+    childProcesses = [:]
+}
+
+def startJavaProcess(String processName, String jarPath, List serviceArgs) {
+
+    if (ext.childProcesses[processName] == null) {
+
+        // ensure file exists
+        def input = new File("${jarPath}")
+        assert input.exists()
+
+        // create process
+        def process = ["java", "-jar", "-server", "-Xms2G", "-Xmx2G", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=10",
+                       "${jarPath}"] + serviceArgs
+
+        def environmentVars = []
+
+        ext.childProcesses[processName] = process.execute(environmentVars, null)
+
+        if (ext.childProcesses[processName] == null) {
+            throw new GradleException("Unable to start up process ${processName} (null)")
+        }
+
+        //Wait till schema creation is complete. Assumes caller of startService is not multi-threading start of different services.
+        //While concurrent schema modification is allowed, concurrent schema creation fails in brand new Cassandra instance.
+        while (ext.childProcesses[processName].in.available() == 0) {
+            sleep(1000)
+        }
+
+        //at this point all the schema will have been created...ok to redirect streams and move on
+        ext.childProcesses[processName].consumeProcessOutput(System.out, System.err)
+    }
+}
+
+def shutdownRunningApps(String name) {
+    if (ext.childProcesses) {
+        println "Shutting down running processes..."
+
+        for (Map.Entry<String, Process> process : ext.childProcesses) {
+            println "Shutting down '${process.key}' process"
+            process.value.destroy()
+        }
+        ext.childProcesses.clear()
+    }
+
+}
+
+addShutdownHook {
+    shutdownRunningApps(project.name)
+}
+
+
+configure(subprojects.findAll { it.name.contains('-service') }) { project ->
+
+    task startApps(dependsOn: ['build']) {
+        group = "bdd"
+        description = "start application"
+
+        doLast {
+
+            shutdownRunningApps(project.name)
+
+            //do a clean restart since we are truncating the DB
+            startJavaProcess(project.name,
+                    "${project.name}/build/libs/${project.name}-${version}.jar",
+                    ["--spring.config.location=${project.name}/application.yml"])
+        }
+    }
+
+    task stopApps() {
+        doLast {
+            shutdownRunningApps(project.name)
+        }
+    }
+
+    task bdd(type: Exec, dependsOn: ['startApps']) {
+        group = bdd
+        description = "run bdd"
+
+        workingDir = "./src/test/resources/bdd"
+        commandLine = buildCucumberCommandLine("features")
+
+        // ensure test apps get shutdown even if BDD test run fails
+        finalizedBy ":${project.name}:stopApps"
+    }
+
+}
+
+List buildCucumberCommandLine(String folder, String tags = "", List excludedTags = []) {
+
+    List bundleCmd = Os.isFamily(Os.FAMILY_WINDOWS) ? ['cmd', '/c', 'bundle.bat', 'exec'] : ['bundle', 'exec']
+
+    List cucumberCmd = ['cucumber', folder,
+                        '--format', 'pretty',
+                        '--format', 'junit',
+                        '-o', "${project.projectDir}/build/test-results/junit"]
+
+    if (tags != "") {
+        cucumberCmd << '--tags'
+        cucumberCmd << tags
+    }
+
+    // Excluded tags must each have their own --tags string before it, otherwise it's ignored
+    // Multiple ignore tags should use logical AND
+    // See "cucumber --help" on --tags
+    excludedTags.each { excludedTag ->
+        cucumberCmd << '--tags'
+        cucumberCmd << excludedTag
+    }
+
+    return (bundleCmd + cucumberCmd)
+}
