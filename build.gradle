@@ -110,6 +110,7 @@ task deleteWebStaticFiles(type: Delete) {
 }
 
 task deployAngularDist(dependsOn: ['buildAngular', 'deleteWebStaticFiles']) {
+    group = 'angular'
     doLast {
         copy {
             from "$angularProjectDir/dist"
