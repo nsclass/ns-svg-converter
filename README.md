@@ -1,10 +1,10 @@
 # README #
 
-SVG image converter application made of Spring Boot 2.0.x and Angular framework for UI
+SVG image converter application made of Spring Boot 2.x.x and Angular framework for UI
 
 ### SVG image converter ###
 
-Main purpose of this project is to demonstrate how to use SpringBoot 2.0.x with enabling JWT based security
+Main purpose of this project is to demonstrate how to use SpringBoot 2.1.x with enabling JWT based security
 and REST API for building Web application with Angular framework.
 
 This project also includes Cassandra DAO as a database but it is configured to use memory based DAO by default. 
