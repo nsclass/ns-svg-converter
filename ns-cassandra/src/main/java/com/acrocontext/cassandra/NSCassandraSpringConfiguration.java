@@ -21,14 +21,13 @@
 
 package com.acrocontext.cassandra;
 
-import com.acrocontext.common.NSCommonSpringConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
 @ComponentScan(basePackageClasses = {
-        NSCommonSpringConfiguration.class
+        NSCassandraSpringConfiguration.class
 })
 @Profile({"dao_cassandra", "default"})
 public class NSCassandraSpringConfiguration {
