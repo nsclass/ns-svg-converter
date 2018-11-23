@@ -15,8 +15,8 @@ fi
 if [ ! -f $DIR/keystore.jks ]
 then
     echo Creating secure keystore...
-    keytool -genkey -alias ${SERVICE_NAME} -keyalg RSA -keystore $DIR/keystore.jks -keysize 2048 -dname "CN=NSEO ${SERVICE_NAME}-service, OU=NSEO, O=NSEO, L=ICN, ST=SE, C=KR" -keypass pleasedonotuse -storepass pleasedonotuse ;
-    keytool -export -alias ${SERVICE_NAME} -file $DIR/${SERVICE_NAME}_default.crt -keystore  $DIR/keystore.jks -keypass pleasedonotuse -storepass pleasedonotuse ;
+    keytool -genkey -alias ${SERVICE_NAME} -keyalg RSA -keystore $DIR/keystore.jks -keysize 2048 -dname "CN=NSEO, OU=NSEO, O=NSEO, L=ICN, ST=SE, C=KR" -keypass pleasedonotuse -storepass pleasedonotuse
+    keytool -export -alias ${SERVICE_NAME} -file $DIR/${SERVICE_NAME}_default.crt -keystore  $DIR/keystore.jks -keypass pleasedonotuse -storepass pleasedonotuse
     keytool -import -noprompt -trustcacerts -alias ${SERVICE_NAME} -keypass pleasedonotuse -file $DIR/${SERVICE_NAME}_default.crt -keystore $DIR/truststore.jks -storepass pleasedonotuse
 fi
 
