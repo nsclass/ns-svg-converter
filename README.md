@@ -1,13 +1,13 @@
 # README #
 
-SVG image converter application made of Spring Boot 2.x.x and Angular framework for UI
+SVG image converter application made of Reactive Spring Boot 2.x.x and Angular framework for UI
 
 ### SVG image converter ###
 
-Main purpose of this project is to demonstrate how to use SpringBoot 2.1.x with enabling JWT based security
+Main purpose of this project is to demonstrate how to use SpringBoot 2.1.x to build an Reactive application(WebFlux) with enabling JWT based reactive security
 and REST API for building Web application with Angular framework.
 
-This project also includes Cassandra DAO as a database but it is configured to use memory based DAO by default. 
+This project also includes Reactive Cassandra DAO as a database but it is configured to use memory based DAO by default. 
 However it can be changed easily by setting the active profile as dao_cassandra in application.yml file.
 
 Also, this project is using Ruby Cucumber framework to test application features as a BDD framework.   
