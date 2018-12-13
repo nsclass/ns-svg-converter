@@ -55,23 +55,26 @@ def request_http_with_token(method, path, bearer_token = nil, content_type = nil
 end
 
 def create_request_method(method)
-  request_method = :get
 
-  if method == 'GET'
-    request_method = :get
-  elsif method == 'OPTIONS'
-    request_method = :options
-  elsif method == 'PATCH'
-    request_method = :patch
-  elsif method == 'POST'
-    request_method = :post
-  elsif method == 'PUT'
-    request_method = :put
-  elsif method == 'DELETE'
-    request_method = :delete
-  end
+  request_method =
+      case method
+      when 'GET' then
+        :get
+      when 'OPTIONS' then
+        :options
+      when 'PATCH' then
+        :patch
+      when 'POST' then
+        :post
+      when 'PUT' then
+        :put
+      when 'DELETE' then
+        :delete
+      else
+        :get
+      end
 
-    request_method
+  request_method
 end
 
 def get_bearer_token
@@ -152,27 +155,33 @@ def request_http_save(method, path, content_type, content)
     url = "http://#{host}:#{port}#{path}"
   end
 
-  request_method = :post
 
-  if method == 'GET'
-    request_method = :get
-  elsif method == 'POST'
-    request_method = :post
-  elsif method == 'PUT'
-    request_method = :put
-  elsif method == 'DELETE'
-    request_method = :delete
-  end
+  request_method =
+      case method
+      when 'GET' then
+        :get
+      when 'POST' then
+        :post
+      when 'PUT' then
+        :put
+      when 'DELETE' then
+        :delete
+      else
+        :post
+      end
 
-  content_type_value = :json
 
-  if content_type == 'form'
-    content_type_value = 'application/x-www-form-urlencoded'
-  elsif content_type == 'json'
-    content_type_value = :json
-  elsif content_type == 'text'
-    content_type_value = 'application/text'
-  end
+  content_type_value =
+      case content_type
+      when 'form' then
+        'application/x-www-form-urlencoded'
+      when 'json' then
+        :json
+      when 'text' then
+        'application/text'
+      else
+        :json
+      end
 
   begin
     $http_json_response = RestClient::Request.execute(method: request_method,
