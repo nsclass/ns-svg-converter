@@ -166,10 +166,10 @@ public class ImageSvgConverter {
         int[] rawData = image.getRGB(0, 0, width, height, null, 0, width);
         byte[] data = new byte[rawData.length * 4];
         for (int idx = 0; idx < rawData.length; idx++) {
-            data[(idx * 4) + 3] = byteTrans((byte) (rawData[idx] >>> 24));
-            data[idx * 4] = byteTrans((byte) (rawData[idx] >>> 16));
-            data[(idx * 4) + 1] = byteTrans((byte) (rawData[idx] >>> 8));
-            data[(idx * 4) + 2] = byteTrans((byte) (rawData[idx]));
+            data[(idx * 4) + 3] = byteTrans((byte) ((rawData[idx] & 0xff000000) >>> 24)); // alpha
+            data[(idx * 4) + 0] = byteTrans((byte) ((rawData[idx] & 0xff0000) >>> 16));   // red
+            data[(idx * 4) + 1] = byteTrans((byte) ((rawData[idx] & 0xff00) >>> 8));      // green
+            data[(idx * 4) + 2] = byteTrans((byte) ((rawData[idx] & 0xff)));              // blue
         }
         return new ImageData(width, height, data);
     }
