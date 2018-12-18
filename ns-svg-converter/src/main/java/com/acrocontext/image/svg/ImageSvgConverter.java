@@ -103,8 +103,8 @@ public class ImageSvgConverter {
         IndexedImage(int[][] paletteColors, byte[][] palette, TracePathBatch[] layers) {
             this.paletteColors = paletteColors;
             this.palette = palette;
-            width = paletteColors[0].length - 2;
-            height = paletteColors.length - 2;// Color quantization adds +2 to the original width and height
+            this.width = paletteColors[0].length - 2;
+            this.height = paletteColors.length - 2;// Color quantization adds +2 to the original width and height
             this.layers = layers;
         }
 
