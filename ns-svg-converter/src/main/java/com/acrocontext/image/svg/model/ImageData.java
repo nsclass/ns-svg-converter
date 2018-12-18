@@ -32,7 +32,7 @@ public class ImageData {
     private final int height;
     private final byte[] data; // raw byte data: R G B A R G B A ...
 
-    public byte dataAtIndex(int idx) {
+    public byte dataAt(int idx) {
         return data[idx];
     }
 }

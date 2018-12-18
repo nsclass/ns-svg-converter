@@ -31,7 +31,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Path {
     private final List<Integer[]> path;
-    public Integer[] indextAt(int idx) {
+    public Integer[] indexAt(int idx) {
         return path.get(idx);
     }
 }

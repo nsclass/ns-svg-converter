@@ -28,7 +28,7 @@ import lombok.Value;
 public class InterNodeList {
     private final InterNode[] interNodes;
 
-    public double valueAtIdxForSequenceIdx(int sequenceIdx, int idx) {
-        return interNodes[sequenceIdx].getPoint()[idx];
+    public double valueAtWithSequenceIdx(int sequenceIdx, int idx) {
+        return interNodes[sequenceIdx].valueAt(idx);
     }
 }

@@ -48,9 +48,9 @@ public class InterNodeGenerator {
             int nextIdx2 = (pathIndex + 2) % pathLen;
             double[] thisPoint = new double[3];
 
-            Integer[] pp1 = path.indextAt(pathIndex);
-            Integer[] pp2 = path.indextAt(nextIdx);
-            Integer[] pp3 = path.indextAt(nextIdx2);
+            Integer[] pp1 = path.indexAt(pathIndex);
+            Integer[] pp2 = path.indexAt(nextIdx);
+            Integer[] pp3 = path.indexAt(nextIdx2);
 
             thisPoint[0] = (pp1[0] + pp2[0]) / 2.0;
             thisPoint[1] = (pp1[1] + pp2[1]) / 2.0;

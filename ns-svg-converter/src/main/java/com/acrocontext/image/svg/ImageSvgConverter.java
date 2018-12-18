@@ -111,7 +111,7 @@ public class ImageSvgConverter {
         }
 
         double valueAtIdx(int idx1, int idx2, int idx3, int idx4) {
-            return layers[idx1].valueAtIdx(idx2, idx3, idx4);
+            return layers[idx1].valueAt(idx2, idx3, idx4);
         }
 
         int pathSizeAtIdx(int idx) {
@@ -119,7 +119,7 @@ public class ImageSvgConverter {
         }
 
         TracePath tracePathAtIdx(int idx1, int idx2) {
-            return layers[idx1].tracePathAtIdx(idx2);
+            return layers[idx1].tracePathAt(idx2);
         }
     }
 
@@ -303,9 +303,9 @@ public class ImageSvgConverter {
                 .append(colorStr)
                 .append("d=\"")
                 .append("M ")
-                .append(segments.valueAtIdx(0, 1) * scale)
+                .append(segments.valueAt(0, 1) * scale)
                 .append(" ")
-                .append(segments.valueAtIdx(0, 2) * scale).append(" ");
+                .append(segments.valueAt(0, 2) * scale).append(" ");
 
         if (roundCoords == -1) {
             for (Double[] segment : segments.getTracePath()) {

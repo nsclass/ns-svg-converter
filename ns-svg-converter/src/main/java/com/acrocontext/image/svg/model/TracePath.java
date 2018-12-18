@@ -33,7 +33,7 @@ import java.util.List;
 public class TracePath {
     private final List<Double[]> tracePath;
 
-    public double valueAtIdx(int idx1, int idx2) {
+    public double valueAt(int idx1, int idx2) {
         return tracePath.get(idx1)[idx2];
     }
 }
