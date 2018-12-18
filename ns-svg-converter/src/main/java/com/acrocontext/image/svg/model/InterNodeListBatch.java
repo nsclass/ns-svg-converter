@@ -28,5 +28,5 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class InterNodeListBatch {
-    private InterNodeList[] interNodeLists;
+    private final InterNodeList[] interNodeLists;
 }

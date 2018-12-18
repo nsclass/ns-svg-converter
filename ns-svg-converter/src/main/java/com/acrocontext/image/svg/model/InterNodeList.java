@@ -16,44 +16,19 @@
 
 package com.acrocontext.image.svg.model;
 
+import lombok.Value;
+
 /**
  * Date 12/24/17
  *
  * @author Nam Seob Seo
  */
 
+@Value
 public class InterNodeList {
-    private InterNode[] interNodes;
+    private final InterNode[] interNodes;
 
-    @java.beans.ConstructorProperties({"interNodes"})
-    public InterNodeList(InterNode[] interNodes) {
-        this.interNodes = interNodes;
-    }
-
-    public double getValue(int sequenceIdx, int idx) {
+    public double valueAtIdxForSequenceIdx(int sequenceIdx, int idx) {
         return interNodes[sequenceIdx].getThisPoint()[idx];
-    }
-
-    public InterNode[] getInterNodes() {
-        return this.interNodes;
-    }
-
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof InterNodeList)) return false;
-        final InterNodeList other = (InterNodeList) o;
-        if (!java.util.Arrays.deepEquals(this.getInterNodes(), other.getInterNodes())) return false;
-        return true;
-    }
-
-    public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        result = result * PRIME + java.util.Arrays.deepHashCode(this.getInterNodes());
-        return result;
-    }
-
-    public String toString() {
-        return "InterNodeList(interNodes=" + java.util.Arrays.deepToString(this.getInterNodes()) + ")";
     }
 }

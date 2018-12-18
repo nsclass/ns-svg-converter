@@ -28,11 +28,11 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class ImageData {
-    int width;
-    int height;
-    byte[] data; // raw byte data: R G B A R G B A ...
+    private final int width;
+    private final int height;
+    private final byte[] data; // raw byte data: R G B A R G B A ...
 
-    public byte getData(int idx) {
+    public byte dataAtIndex(int idx) {
         return data[idx];
     }
 }

@@ -148,10 +148,10 @@ public class ColorQuantizator {
             for (int paletteIdx = 0; paletteIdx < palette.length; paletteIdx++) {
 
                 // In my experience, https://en.wikipedia.org/wiki/Rectilinear_distance works better than https://en.wikipedia.org/wiki/Euclidean_distance
-                int c1 = Math.abs(palette[paletteIdx][0] - imageData.getData(idx));
-                int c2 = Math.abs(palette[paletteIdx][1] - imageData.getData(idx + 1));
-                int c3 = Math.abs(palette[paletteIdx][2] - imageData.getData(idx + 2));
-                int c4 = Math.abs(palette[paletteIdx][3] - imageData.getData(idx + 3));
+                int c1 = Math.abs(palette[paletteIdx][0] - imageData.dataAtIndex(idx));
+                int c2 = Math.abs(palette[paletteIdx][1] - imageData.dataAtIndex(idx + 1));
+                int c3 = Math.abs(palette[paletteIdx][2] - imageData.dataAtIndex(idx + 2));
+                int c4 = Math.abs(palette[paletteIdx][3] - imageData.dataAtIndex(idx + 3));
                 int cd = c1 + c2 + c3 + (c4 * 4); // weighted alpha seems to help images with transparency
 
                 // Remember this color if this is the closest yet
@@ -163,10 +163,10 @@ public class ColorQuantizator {
             }// End of palette loop
 
             // add to paletteAcc
-            paletteAcc[ci][0] += 128 + imageData.getData(idx);
-            paletteAcc[ci][1] += 128 + imageData.getData(idx + 1);
-            paletteAcc[ci][2] += 128 + imageData.getData(idx + 2);
-            paletteAcc[ci][3] += 128 + imageData.getData(idx + 3);
+            paletteAcc[ci][0] += 128 + imageData.dataAtIndex(idx);
+            paletteAcc[ci][1] += 128 + imageData.dataAtIndex(idx + 1);
+            paletteAcc[ci][2] += 128 + imageData.dataAtIndex(idx + 2);
+            paletteAcc[ci][3] += 128 + imageData.dataAtIndex(idx + 3);
             paletteAcc[ci][4]++;
 
             indexedDataArray[row + 1][col + 1] = ci;
@@ -213,10 +213,10 @@ public class ColorQuantizator {
                     // add weighted color values
                     if (((col + k) > 0) && ((col + k) < imageData.getWidth())) {
                         int idx = ((row * imageData.getWidth()) + col + k) * 4;
-                        rAcc += imageData.getData(idx) * thisGK[k + radius];
-                        gAcc += imageData.getData(idx + 1) * thisGK[k + radius];
-                        bAcc += imageData.getData(idx + 2) * thisGK[k + radius];
-                        aAcc += imageData.getData(idx + 3) * thisGK[k + radius];
+                        rAcc += imageData.dataAtIndex(idx) * thisGK[k + radius];
+                        gAcc += imageData.dataAtIndex(idx + 1) * thisGK[k + radius];
+                        bAcc += imageData.dataAtIndex(idx + 2) * thisGK[k + radius];
+                        aAcc += imageData.dataAtIndex(idx + 3) * thisGK[k + radius];
                         wAcc += thisGK[k + radius];
                     }
                 }
@@ -270,16 +270,16 @@ public class ColorQuantizator {
 
                 int idx = ((row * imageData.getWidth()) + col) * 4;
                 // d is the difference between the blurred and the original pixel
-                int d = Math.abs(imageRawData2[idx] - imageData.getData(idx)) +
-                        Math.abs(imageRawData2[idx + 1] - imageData.getData(idx + 1)) +
-                        Math.abs(imageRawData2[idx + 2] - imageData.getData(idx + 2)) +
-                        Math.abs(imageRawData2[idx + 3] - imageData.getData(idx + 3));
+                int d = Math.abs(imageRawData2[idx] - imageData.dataAtIndex(idx)) +
+                        Math.abs(imageRawData2[idx + 1] - imageData.dataAtIndex(idx + 1)) +
+                        Math.abs(imageRawData2[idx + 2] - imageData.dataAtIndex(idx + 2)) +
+                        Math.abs(imageRawData2[idx + 3] - imageData.dataAtIndex(idx + 3));
                 // selective blur: if d>delta, put the original pixel back
                 if (d > delta) {
-                    imageRawData2[idx] = imageData.getData(idx);
-                    imageRawData2[idx + 1] = imageData.getData(idx + 1);
-                    imageRawData2[idx + 2] = imageData.getData(idx + 2);
-                    imageRawData2[idx + 3] = imageData.getData(idx + 3);
+                    imageRawData2[idx] = imageData.dataAtIndex(idx);
+                    imageRawData2[idx + 1] = imageData.dataAtIndex(idx + 1);
+                    imageRawData2[idx + 2] = imageData.dataAtIndex(idx + 2);
+                    imageRawData2[idx + 3] = imageData.dataAtIndex(idx + 3);
                 }
             }
         }// End of Selective blur

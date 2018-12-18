@@ -115,8 +115,8 @@ public class TracePathGenerator {
         if (tl < 0) {
             tl += pathLength;
         }
-        double vx = (path.getValue(seqEnd, 0) - path.getValue(seqStart, 0)) / tl;
-        double vy = (path.getValue(seqEnd, 1) - path.getValue(seqStart, 1)) / tl;
+        double vx = (path.valueAtIdxForSequenceIdx(seqEnd, 0) - path.valueAtIdxForSequenceIdx(seqStart, 0)) / tl;
+        double vy = (path.valueAtIdxForSequenceIdx(seqEnd, 1) - path.valueAtIdxForSequenceIdx(seqStart, 1)) / tl;
 
         // 5.2. Fit a straight line on the sequence
         int pathIndex = (seqStart + 1) % pathLength;
@@ -125,10 +125,10 @@ public class TracePathGenerator {
             if (pl < 0) {
                 pl += pathLength;
             }
-            px = path.getValue(seqStart, 0) + (vx * pl);
-            py = path.getValue(seqStart, 1) + (vy * pl);
-            double dist2 = ((path.getValue(pathIndex, 0) - px) * (path.getValue(pathIndex, 0) - px)) +
-                    ((path.getValue(pathIndex, 1) - py) * (path.getValue(pathIndex, 1) - py));
+            px = path.valueAtIdxForSequenceIdx(seqStart, 0) + (vx * pl);
+            py = path.valueAtIdxForSequenceIdx(seqStart, 1) + (vy * pl);
+            double dist2 = ((path.valueAtIdxForSequenceIdx(pathIndex, 0) - px) * (path.valueAtIdxForSequenceIdx(pathIndex, 0) - px)) +
+                    ((path.valueAtIdxForSequenceIdx(pathIndex, 1) - py) * (path.valueAtIdxForSequenceIdx(pathIndex, 1) - py));
             if (dist2 > lThreshold) {
                 curvePass = false;
             }
@@ -144,10 +144,10 @@ public class TracePathGenerator {
             segment.add(new Double[7]);
             thisSegment = segment.get(segment.size() - 1);
             thisSegment[0] = 1.0;
-            thisSegment[1] = path.getValue(seqStart, 0);
-            thisSegment[2] = path.getValue(seqStart, 1);
-            thisSegment[3] = path.getValue(seqEnd, 0);
-            thisSegment[4] = path.getValue(seqEnd, 1);
+            thisSegment[1] = path.valueAtIdxForSequenceIdx(seqStart, 0);
+            thisSegment[2] = path.valueAtIdxForSequenceIdx(seqStart, 1);
+            thisSegment[3] = path.valueAtIdxForSequenceIdx(seqEnd, 0);
+            thisSegment[4] = path.valueAtIdxForSequenceIdx(seqEnd, 1);
             thisSegment[5] = 0.0;
             thisSegment[6] = 0.0;
             return segment;
@@ -161,8 +161,8 @@ public class TracePathGenerator {
         // 5.4. Fit a quadratic spline through this point, measure errors on every point in the sequence
         // helpers and projecting to get control point
         double t = (fitPoint - seqStart) / tl, t1 = (1.0 - t) * (1.0 - t), t2 = 2.0 * (1.0 - t) * t, t3 = t * t;
-        double cpx = (((t1 * path.getValue(seqStart, 0)) + (t3 * path.getValue(seqEnd, 0))) - path.getValue(fitPoint, 0)) / -t2;
-        double cpy = (((t1 * path.getValue(seqStart, 1)) + (t3 * path.getValue(seqEnd, 1))) - path.getValue(fitPoint, 1)) / -t2;
+        double cpx = (((t1 * path.valueAtIdxForSequenceIdx(seqStart, 0)) + (t3 * path.valueAtIdxForSequenceIdx(seqEnd, 0))) - path.valueAtIdxForSequenceIdx(fitPoint, 0)) / -t2;
+        double cpy = (((t1 * path.valueAtIdxForSequenceIdx(seqStart, 1)) + (t3 * path.valueAtIdxForSequenceIdx(seqEnd, 1))) - path.valueAtIdxForSequenceIdx(fitPoint, 1)) / -t2;
 
         // Check every point
         pathIndex = seqStart + 1;
@@ -172,11 +172,11 @@ public class TracePathGenerator {
             t1 = (1.0 - t) * (1.0 - t);
             t2 = 2.0 * (1.0 - t) * t;
             t3 = t * t;
-            px = (t1 * path.getValue(seqStart, 0)) + (t2 * cpx) + (t3 * path.getValue(seqEnd, 0));
-            py = (t1 * path.getValue(seqStart, 1)) + (t2 * cpy) + (t3 * path.getValue(seqEnd, 1));
+            px = (t1 * path.valueAtIdxForSequenceIdx(seqStart, 0)) + (t2 * cpx) + (t3 * path.valueAtIdxForSequenceIdx(seqEnd, 0));
+            py = (t1 * path.valueAtIdxForSequenceIdx(seqStart, 1)) + (t2 * cpy) + (t3 * path.valueAtIdxForSequenceIdx(seqEnd, 1));
 
-            double dist2 = ((path.getValue(pathIndex, 0) - px) * (path.getValue(pathIndex, 0) - px)) +
-                    ((path.getValue(pathIndex, 1) - py) * (path.getValue(pathIndex, 1) - py));
+            double dist2 = ((path.valueAtIdxForSequenceIdx(pathIndex, 0) - px) * (path.valueAtIdxForSequenceIdx(pathIndex, 0) - px)) +
+                    ((path.valueAtIdxForSequenceIdx(pathIndex, 1) - py) * (path.valueAtIdxForSequenceIdx(pathIndex, 1) - py));
 
             if (dist2 > qThreshold) {
                 curvePass = false;
@@ -193,12 +193,12 @@ public class TracePathGenerator {
             segment.add(new Double[7]);
             thisSegment = segment.get(segment.size() - 1);
             thisSegment[0] = 2.0;
-            thisSegment[1] = path.getValue(seqStart, 0);
-            thisSegment[2] = path.getValue(seqStart, 1);
+            thisSegment[1] = path.valueAtIdxForSequenceIdx(seqStart, 0);
+            thisSegment[2] = path.valueAtIdxForSequenceIdx(seqStart, 1);
             thisSegment[3] = cpx;
             thisSegment[4] = cpy;
-            thisSegment[5] = path.getValue(seqEnd, 0);
-            thisSegment[6] = path.getValue(seqEnd, 1);
+            thisSegment[5] = path.valueAtIdxForSequenceIdx(seqEnd, 0);
+            thisSegment[6] = path.valueAtIdxForSequenceIdx(seqEnd, 1);
             return segment;
         }
 

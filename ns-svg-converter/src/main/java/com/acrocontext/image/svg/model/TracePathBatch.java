@@ -28,13 +28,13 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class TracePathBatch {
-    private TracePath[] tracePaths;
+    private final TracePath[] tracePaths;
 
-    public TracePath getTracePath(int idx) {
+    public TracePath tracePathAtIdx(int idx) {
         return tracePaths[idx];
     }
 
-    public double getValue(int idx, int idx2, int idx3) {
-        return tracePaths[idx].getValue(idx2, idx3);
+    public double valueAtIdx(int idx, int idx2, int idx3) {
+        return tracePaths[idx].valueAtIdx(idx2, idx3);
     }
 }

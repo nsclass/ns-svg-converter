@@ -30,6 +30,6 @@ import java.util.List;
 @Value
 @AllArgsConstructor
 public class ScanPath {
-    private List<Path> scanPath;
+    private final List<Path> scanPath;
 
 }

@@ -87,10 +87,10 @@ public class PaletteGenerator {
         byte[][] palette = new byte[numberOfColors][4];
         for (int colorIdx = 0; colorIdx < numberOfColors; colorIdx++) {
             int idx = (int) (Math.floor((Math.random() * imageData.getData().length) / 4) * 4);
-            palette[colorIdx][0] = imageData.getData(idx);
-            palette[colorIdx][1] = imageData.getData(idx + 1);
-            palette[colorIdx][2] = imageData.getData(idx + 2);
-            palette[colorIdx][3] = imageData.getData(idx + 3);
+            palette[colorIdx][0] = imageData.dataAtIndex(idx);
+            palette[colorIdx][1] = imageData.dataAtIndex(idx + 1);
+            palette[colorIdx][2] = imageData.dataAtIndex(idx + 2);
+            palette[colorIdx][3] = imageData.dataAtIndex(idx + 3);
         }
         return palette;
     }// End of samplePalette()

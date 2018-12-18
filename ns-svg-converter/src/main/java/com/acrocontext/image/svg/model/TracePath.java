@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Date 12/24/17
@@ -30,9 +31,9 @@ import java.util.ArrayList;
 @Value
 @AllArgsConstructor
 public class TracePath {
-    private ArrayList<Double[]> tracePath;
+    private final List<Double[]> tracePath;
 
-    public double getValue(int idx1, int idx2) {
+    public double valueAtIdx(int idx1, int idx2) {
         return tracePath.get(idx1)[idx2];
     }
 }

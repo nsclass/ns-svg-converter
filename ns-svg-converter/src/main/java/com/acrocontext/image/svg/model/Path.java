@@ -30,5 +30,5 @@ import java.util.List;
 @Value
 @AllArgsConstructor
 public class Path {
-    private List<Integer[]> path;
+    private final List<Integer[]> path;
 }
