@@ -81,7 +81,7 @@ public class SvgConverterController {
                 int imageSize = bufferedImage.getData().getDataBuffer().getSize();
                 if (settings.isUseLimitation()) {
                     if (imageSize > settings.getMaxSupportedImageSize()) {
-                        throw new SvgImageGenerationError("Not supported image size");
+                        throw new CompletionException(new SvgImageGenerationError("Not supported image size"));
                     }
 
                     if (convertRequestView.getNumberOfColors() > settings.getMaxNumberOfColors()) {
