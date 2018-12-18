@@ -62,12 +62,12 @@ public class ColorQuantizator {
         final ImageData finalImageData = imageData;
         for (int loopIdx = 0; loopIdx < cycles; loopIdx++) {
             colorQuantizationIteration(loopIdx,
-                        minColorRatio,
-                        cycles,
-                        indexedDataArray,
-                        paletteAcc,
-                        finalImageData,
-                        palette);
+                    minColorRatio,
+                    cycles,
+                    indexedDataArray,
+                    paletteAcc,
+                    finalImageData,
+                    palette);
 
         } // End of Repeat clustering step "cycles" times
 
@@ -76,14 +76,13 @@ public class ColorQuantizator {
     }// End of colorQuantization
 
 
-
     private static void colorQuantizationIteration(int loopIdx,
-                                            float minColorRatio,
-                                            int cycles,
-                                            int[][] indexedDataArray,
-                                            long[][] paletteAcc,
-                                            ImageData imageData,
-                                            byte[][] palette) {
+                                                   float minColorRatio,
+                                                   int cycles,
+                                                   int[][] indexedDataArray,
+                                                   long[][] paletteAcc,
+                                                   ImageData imageData,
+                                                   byte[][] palette) {
         // Average colors from the second iteration
         if (loopIdx > 0) {
             // averaging paletteAcc for palette
