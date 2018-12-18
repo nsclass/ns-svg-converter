@@ -160,7 +160,7 @@ public class ImageSvgConverter {
         return operationManager;
     }
 
-    ImageData loadImageData(BufferedImage image) {
+    private ImageData loadImageData(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         int[] rawData = image.getRGB(0, 0, width, height, null, 0, width);
@@ -198,9 +198,7 @@ public class ImageSvgConverter {
                                                             String filename) {
         loadImageData(operationManager, filename);
 
-        imageDataToSVG(operationManager);
-
-        return operationManager;
+        return imageDataToSVG(operationManager);
     }// End of imageToSVG()
 
 
@@ -212,14 +210,12 @@ public class ImageSvgConverter {
             return ctx;
         });
 
-        imageDataToSVG(operationManager);
-
-        return operationManager;
+        return imageDataToSVG(operationManager);
     }// End of imageToSVG()
 
 
     // Tracing ImageData, then returning the SVG String
-    OperationManager<ImageSvgConvertCtx> imageDataToSVG(OperationManager<ImageSvgConvertCtx> operationManager) {
+    private OperationManager<ImageSvgConvertCtx> imageDataToSVG(OperationManager<ImageSvgConvertCtx> operationManager) {
         return imageDataToTraceData(operationManager)
                 .addOperation("creating svg string", ctx -> {
                     ctx.svgString = getSvgString(ctx.getIndexedImage(), ctx.getOptions());

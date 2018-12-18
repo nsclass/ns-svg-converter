@@ -42,6 +42,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 /**
  * Date 12/24/17
@@ -84,7 +85,7 @@ public class SvgConverterController {
                     }
 
                     if (convertRequestView.getNumberOfColors() > settings.getMaxNumberOfColors()) {
-                        throw new SvgImageGenerationError("Not supported number of colors");
+                        throw new CompletionException(new SvgImageGenerationError("Not supported number of colors"));
                     }
                 }
 
@@ -102,7 +103,7 @@ public class SvgConverterController {
                         .svgString(svgString)
                         .build();
             } catch (IOException e) {
-                throw new SvgImageGenerationError(e.getMessage());
+                throw new CompletionException(e);
             }
         });
 
