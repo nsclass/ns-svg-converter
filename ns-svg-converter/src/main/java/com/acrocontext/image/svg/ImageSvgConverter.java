@@ -45,7 +45,7 @@ public class ImageSvgConverter {
 
     @Data
     private static class ImageSvgConvertCtx {
-        private ImageConvertOptions options;
+        private final ImageConvertOptions options;
         private ImageData imageData;
         private int[][] paletteColors;
         private byte[][] palette;
@@ -55,6 +55,10 @@ public class ImageSvgConverter {
         private String svgString;
         public com.acrocontext.image.svg.model.ScanPath[] batchPathScan;
         public InterNodeListBatch[] batchInterNodes;
+
+        public ImageSvgConvertCtx(ImageConvertOptions options) {
+            this.options = options;
+        }
     }
 
 
@@ -63,17 +67,16 @@ public class ImageSvgConverter {
                                   ImageConvertOptions options,
                                   OperationProgressListener listener) {
 
-        ImageSvgConvertCtx convertCtx = new ImageSvgConvertCtx();
-        convertCtx.setOptions(options);
+        ImageSvgConvertCtx convertCtx = new ImageSvgConvertCtx(options);
 
-        OperationManager<ImageSvgConvertCtx> operationManager = new OperationManager<>(convertCtx, listener);
+        OperationManager<ImageSvgConvertCtx> operationManager = new OperationManager<>(listener);
 
         imageToSVG(operationManager, inputFilename)
                 .addOperation("save it to file", ctx -> {
                     saveString(outputFilename, ctx.getSvgString());
                     return ctx;
                 })
-                .execute();
+                .execute(convertCtx);
     }
 
 
@@ -81,13 +84,12 @@ public class ImageSvgConverter {
                                   ImageConvertOptions options,
                                   OperationProgressListener listener) {
 
-        ImageSvgConvertCtx convertCtx = new ImageSvgConvertCtx();
-        convertCtx.setOptions(options);
+        ImageSvgConvertCtx convertCtx = new ImageSvgConvertCtx(options);
 
-        OperationManager<ImageSvgConvertCtx> operationManager = new OperationManager<>(convertCtx, listener);
+        OperationManager<ImageSvgConvertCtx> operationManager = new OperationManager<>(listener);
 
         return imageToSVG(operationManager, bufferedImage)
-                .execute().getSvgString();
+                .execute(convertCtx).getSvgString();
     }
 
 
@@ -226,16 +228,13 @@ public class ImageSvgConverter {
     // Tracing ImageData, then returning IndexedImage with traceData in layers
     private OperationManager<ImageSvgConvertCtx> imageDataToTraceData(OperationManager<ImageSvgConvertCtx> operationManager) {
         // 0. Generate palette
-        if (operationManager.getContext().getPalette() == null) {
+        PaletteGenerator paletteGenerator = new PaletteGenerator();
+        operationManager.addOperation("generating palette", (ctx) -> {
+            byte[][] palette = paletteGenerator.generatePalette(ctx.getImageData(), ctx.getOptions());
 
-            PaletteGenerator paletteGenerator = new PaletteGenerator();
-            operationManager.addOperation("generating palette", (ctx) -> {
-                byte[][] palette = paletteGenerator.generatePalette(ctx.getImageData(), ctx.getOptions());
-
-                ctx.setPalette(palette);
-                return ctx;
-            });
-        }
+            ctx.setPalette(palette);
+            return ctx;
+        });
 
         // 1. Color quantization
         ColorQuantizator colorQuantizator = new ColorQuantizator();

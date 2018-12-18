@@ -34,8 +34,7 @@ import java.util.function.Function;
 
 public class OperationManager<T> {
 
-    private T context;
-    private OperationProgressListener progressListener;
+    private final OperationProgressListener progressListener;
 
     @Value
     @AllArgsConstructor
@@ -44,13 +43,8 @@ public class OperationManager<T> {
         private Function<T, T> function;
     }
 
-    public OperationManager(T context, OperationProgressListener listener) {
-        this.context = context;
+    public OperationManager(OperationProgressListener listener) {
         this.progressListener = listener;
-    }
-
-    public T getContext() {
-        return context;
     }
 
     private List<OperationInfo<T>> operationInfoList = new ArrayList<>();
@@ -60,7 +54,7 @@ public class OperationManager<T> {
         return this;
     }
 
-    public T execute() {
+    public T execute(T context) {
         int idx = 0;
         int totalCount = operationInfoList.size();
         for (OperationInfo<T> operationInfo : operationInfoList) {
