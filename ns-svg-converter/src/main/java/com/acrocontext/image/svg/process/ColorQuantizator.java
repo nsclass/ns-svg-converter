@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Date 12/23/17
@@ -119,15 +120,11 @@ public class ColorQuantizator {
         // loop through all pixels
         List<Supplier<Integer>> tasks = new ArrayList<>(imageData.getHeight());
 
-        for (int row = 0; row < imageData.getHeight(); row++) {
-            int finalRow = row;
-            tasks.add(() -> {
-                rowColorQuantizationOnPixel(finalRow, indexedDataArray, paletteAcc, imageData, palette);
-
-                return finalRow;
-            });
-
-        }// End of row loop
+        IntStream.range(0, imageData.getHeight())
+                .forEach(row -> tasks.add(() -> {
+                    rowColorQuantizationOnPixel(row, indexedDataArray, paletteAcc, imageData, palette);
+                    return row;
+                }));
 
         ParallelOperationUtils.executeTasks(tasks);
     }
