@@ -16,10 +16,7 @@
 
 package com.acrocontext.image.svg.process;
 
-import com.acrocontext.image.svg.model.InterNode;
-import com.acrocontext.image.svg.model.InterNodeList;
-import com.acrocontext.image.svg.model.InterNodeListBatch;
-import com.acrocontext.image.svg.model.Path;
+import com.acrocontext.image.svg.model.*;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
 import org.springframework.data.util.Pair;
 
@@ -101,14 +98,14 @@ public class InterNodeGenerator {
     }
 
     // 4. interpolating between path points for nodes with 8 directions ( E, SE, S, SW, W, NW, N, NE )
-    private static InterNodeList[] createInterNodeList(com.acrocontext.image.svg.model.ScanPath paths) {
-        List<Supplier<Pair<Integer, InterNodeList>>> tasks = new ArrayList<>(paths.getScanPath().size());
+    private static InterNodeList[] createInterNodeList(ScanPath scanPath) {
+        List<Supplier<Pair<Integer, InterNodeList>>> tasks = new ArrayList<>(scanPath.getScanPath().size());
 
         // paths loop
-        IntStream.range(0, paths.getScanPath().size())
+        IntStream.range(0, scanPath.getScanPath().size())
                 .forEach(idx -> {
                     tasks.add(() -> {
-                        InterNodeList interNodeList = new InterNodeList(createInterNode(paths.getScanPath().get(idx)));
+                        InterNodeList interNodeList = new InterNodeList(createInterNode(scanPath.getScanPath().get(idx)));
                         return Pair.of(idx, interNodeList);
                     });
                 });
@@ -118,20 +115,20 @@ public class InterNodeGenerator {
 
 
     // 4. Batch interpolation
-    public InterNodeListBatch[] createBatchInterNodeList(com.acrocontext.image.svg.model.ScanPath[] batchPaths) {
+    public InterNodeListLayers[] createInterNodeListLayers(ScanPath[] scanPaths) {
 
-        List<Supplier<Pair<Integer, InterNodeListBatch>>> tasks = new ArrayList<>(batchPaths.length);
+        List<Supplier<Pair<Integer, InterNodeListLayers>>> tasks = new ArrayList<>(scanPaths.length);
 
-        IntStream.range(0, batchPaths.length)
+        IntStream.range(0, scanPaths.length)
                 .forEach(idx -> {
                     tasks.add(() -> {
-                        InterNodeListBatch interNodeListBatch = new InterNodeListBatch(createInterNodeList(batchPaths[idx]));
-                        return Pair.of(idx, interNodeListBatch);
+                        InterNodeListLayers interNodeListLayers = new InterNodeListLayers(createInterNodeList(scanPaths[idx]));
+                        return Pair.of(idx, interNodeListLayers);
                     });
 
                 });
 
-        return ParallelOperationUtils.execute(InterNodeListBatch.class, tasks);
+        return ParallelOperationUtils.execute(InterNodeListLayers.class, tasks);
     }
 
 }

@@ -27,7 +27,7 @@ import lombok.Value;
 
 @Value
 @AllArgsConstructor
-public class TracePathBatch {
+public class TracePathLayers {
     private final TracePath[] tracePaths;
 
     public TracePath tracePathAtIdx(int idx) {

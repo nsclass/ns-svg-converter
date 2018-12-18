@@ -28,5 +28,5 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class InterNode {
-    private final double[] thisPoint;
+    private final double[] point;
 }

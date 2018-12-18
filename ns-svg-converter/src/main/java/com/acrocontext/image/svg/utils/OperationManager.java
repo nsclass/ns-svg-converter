@@ -38,7 +38,7 @@ public class OperationManager<T> {
 
     @Value
     @AllArgsConstructor
-    static class OperationInfo<T> {
+    static class OperationCommand<T> {
         private String description;
         private Function<T, T> function;
     }
@@ -47,22 +47,22 @@ public class OperationManager<T> {
         this.progressListener = listener;
     }
 
-    private List<OperationInfo<T>> operationInfoList = new ArrayList<>();
+    private List<OperationCommand<T>> operationCommandList = new ArrayList<>();
 
     public OperationManager<T> addOperation(String description, Function<T, T> operation) {
-        operationInfoList.add(new OperationInfo<>(description, operation));
+        operationCommandList.add(new OperationCommand<>(description, operation));
         return this;
     }
 
     public T execute(T context) {
         int idx = 0;
-        int totalCount = operationInfoList.size();
-        for (OperationInfo<T> operationInfo : operationInfoList) {
+        int totalCount = operationCommandList.size();
+        for (OperationCommand<T> operationCommand : operationCommandList) {
             Instant start = Instant.now();
 
-            operationInfo.function.apply(context);
+            operationCommand.function.apply(context);
             Instant end = Instant.now();
-            progressListener.onProgressInfo("Done: " + operationInfo.getDescription(), idx, totalCount, Duration.between(start, end));
+            progressListener.onProgressInfo("Done: " + operationCommand.getDescription(), idx, totalCount, Duration.between(start, end));
 
             ++idx;
         }

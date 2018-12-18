@@ -49,12 +49,12 @@ public class ImageSvgConverter {
         private ImageData imageData;
         private int[][] paletteColors;
         private byte[][] palette;
-        public int[][][] rawLayers;
+        private int[][][] rawLayers;
 
         private IndexedImage indexedImage;
         private String svgString;
-        public com.acrocontext.image.svg.model.ScanPath[] batchPathScan;
-        public InterNodeListBatch[] batchInterNodes;
+        private com.acrocontext.image.svg.model.ScanPath[] batchPathScan;
+        private InterNodeListLayers[] batchInterNodes;
 
         public ImageSvgConvertCtx(ImageConvertOptions options) {
             this.options = options;
@@ -96,13 +96,13 @@ public class ImageSvgConverter {
     // Container for the color-indexed image before and traceData after vectorizing
     @Value
     static class IndexedImage {
-        private int width;
-        private int height;
-        private int[][] paletteColors; // array[x][y] of palette colors
-        private byte[][] palette;// array[paletteLength][4] RGBA color palette
-        private TracePathBatch[] layers;// traceData
+        private final int width;
+        private final int height;
+        private final int[][] paletteColors; // array[x][y] of palette colors
+        private final byte[][] palette;// array[paletteLength][4] RGBA color palette
+        private final TracePathLayers[] layers;// traceData
 
-        IndexedImage(int[][] paletteColors, byte[][] palette, TracePathBatch[] layers) {
+        IndexedImage(int[][] paletteColors, byte[][] palette, TracePathLayers[] layers) {
             this.paletteColors = paletteColors;
             this.palette = palette;
             this.width = paletteColors[0].length - 2;
@@ -110,15 +110,15 @@ public class ImageSvgConverter {
             this.layers = layers;
         }
 
-        double getValue(int idx1, int idx2, int idx3, int idx4) {
+        double valueAtIdx(int idx1, int idx2, int idx3, int idx4) {
             return layers[idx1].valueAtIdx(idx2, idx3, idx4);
         }
 
-        int getPathSize(int idx) {
+        int pathSizeAtIdx(int idx) {
             return layers[idx].getTracePaths().length;
         }
 
-        TracePath getTracePath(int idx1, int idx2) {
+        TracePath tracePathAtIdx(int idx1, int idx2) {
             return layers[idx1].tracePathAtIdx(idx2);
         }
     }
@@ -262,14 +262,14 @@ public class ImageSvgConverter {
         // 4. Batch interpolation
         InterNodeGenerator interNodeGenerator = new InterNodeGenerator();
         operationManager.addOperation("batch interpolation", ctx -> {
-            ctx.batchInterNodes = interNodeGenerator.createBatchInterNodeList(ctx.getBatchPathScan());
+            ctx.batchInterNodes = interNodeGenerator.createInterNodeListLayers(ctx.getBatchPathScan());
             return ctx;
         });
 
         // 5. Batch tracing
         TracePathGenerator tracePathGenerator = new TracePathGenerator();
         operationManager.addOperation("batch tracing", ctx -> {
-            TracePathBatch[] layers = tracePathGenerator.createBatchTracePathList(ctx.getBatchInterNodes(),
+            TracePathLayers[] layers = tracePathGenerator.createBatchTracePathList(ctx.getBatchInterNodes(),
                     ctx.getOptions().getLThreshold(), ctx.getOptions().getQThreshold());
             ctx.indexedImage = new IndexedImage(ctx.getPaletteColors(), ctx.getPalette(), layers);
 
@@ -430,10 +430,10 @@ public class ImageSvgConverter {
         for (int layerIdx = 0; layerIdx < indexedImage.layers.length; layerIdx++) {
 
             // Path loop
-            for (int pathCount = 0; pathCount < indexedImage.getPathSize(layerIdx); pathCount++) {
+            for (int pathCount = 0; pathCount < indexedImage.pathSizeAtIdx(layerIdx); pathCount++) {
 
                 // Label (Z-index key) is the startPoint of the path, linearized
-                double label = (indexedImage.getValue(layerIdx, pathCount, 0, 2) * w) + indexedImage.getValue(layerIdx, pathCount, 0, 1);
+                double label = (indexedImage.valueAtIdx(layerIdx, pathCount, 0, 2) * w) + indexedImage.valueAtIdx(layerIdx, pathCount, 0, 1);
                 // Creating new list if required
                 if (!zIndex.containsKey(label)) {
                     zIndex.put(label, new Integer[2]);
@@ -458,7 +458,7 @@ public class ImageSvgConverter {
             }
             generateSvgPathFromTracePaths(svgStringBuilder,
                     thisDescription,
-                    indexedImage.getTracePath(entry.getValue()[0], entry.getValue()[1]),
+                    indexedImage.tracePathAtIdx(entry.getValue()[0], entry.getValue()[1]),
                     toSvgColorStr(indexedImage.palette[entry.getValue()[0]]),
                     options);
         }

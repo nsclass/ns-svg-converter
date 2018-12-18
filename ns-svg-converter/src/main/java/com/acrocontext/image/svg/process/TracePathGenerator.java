@@ -17,9 +17,9 @@
 package com.acrocontext.image.svg.process;
 
 import com.acrocontext.image.svg.model.InterNodeList;
-import com.acrocontext.image.svg.model.InterNodeListBatch;
+import com.acrocontext.image.svg.model.InterNodeListLayers;
 import com.acrocontext.image.svg.model.TracePath;
-import com.acrocontext.image.svg.model.TracePathBatch;
+import com.acrocontext.image.svg.model.TracePathLayers;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
 import org.springframework.data.util.Pair;
 
@@ -62,15 +62,15 @@ public class TracePathGenerator {
 
         while (pathIndex < pathLength) {
             // 5.1. Find sequences of points with only 2 segment types
-            sequenceType1 = path.getInterNodes()[pathIndex].getThisPoint()[2];
+            sequenceType1 = path.getInterNodes()[pathIndex].getPoint()[2];
             sequenceType2 = -1;
             sequenceEnd = pathIndex + 1;
             while (
-                    ((path.getInterNodes()[sequenceEnd].getThisPoint()[2] == sequenceType1) ||
-                            (path.getInterNodes()[sequenceEnd].getThisPoint()[2] == sequenceType2) || (sequenceType2 == -1))
+                    ((path.getInterNodes()[sequenceEnd].getPoint()[2] == sequenceType1) ||
+                            (path.getInterNodes()[sequenceEnd].getPoint()[2] == sequenceType2) || (sequenceType2 == -1))
                             && (sequenceEnd < (pathLength - 1))) {
-                if ((path.getInterNodes()[sequenceEnd].getThisPoint()[2] != sequenceType1) && (sequenceType2 == -1)) {
-                    sequenceType2 = path.getInterNodes()[sequenceEnd].getThisPoint()[2];
+                if ((path.getInterNodes()[sequenceEnd].getPoint()[2] != sequenceType1) && (sequenceType2 == -1)) {
+                    sequenceType2 = path.getInterNodes()[sequenceEnd].getPoint()[2];
                 }
                 sequenceEnd++;
             }
@@ -215,7 +215,7 @@ public class TracePathGenerator {
 
 
     // 5. Batch tracing paths
-    private static TracePath[] batchTracePaths(InterNodeListBatch interNodePaths, float lThreshold, float qThreshold) {
+    private static TracePath[] batchTracePaths(InterNodeListLayers interNodePaths, float lThreshold, float qThreshold) {
         TracePath[] batchTracePathResult = new TracePath[interNodePaths.getInterNodeLists().length];
 
         int idx = 0;
@@ -227,19 +227,19 @@ public class TracePathGenerator {
     }
 
     // 5. Batch tracing layers
-    public TracePathBatch[] createBatchTracePathList(InterNodeListBatch[] batchInterNodes, float lThreshold, float qThreshold) {
-        List<Supplier<Pair<Integer, TracePathBatch>>> tasks = new ArrayList<>(batchInterNodes.length);
+    public TracePathLayers[] createBatchTracePathList(InterNodeListLayers[] batchInterNodes, float lThreshold, float qThreshold) {
+        List<Supplier<Pair<Integer, TracePathLayers>>> tasks = new ArrayList<>(batchInterNodes.length);
 
         IntStream.range(0, batchInterNodes.length)
                 .forEach(idx -> {
                     tasks.add(() -> {
-                        TracePathBatch tracePathBatch = new TracePathBatch(batchTracePaths(batchInterNodes[idx], lThreshold, qThreshold));
-                        return Pair.of(idx, tracePathBatch);
+                        TracePathLayers tracePathLayers = new TracePathLayers(batchTracePaths(batchInterNodes[idx], lThreshold, qThreshold));
+                        return Pair.of(idx, tracePathLayers);
                     });
 
                 });
 
-        return ParallelOperationUtils.execute(TracePathBatch.class, tasks);
+        return ParallelOperationUtils.execute(TracePathLayers.class, tasks);
 
     }
 

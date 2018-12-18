@@ -29,6 +29,6 @@ public class InterNodeList {
     private final InterNode[] interNodes;
 
     public double valueAtIdxForSequenceIdx(int sequenceIdx, int idx) {
-        return interNodes[sequenceIdx].getThisPoint()[idx];
+        return interNodes[sequenceIdx].getPoint()[idx];
     }
 }
