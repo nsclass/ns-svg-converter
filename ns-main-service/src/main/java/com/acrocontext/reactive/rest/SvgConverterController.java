@@ -71,7 +71,7 @@ public class SvgConverterController {
 
         CompletableFuture<SvgConvertRespondView> completableFuture = CompletableFuture.supplyAsync(() -> {
 
-            byte[] imageData = getBytesFromBase64(convertRequestView.getImageDataBase64());
+            byte[] imageData = createBytesFromBase64(convertRequestView.getImageDataBase64());
             try (InputStream inputStream = new ByteArrayInputStream(imageData)) {
                 BufferedImage bufferedImage = ImageIO.read(inputStream);
 
@@ -110,7 +110,7 @@ public class SvgConverterController {
         return Mono.fromCompletionStage(completableFuture);
     }
 
-    private static byte[] getBytesFromBase64(String data) {
+    private static byte[] createBytesFromBase64(String data) {
         String base64Image = data.split(",")[1];
         return javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
     }

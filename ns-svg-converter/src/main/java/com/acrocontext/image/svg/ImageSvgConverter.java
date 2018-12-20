@@ -81,8 +81,8 @@ public class ImageSvgConverter {
 
 
     public String convertImageToSVG(BufferedImage bufferedImage,
-                                  ImageConvertOptions options,
-                                  OperationProgressListener listener) {
+                                    ImageConvertOptions options,
+                                    OperationProgressListener listener) {
 
         ImageSvgConvertCtx convertCtx = new ImageSvgConvertCtx(options);
 

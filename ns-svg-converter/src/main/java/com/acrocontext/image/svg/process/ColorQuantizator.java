@@ -60,14 +60,13 @@ public class ColorQuantizator {
         long[][] paletteAcc = new long[palette.length][5];
 
         // Repeat clustering step "cycles" times
-        final ImageData finalImageData = imageData;
         for (int loopIdx = 0; loopIdx < cycles; loopIdx++) {
             colorQuantizationIteration(loopIdx,
                     minColorRatio,
                     cycles,
                     indexedDataArray,
                     paletteAcc,
-                    finalImageData,
+                    imageData,
                     palette);
 
         } // End of Repeat clustering step "cycles" times
