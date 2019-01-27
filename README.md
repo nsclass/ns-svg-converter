@@ -4,7 +4,7 @@ SVG image converter application made of Reactive Spring Boot 2.x.x and Angular f
 
 ### SVG image converter ###
 
-Main purpose of this project is to demonstrate how to use SpringBoot 2.1.x to build an Reactive application(WebFlux) with enabling JWT based reactive security
+Main purpose of this project is to demonstrate how to use SpringBoot 2.1.x to build a reactive application(WebFlux) with enabling JWT based reactive security
 and REST API for building Web application with Angular framework.
 
 This project also includes Reactive Cassandra DAO as a database but it is configured to use memory based DAO by default. 
@@ -14,7 +14,7 @@ Also, this project is using Ruby Cucumber framework to test application features
 
 ### Working application example ###
 
-Since it is free account in Heroku so it will require waking up time to run the application.
+Since it is a free account in Heroku, it will take a time to run the application.
 
 https://svg-converter.herokuapp.com/
 
@@ -28,7 +28,7 @@ This application is using a Gradle as a build system and it requires Java 8 JDK 
 The following gradle task will build and deploy it into Java backend project.
 
 ```
-$ gradlew deployAngularDist
+$ ./gradlew deployAngularDist
 ```
 
 If you would like to compile only UI project, the following command can be used.
@@ -42,7 +42,7 @@ $ ng build
 * Compiling backend application
 
 ```
-$ gradlew clean build
+$ ./gradlew clean build
 ```
 
 ### Running application ###
@@ -92,7 +92,7 @@ $ docker run -d --name=[name] -p 8080:8080 [image name]
 ### Running test ###
 
 ```
-$ gradlew bdd 
+$ ./gradlew bdd 
 ```
 
 * BDD run result example
