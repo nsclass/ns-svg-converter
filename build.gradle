@@ -26,14 +26,12 @@ task wrapper(type: Wrapper) {
 
 buildscript {
 	ext {
-		springBootVersion = '2.1.0.RELEASE'
+		springBootVersion = '2.1.2.RELEASE'
         buildDateTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 	}
 	repositories {
         jcenter()
         mavenCentral()
-//		maven { url "https://repo.spring.io/snapshot" }
-//		maven { url "https://repo.spring.io/milestone" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
