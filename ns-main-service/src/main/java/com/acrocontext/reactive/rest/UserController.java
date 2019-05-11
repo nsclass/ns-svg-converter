@@ -124,10 +124,10 @@ public class UserController {
                                     user.setPassword(passwordProvider.encode(newPassword));
                                    return userService.updateUser(user);
                                 })
-                                .switchIfEmpty(Mono.error(new ChangePasswordUserNotFound("User not found")));
+                                .switchIfEmpty(Mono.error(new ChangePasswordUserNotFound("Invalid user/password")));
 
                     } else {
-                        return Mono.error(new ChangePasswordNotMatchOldPassword("Password not matched"));
+                        return Mono.error(new ChangePasswordNotMatchOldPassword("Invalid user/password"));
                     }
                 })
                 .map(user -> new GeneralResponseView("Successfully changed a password"));
