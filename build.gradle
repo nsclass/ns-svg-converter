@@ -68,7 +68,7 @@ subprojects {
         compile('org.springframework.boot:spring-boot-starter-validation')
         compile('org.springframework.boot:spring-boot-configuration-processor')
 
-        compile(group: 'com.google.guava', name: 'guava', version: '22.0') // or 22.0-android for the Android flavor
+//        compile(group: 'com.google.guava', name: 'guava', version: '22.0') // or 22.0-android for the Android flavor
 //        compile group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.2.Final'
 //        compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
 //        compile group: 'org.glassfish.web', name: 'javax.el', version: '2.2.6'
