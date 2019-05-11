@@ -25,8 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.server.ServerFormLoginAuthenticationConverter;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.ServerFormLoginAuthenticationConverter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.stereotype.Component;
@@ -53,7 +53,7 @@ public class TokenAuthenticationFilterBuilder {
                 this.tokenAuthenticationManager);
         authenticationFilter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/api/v1/login"));
         authenticationFilter.setAuthenticationFailureHandler(new TokenAuthenticationFailureHandler());
-        authenticationFilter.setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
+        authenticationFilter.setServerAuthenticationConverter( new ServerFormLoginAuthenticationConverter());
         authenticationFilter.setAuthenticationSuccessHandler(tokenAuthenticationSuccessHandler);
 
         serverHttpSecurity.addFilterAt(authenticationFilter, SecurityWebFiltersOrder.FORM_LOGIN);
