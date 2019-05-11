@@ -33,5 +33,5 @@ Feature: Change user password
     And I expect HTTP status code is 403
     Then I expect HTTP JSON error message contains text
     """
-    Password not matched
+    Invalid user/password
     """
