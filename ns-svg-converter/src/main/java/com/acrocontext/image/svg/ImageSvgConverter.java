@@ -405,10 +405,10 @@ public class ImageSvgConverter {
                         .append("\" stroke-width=\"")
                         .append(qcpr * 0.2)
                         .append("\" stroke=\"cyan\" />");
-            }// End of quadratic control points
+            }
         }
 
-    }// End of generateSvgPathFromTracePaths()
+    }
 
 
     // Converting traceData to an SVG string, paths are drawn according to a Z-index
@@ -441,9 +441,9 @@ public class ImageSvgConverter {
                 // Adding layer and path number to list
                 zIndex.get(label)[0] = layerIdx;
                 zIndex.get(label)[1] = pathCount;
-            }// End of path loop
+            }
 
-        }// End of layer loop
+        }
 
         // Sorting Z-index is not required, TreeMap is sorted automatically
 

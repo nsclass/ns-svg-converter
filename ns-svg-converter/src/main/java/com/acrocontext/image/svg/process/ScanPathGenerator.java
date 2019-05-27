@@ -37,7 +37,7 @@ public class ScanPathGenerator {
     // Lookup tables for createScanPath
     private static final byte[] PATH_SCAN_DIR_LOOKUP = {0, 0, 3, 0, 1, 0, 3, 0, 0, 3, 3, 1, 0, 3, 0, 0};
     private static final boolean[] PATH_SCAN_HOLE_PATH_LOOKUP = {false, false, false, false, false, false, false, true, false, false, false, true, false, true, true, false};
-    // PATH_SCAN_COMBINED_LOOKUP[ arr[py][px] ][ dir ] = [nextarrpypx, nextdir, deltapx, deltapy];
+    // PATH_SCAN_COMBINED_LOOKUP[ arr[py][px] ][ dir ] = [nextArrayPyPx, nextDir, deltaPx, deltaPy];
     private static final byte[][][] PATH_SCAN_COMBINED_LOOKUP = {
             {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}},// arr[py][px]==0 is invalid
             {{0, 1, 0, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 2, -1, 0}},
@@ -85,7 +85,7 @@ public class ScanPathGenerator {
             }
         }
         return new ScanPath(paths);
-    }// End of createScanPath()
+    }
 
     private static void rowScanPathOperation(int row,
                                              int width,
@@ -137,12 +137,9 @@ public class ScanPathGenerator {
                         }
                     }
 
-                }// End of Path points loop
-
-            }// End of Follow path
-
-        }// End of col loop
-
+                }
+            }
+        }
     }
 
     // 3. Batch createScanPath

@@ -89,11 +89,11 @@ public class TracePathGenerator {
                 pathIndex = pathLength;
             }
 
-        }// End of pathIndex loop
+        }
 
         return new TracePath(smp);
 
-    }// End of createTracePath()
+    }
 
 
     // 5.2. - 5.6. recursively fitting a straight or quadratic line segment on this sequence of path nodes,
@@ -211,7 +211,7 @@ public class TracePathGenerator {
         segment.addAll(fitSequence(path, lThreshold, qThreshold, splitPoint, seqEnd));
         return segment;
 
-    }// End of fitSequence()
+    }
 
 
     // 5. Batch tracing paths

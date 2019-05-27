@@ -38,7 +38,7 @@ public class OperationManager<T> {
 
     @Value
     @AllArgsConstructor
-    static class OperationCommand<T> {
+    private static class OperationCommand<T> {
         private String description;
         private Function<T, T> function;
     }
