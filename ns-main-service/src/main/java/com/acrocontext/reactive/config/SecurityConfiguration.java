@@ -44,7 +44,6 @@ import reactor.core.publisher.Mono;
 public class SecurityConfiguration {
     private final TokenAuthenticationFilterBuilder authenticationBuilder;
 
-    @Autowired
     public SecurityConfiguration(TokenAuthenticationFilterBuilder authenticationBuilder) {
         this.authenticationBuilder = authenticationBuilder;
     }
@@ -64,7 +63,7 @@ public class SecurityConfiguration {
 
 
     @Bean
-    SecurityWebFilterChain security(ServerHttpSecurity httpSecurity) {
+    public SecurityWebFilterChain security(ServerHttpSecurity httpSecurity) {
 
         CustomWebExchangerMatcherBuilder matcherBuilder = new CustomWebExchangerMatcherBuilder();
         ServerWebExchangeMatcher permitAllPatternMatcher = matcherBuilder
