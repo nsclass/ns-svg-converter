@@ -28,6 +28,7 @@ out/
 ###
 .DS_Store
 
+bin/
 
 ### ns-spring ##
 ns-main-service/src/main/resources/static/*
