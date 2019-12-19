@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import "./assets/css/bootstrap.min.css";
+import "./assets/css/styles.css";
+import MainNavBar from "./component/MainNavBar";
+
+const MainView = () => {
+    return (
+        <header className="masthead">
+            <div className="container">
+                <div className="intro-text">
+                    <div>
+                        <h1>SVG Image Converter</h1>
+                    </div>
+                    <div>
+                        <h5>(Supported image types are PNG and JFG)</h5>
+                        <h5>(Max supported image size is 2MB due to available memory in Heroku)</h5>
+                    </div>
+                </div>
+            </div>
+        </header>
+    );
+};
+
+const App = () => {
+    return (
+        <div>
+            <MainNavBar />
+            <MainView />
+        </div>
+    );
+};
 
 export default App;
