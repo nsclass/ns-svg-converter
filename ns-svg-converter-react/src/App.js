@@ -3,6 +3,7 @@ import React from "react";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/styles.css";
 import MainNavBar from "./component/MainNavBar";
+import ImageDropZone from "./component/ImageDropZone";
 
 const MainView = () => {
     return (
@@ -16,6 +17,7 @@ const MainView = () => {
                         <h5>(Supported image types are PNG and JFG)</h5>
                         <h5>(Max supported image size is 2MB due to available memory in Heroku)</h5>
                     </div>
+                    <ImageDropZone/>
                 </div>
             </div>
         </header>
