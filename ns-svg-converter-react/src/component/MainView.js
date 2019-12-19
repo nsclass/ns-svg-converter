@@ -9,7 +9,7 @@ const MainView = () => {
 
     const SVGConverterView = () => {
         return (
-            <header className="masthead">
+            <header className="masthead" id="page-top">
                 <div className="container">
                     <div className="intro-text">
                         <div>
