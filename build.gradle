@@ -84,17 +84,6 @@ subprojects {
     }
 }
 
-def angularProjectDir = "$projectDir/ns-svg-converter-angular"
-task buildAngular(type: Exec) {
-    workingDir = "$angularProjectDir"
-    group = 'angular'
-
-    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-        commandLine "ng.cmd", "build"
-    } else {
-        commandLine "ng", "build"
-    }
-}
 
 def reactProjectDir = "$projectDir/ns-svg-converter-react"
 task buildReact(type: Exec) {
@@ -112,20 +101,6 @@ task deleteWebStaticFiles(type: Delete) {
     }
 }
 
-task deployAngularDist(dependsOn: ['buildAngular', 'deleteWebStaticFiles']) {
-    group = 'angular'
-    doLast {
-        copy {
-            from "$angularProjectDir/dist"
-            into "$springBootStaticDir"
-            include '**/*.html'
-            include '**/*.js'
-            include '**/*.jpg'
-            include '**/*.png'
-            include '**/*.svg'
-        }
-    }
-}
 
 task deployReactDist(dependsOn: ['buildReact', 'deleteWebStaticFiles']) {
     group = 'react'
