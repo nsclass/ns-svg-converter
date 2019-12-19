@@ -1,11 +1,11 @@
 # README #
 
-SVG image converter application made of Reactive Spring Boot 2.x.x and Angular framework for UI
+SVG image converter application made of Reactive Spring Boot 2.x.x and React for UI
 
 ### SVG image converter ###
 
 Main purpose of this project is to demonstrate how to use SpringBoot 2.1.x to build a reactive application(WebFlux) with enabling JWT based reactive security
-and REST API for building Web application with Angular framework.
+and REST API for building Web application with React framework.
 
 This project also includes Reactive Cassandra DAO as a database but it is configured to use memory based DAO by default. 
 However it can be changed easily by setting the active profile as dao_cassandra in application.yml file.
@@ -32,11 +32,11 @@ $ ./gradlew deployAngularDist
 ```
 
 If you would like to compile only UI project, the following command can be used.
-As this UI project is made of Angular framework, angular cli(7.0) should be installed to compile UI project.
+As this UI project is made of React framework, yarn should be installed to compile UI project.
 
 ```$xslt
-# cd ns-svg-converter-angular
-$ ng build
+# cd ns-svg-converter-react
+$ yarn build
 ``` 
 
 * Compiling backend application

@@ -1,16 +1,15 @@
 import React, { useState } from "react"
 import axios from "axios"
 
-const SVGConvertingView = ({ imageFilename, loading, svgData }) => {
-
+const SVGConvertingView = ({ imageFilename, loading, svgData, errorMsg }) => {
     const downloadSvgFile = () => {
-        const element = document.createElement("a");
-        const file = new Blob([svgData], { type: "text/plain" });
-        element.href = URL.createObjectURL(file);
-        element.download = `${imageFilename}.svg`;
-        document.body.appendChild(element); // Required for this to work in FireFox
-        element.click();
-    };
+        const element = document.createElement("a")
+        const file = new Blob([svgData], { type: "text/plain" })
+        element.href = URL.createObjectURL(file)
+        element.download = `${imageFilename}.svg`
+        document.body.appendChild(element) // Required for this to work in FireFox
+        element.click()
+    }
 
     if (loading) {
         return (
@@ -24,18 +23,29 @@ const SVGConvertingView = ({ imageFilename, loading, svgData }) => {
         )
     }
 
+    if (errorMsg) {
+        return (
+            <div className="alert alert-danger">
+                <strong>Error!</strong> {errorMsg}
+            </div>
+        )
+    }
+
     if (!svgData) {
         return null
     }
 
-    const convertSvgToBase64ImgString = SVG => `data:image/svg+xml;base64,${Buffer.from(SVG).toString('base64')}`;
+    const convertSvgToBase64ImgString = SVG =>
+        `data:image/svg+xml;base64,${Buffer.from(SVG).toString("base64")}`
 
     return (
-        <div>            
+        <div>
             <img src={convertSvgToBase64ImgString(svgData)} />
             <div className="portfolio-caption">
                 <h4>Converted SVG image</h4>
-                <button className="btn btn-success" onClick={e => downloadSvgFile()}>Download</button>
+                <button className="btn btn-success" onClick={e => downloadSvgFile()}>
+                    Download
+                </button>
             </div>
         </div>
     )
@@ -44,6 +54,7 @@ const SVGConvertingView = ({ imageFilename, loading, svgData }) => {
 const SVGConverter = ({ imageFilename, imageData }) => {
     const [loading, updateLoading] = useState(false)
     const [svgData, updateSVGData] = useState()
+    const [errorMsg, updateErrorMsg] = useState()
 
     const convertSvg = async () => {
         try {
@@ -55,12 +66,23 @@ const SVGConverter = ({ imageFilename, imageData }) => {
 
             updateSVGData(null)
             updateLoading(true)
+            updateErrorMsg(null)
 
-            const {data} = await axios.put("/api/v1/svg/conversion", requestData)
+            const { data } = await axios.put("/api/v1/svg/conversion", requestData)
             updateSVGData(data.svgString)
-
         } catch (error) {
             console.error(error)
+
+            let message = error.message
+            if (error.response && error.response.data && error.response.data.message) {
+                message = error.response.data.message
+            }
+            const splitRes = message.split(":")
+            if (splitRes.length > 1) {
+                updateErrorMsg(splitRes[1])
+            } else {
+                updateErrorMsg(message)
+            }
         }
 
         updateLoading(false)
@@ -76,7 +98,9 @@ const SVGConverter = ({ imageFilename, imageData }) => {
                 <img className="img-fluid" src={imageData} />
                 <div className="portfolio-caption">
                     <h4>Original image</h4>
-                    <button className="btn btn-success" onClick={e => convertSvg()}>Convert</button>
+                    <button className="btn btn-success" onClick={e => convertSvg()}>
+                        Convert
+                    </button>
                 </div>
             </div>
 
@@ -85,6 +109,7 @@ const SVGConverter = ({ imageFilename, imageData }) => {
                     imageFilename={imageFilename}
                     loading={loading}
                     svgData={svgData}
+                    errorMsg={errorMsg}
                 />
             </div>
         </div>
