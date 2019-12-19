@@ -28,7 +28,7 @@ This application is using a Gradle as a build system and it requires Java 8 JDK 
 The following gradle task will build and deploy it into Java backend project.
 
 ```
-$ ./gradlew deployAngularDist
+$ ./gradlew deployReactDist
 ```
 
 If you would like to compile only UI project, the following command can be used.
@@ -50,7 +50,7 @@ $ ./gradlew clean build
 * Compiling application including UI and running application
 ```
 $ ./gradlew clean build
-$ ./gradlew deployAngularDist build
+$ ./gradlew deployReactDist build
 $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 ```
 

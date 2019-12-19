@@ -96,14 +96,19 @@ task buildAngular(type: Exec) {
     }
 }
 
+def reactProjectDir = "$projectDir/ns-svg-converter-react"
+task buildReact(type: Exec) {
+    workingDir = "$reactProjectDir"
+    group = 'react'
+    commandLine "yarn", "build"
+}
+
 
 def springBootStaticDir = "$projectDir/ns-main-service/src/main/resources/static"
 
 task deleteWebStaticFiles(type: Delete) {
     doLast {
-        delete fileTree("$springBootStaticDir") {
-            include '**/*'
-        }
+        project.delete(files("$springBootStaticDir"))
     }
 }
 
@@ -118,6 +123,22 @@ task deployAngularDist(dependsOn: ['buildAngular', 'deleteWebStaticFiles']) {
             include '**/*.jpg'
             include '**/*.png'
             include '**/*.svg'
+        }
+    }
+}
+
+task deployReactDist(dependsOn: ['buildReact', 'deleteWebStaticFiles']) {
+    group = 'react'
+    doLast {
+        copy {
+            from "$reactProjectDir/build"
+            into "$springBootStaticDir"
+            include '**/*.html'
+            include '**/*.js'
+            include '**/*.jpg'
+            include '**/*.png'
+            include '**/*.svg'
+            include '**/*.css'
         }
     }
 }

@@ -77,6 +77,9 @@ public class SecurityConfiguration {
                 .addPattern(HttpMethod.GET, "/assets/images/*")
                 .addPattern(HttpMethod.GET, "/assets/images/samples/*")
                 .addPattern(HttpMethod.GET, "/assets/images/about/*")
+                .addPattern(HttpMethod.GET, "/static/css/*")
+                .addPattern(HttpMethod.GET, "/static/js/*")
+                .addPattern(HttpMethod.GET, "/static/media/*")
                 .build();
 
         return authenticationBuilder.configure(httpSecurity, permitAllPatternMatcher)
