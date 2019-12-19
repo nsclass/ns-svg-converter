@@ -40,7 +40,7 @@ const useImageDropZone = () => {
                     {isDragActive ? (
                         <p>Drop the files here ...</p>
                     ) : (
-                        <p>Drag 'n' drop some files here, or click to select files</p>
+                        <p>Drag 'n' drop a file here, or click to select a file</p>
                     )}
                 </div>
             </div>
