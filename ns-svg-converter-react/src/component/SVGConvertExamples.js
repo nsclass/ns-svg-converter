@@ -34,10 +34,7 @@ const SVGSample = ({ imageName, originalImage, convertedSvg }) => {
     )
 }
 
-const SVGExamples = () => {
-
-
-
+const SVGCOnvertExamples = () => {
     return (
         <section className="bg-light" id="portfolio">
             <div className="container">
@@ -57,4 +54,4 @@ const SVGExamples = () => {
     )
 }
 
-export default SVGExamples
+export default SVGCOnvertExamples

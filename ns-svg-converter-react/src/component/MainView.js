@@ -2,6 +2,7 @@ import React from "react"
 import useImageDropZone from "./ImageDropZone"
 import SVGHistory from "./SVGHistory"
 import SVGConvertExamples from "./SVGConvertExamples"
+import SVGConverter from "./SVGConverter"
 
 const MainView = () => {
     const [filename, fileContent, ImageDropZone] = useImageDropZone()
@@ -19,6 +20,7 @@ const MainView = () => {
                             <h5>(Max supported image size is 2MB due to available memory in Heroku)</h5>
                         </div>
                         <ImageDropZone/>
+                        <SVGConverter imageFilename={filename} imageData={fileContent} />
                     </div>
                 </div>
             </header>

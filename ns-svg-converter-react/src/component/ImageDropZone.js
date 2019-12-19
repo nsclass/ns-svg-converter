@@ -8,31 +8,31 @@ const useImageDropZone = () => {
     const [fileContent, updateFileContent] = useState()
     const [errorMessage, updateErrorMessage] = useState()
 
-    const ImageDropZone = () => {    
+    const ImageDropZone = () => {
         const loadFile = file => {
             try {
                 updateFilename(file.name)
-    
+
                 let reader = new FileReader()
                 reader.onloadend = evt => {
                     if (evt.target.readyState == FileReader.DONE) {
-                        const content = String(evt.target.result)
+                        const content = evt.target.result
                         updateFileContent(content)
                     }
                 }
-                reader.readAsText(file)
+                reader.readAsDataURL(file)
                 updateErrorMessage(null)
             } catch (e) {
                 console.log(e)
                 updateErrorMessage(JSON.stringify(e, null, 2))
             }
         }
-    
+
         const onDrop = useCallback(acceptedFiles => {
             loadFile(acceptedFiles[0])
         }, [])
         const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
-    
+
         return (
             <div className="dropzone-container">
                 <div className="dropzone" {...getRootProps()}>
@@ -46,7 +46,7 @@ const useImageDropZone = () => {
             </div>
         )
     }
-    
+
     return [filename, fileContent, ImageDropZone]
 }
 
