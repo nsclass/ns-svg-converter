@@ -108,12 +108,7 @@ task deployReactDist(dependsOn: ['buildReact', 'deleteWebStaticFiles']) {
         copy {
             from "$reactProjectDir/build"
             into "$springBootStaticDir"
-            include '**/*.html'
-            include '**/*.js'
-            include '**/*.jpg'
-            include '**/*.png'
-            include '**/*.svg'
-            include '**/*.css'
+            include '**/*'
         }
     }
 }
