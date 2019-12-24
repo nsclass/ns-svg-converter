@@ -67,29 +67,6 @@ public class SvgConverterController {
 
     }
 
-    private SvgConvertRequestView convertRequestView(InputStream inputStream) {
-        try {
-           return objectMapper.readValue(inputStream, SvgConvertRequestView.class);
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static class InputStreamCollector {
-        private InputStream inputStream;
-
-        public void collectInputStream(InputStream inputStream) {
-            if (this.inputStream == null) {
-                this.inputStream = inputStream;
-            }
-
-            this.inputStream = new SequenceInputStream(this.inputStream, inputStream);
-        }
-
-        public InputStream getInputStream() {
-            return this.inputStream;
-        }
-    }
 
     private SvgConvertRespondView convertRespondView(SvgConvertRequestView convertRequestView) {
         byte[] imageData = createBytesFromBase64(convertRequestView.getImageDataBase64());
@@ -128,15 +105,39 @@ public class SvgConverterController {
         }
     }
 
+    private <T> T toRequestBody(InputStream inputStream, Class<T> classValue) {
+        try {
+            return objectMapper.readValue(inputStream, classValue);
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static class InputStreamCollector {
+        private InputStream inputStream;
+
+        public void collectInputStream(InputStream inputStream) {
+            if (this.inputStream == null) {
+                this.inputStream = inputStream;
+            }
+
+            this.inputStream = new SequenceInputStream(this.inputStream, inputStream);
+        }
+
+        public InputStream getInputStream() {
+            return this.inputStream;
+        }
+    }
+
     @PutMapping(path = "/conversion",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<SvgConvertRespondView> convertImage(ServerWebExchange exchange) {
-
         return exchange.getRequest().getBody()
-                .collect(InputStreamCollector::new, (inputStreamCollector, dataBuffer)-> inputStreamCollector.collectInputStream(dataBuffer.asInputStream()))
+                .collect(InputStreamCollector::new, (inputStreamCollector, dataBuffer)->
+                        inputStreamCollector.collectInputStream(dataBuffer.asInputStream()))
                 .map(InputStreamCollector::getInputStream)
-                .map(this::convertRequestView)
+                .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestView.class))
                 .map(this::convertRespondView);
     }
 
