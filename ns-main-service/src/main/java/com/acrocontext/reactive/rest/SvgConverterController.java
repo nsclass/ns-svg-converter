@@ -43,7 +43,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
-import java.util.concurrent.CompletionException;
 
 /**
  * Date 12/24/17
@@ -77,15 +76,18 @@ public class SvgConverterController {
     }
 
     public static class InputStreamCollector {
-        private InputStream is;
+        private InputStream inputStream;
 
-        public void collectInputStream(InputStream is) {
-            if (this.is == null) this.is = is;
-            this.is = new SequenceInputStream(this.is, is);
+        public void collectInputStream(InputStream inputStream) {
+            if (this.inputStream == null) {
+                this.inputStream = inputStream;
+            }
+
+            this.inputStream = new SequenceInputStream(this.inputStream, inputStream);
         }
 
         public InputStream getInputStream() {
-            return this.is;
+            return this.inputStream;
         }
     }
 
@@ -132,7 +134,7 @@ public class SvgConverterController {
     public Mono<SvgConvertRespondView> convertImage(ServerWebExchange exchange) {
 
         return exchange.getRequest().getBody()
-                .collect(InputStreamCollector::new, (t, dataBuffer)-> t.collectInputStream(dataBuffer.asInputStream()))
+                .collect(InputStreamCollector::new, (inputStreamCollector, dataBuffer)-> inputStreamCollector.collectInputStream(dataBuffer.asInputStream()))
                 .map(InputStreamCollector::getInputStream)
                 .map(this::convertRequestView)
                 .map(this::convertRespondView);
