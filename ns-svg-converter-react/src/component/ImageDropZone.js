@@ -38,7 +38,7 @@ const useImageDropZone = () => {
                 <div className="dropzone" {...getRootProps()}>
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                        <p>Drop the files here ...</p>
+                        <p>Drop the file here ...</p>
                     ) : (
                         <p>Drag 'n' drop a file here, or click to select a file</p>
                     )}
