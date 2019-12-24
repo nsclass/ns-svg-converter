@@ -38,6 +38,7 @@ import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -108,28 +109,32 @@ public class UserController {
     @PatchMapping(path = "/operations/password",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<GeneralResponseView> changePassword(@RequestBody MultiValueMap<String, String> data) {
-        String oldPassword = data.getFirst("oldpassword");
-        String newPassword = data.getFirst("newpassword");
+    public Mono<GeneralResponseView> changePassword(ServerWebExchange exchange) {
 
-        return ReactiveSecurityContextHolder
-                .getContext()
-                .flatMap(securityContext -> {
-                    UserDetails userDetails = (UserDetails)securityContext.getAuthentication()
-                            .getDetails();
+        Mono<MultiValueMap<String, String>> data = exchange.getFormData();
+        return data.flatMap(formData -> {
+            String oldPassword = formData.getFirst("oldpassword");
+            String newPassword = formData.getFirst("newpassword");
 
-                    if (passwordProvider.matches(oldPassword, userDetails.getPassword())) {
-                        return userService.findUserByEmail(userDetails.getUsername())
-                                .flatMap(user -> {
-                                    user.setPassword(passwordProvider.encode(newPassword));
-                                   return userService.updateUser(user);
-                                })
-                                .switchIfEmpty(Mono.error(new ChangePasswordUserNotFound("Invalid user/password")));
+            return ReactiveSecurityContextHolder
+                    .getContext()
+                    .flatMap(securityContext -> {
+                        UserDetails userDetails = (UserDetails)securityContext.getAuthentication()
+                                .getDetails();
 
-                    } else {
-                        return Mono.error(new ChangePasswordNotMatchOldPassword("Invalid user/password"));
-                    }
-                })
-                .map(user -> new GeneralResponseView("Successfully changed a password"));
+                        if (passwordProvider.matches(oldPassword, userDetails.getPassword())) {
+                            return userService.findUserByEmail(userDetails.getUsername())
+                                    .flatMap(user -> {
+                                        user.setPassword(passwordProvider.encode(newPassword));
+                                        return userService.updateUser(user);
+                                    })
+                                    .switchIfEmpty(Mono.error(new ChangePasswordUserNotFound("Invalid user/password")));
+
+                        } else {
+                            return Mono.error(new ChangePasswordNotMatchOldPassword("Invalid user/password"));
+                        }
+                    })
+                    .map(user -> new GeneralResponseView("Successfully changed a password"));
+        });
     }
 }
