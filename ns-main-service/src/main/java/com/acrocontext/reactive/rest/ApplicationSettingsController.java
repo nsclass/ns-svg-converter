@@ -112,7 +112,7 @@ public class ApplicationSettingsController {
         svgImageGenerationSettings.setMaxSupportedImageSize(appSvgSettingsView.getImageSizeLimitation());
 
         return this.applicationSettingsService.setSvgSettingsInAsync(svgImageGenerationSettings)
-                .map(settings -> fromAppSvgSettings(settings));
+                .map(this::fromAppSvgSettings);
     }
 
 }
