@@ -32,8 +32,7 @@ The following gradle task will build and deploy it into Java backend project.
 $ ./gradlew deployReactDist
 ```
 
-If you would like to compile only UI project, the following command can be used.
-As this UI project is made of React framework, yarn should be installed to compile UI project.
+The following command show how to compile UI project.
 
 ```$xslt
 # cd ns-svg-converter-react
