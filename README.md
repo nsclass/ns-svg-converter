@@ -72,8 +72,7 @@ http://localhost:8080/
 
 ### Creating docker container ###
 
-Since ns-main-service project contains the Dockerfile, it can be deployed in Docker 
-even it can be deployed in Kubernetes cluster.
+Since ns-main-service project contains the Dockerfile, it can be run in Docker environment and Kubernetes cluster.
  
 * Creating a container
 
