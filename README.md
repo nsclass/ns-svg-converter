@@ -5,12 +5,12 @@ SVG image converter application made of Reactive Spring Boot 2.x.x and React for
 ### SVG image converter ###
 
 Main purpose of this project is to demonstrate how to use SpringBoot 2.x.x to build an reactive REST web application (WebFlux) with JWT for security.
-It has an UI with React framework(16.12.0)
+Even UI is made of React Hook framework.  
 
 And this project includes Reactive Cassandra DAO to access Cassandra database but it is configured to use memory based DAO by default. 
 However it can be changed easily by setting the active profile as dao_cassandra in application.yml file.
 
-Also, this project is using Ruby Cucumber framework to test application features as an integration test.   
+Also, this project is using Ruby Cucumber framework for integration tests.   
 
 ### Working application example ###
 
@@ -22,7 +22,7 @@ https://svg-converter.herokuapp.com/
 
 ### Compile project ###
 
-This application is using a Gradle as a build system and Java 8 or later JDK is required.
+This application is using a Gradle as a build system and minimum required JDK is Java 8.
 
 * Compiling UI project
 
