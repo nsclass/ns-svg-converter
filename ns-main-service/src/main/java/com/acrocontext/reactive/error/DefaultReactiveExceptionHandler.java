@@ -32,7 +32,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -73,8 +72,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
         HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
         return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(error))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(error)
                 .doOnNext(resp -> logError(request, errorStatus));
     }
 
@@ -106,8 +105,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
         HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
         return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(error))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(error)
                 .doOnNext(resp -> logError(request, errorStatus));
     }
 
@@ -126,8 +125,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
         HttpStatus errorStatus = HttpStatus.FORBIDDEN;
         return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(error))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(error)
                 .doOnNext(resp -> logError(request, errorStatus));
     }
 
@@ -145,8 +144,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
         HttpStatus errorStatus = HttpStatus.FORBIDDEN;
         return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(error))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(error)
                 .doOnNext(resp -> logError(request, errorStatus));
     }
 
@@ -166,8 +165,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
         HttpStatus errorStatus = HttpStatus.METHOD_NOT_ALLOWED;
         return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(error))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(error)
                 .doOnNext(resp -> logError(request, errorStatus));
     }
 
@@ -185,8 +184,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
         HttpStatus errorStatus = HttpStatus.FORBIDDEN;
         return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(error))
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(error)
                 .doOnNext(resp -> logError(request, errorStatus));
     }
 
