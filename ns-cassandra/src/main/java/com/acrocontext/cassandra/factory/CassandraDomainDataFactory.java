@@ -34,8 +34,11 @@ import java.util.UUID;
 @Service
 @Profile({"dao_cassandra", "default"})
 public class CassandraDomainDataFactory {
-    @Autowired
-    private CustomJsonProvider jsonProvider;
+    private final CustomJsonProvider jsonProvider;
+
+    public CassandraDomainDataFactory(CustomJsonProvider jsonProvider) {
+        this.jsonProvider = jsonProvider;
+    }
 
     public String getUserRowKey(String email) {
         return "USER_DATA$" + email;
