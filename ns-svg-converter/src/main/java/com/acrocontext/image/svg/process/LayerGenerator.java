@@ -37,17 +37,17 @@ public class LayerGenerator {
     //
     public int[][][] layering(int[][] paletteColors, byte[][] palette) {
         // Creating layers for each indexed color in arr
-        int aw = paletteColors[0].length;
-        int ah = paletteColors.length;
-        int[][][] layers = new int[palette.length][ah][aw];
+        int width = paletteColors[0].length;
+        int height = paletteColors.length;
+        int[][][] layers = new int[palette.length][height][width];
 
         // Looping through all pixels and calculating edge node type
-        List<Supplier<Integer>> tasks = new ArrayList<>(ah - 1);
+        List<Supplier<Integer>> tasks = new ArrayList<>(height - 1);
 
-        for (int row = 1; row < (ah - 1); row++) {
+        for (int row = 1; row < (height - 1); row++) {
             int finalRow = row;
             tasks.add(() -> {
-                rowLayering(finalRow, aw, paletteColors, layers);
+                rowLayering(finalRow, width, paletteColors, layers);
                 return finalRow;
             });
         }// End of row loop
@@ -57,8 +57,8 @@ public class LayerGenerator {
         return layers;
     }// End of layering()
 
-    private static void rowLayering(int row, int aw, int[][] paletteColors, int[][][] layers) {
-        for (int col = 1; col < (aw - 1); col++) {
+    private static void rowLayering(int row, int width, int[][] paletteColors, int[][][] layers) {
+        for (int col = 1; col < (width - 1); col++) {
 
             // This pixel's indexed color
             int val = paletteColors[row][col];
