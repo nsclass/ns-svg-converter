@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 /*
  * Copyright 2017-present, Nam Seob Seo
  *
@@ -25,8 +27,8 @@ wrapper {
 
 buildscript {
 	ext {
-		springBootVersion = '2.2.6.RELEASE'
-        buildDateTime = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+		springBootVersion = '2.3.2.RELEASE'
+        buildDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 	}
 	repositories {
         jcenter()
