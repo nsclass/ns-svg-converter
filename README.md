@@ -26,13 +26,13 @@ This application is using a Gradle as a build system and minimum required JDK is
 
 * Compiling UI project
 
-The following gradle task will build and deploy it into Java backend project.
+The following gradle task will build and deploy the React application into Java backend project.
 
 ```
 $ ./gradlew deployReactDist
 ```
 
-The following command show how to compile UI project.
+Compiling React UI application
 
 ```$xslt
 # cd ns-svg-converter-react
@@ -49,7 +49,7 @@ $ ./gradlew clean build
 
 * Compiling application including UI and running application
 ```
-$ ./gradlew clean build
+$ ./gradlew clean
 $ ./gradlew deployReactDist build
 $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 ```
@@ -88,6 +88,11 @@ $ docker run -d --name=[name] -p 8080:8080 [image name]
 
 ### Running test ###
 
+This project is using cucumber BDD testing framework.
+
+In order to run the test, Ruby should be installed.
+
+* Running test 
 ```
 $ ./gradlew bdd 
 ```
