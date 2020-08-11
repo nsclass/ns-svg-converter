@@ -96,11 +96,11 @@ public class ImageSvgConverter {
     // Container for the color-indexed image before and traceData after vectorizing
     @Value
     static class IndexedImage {
-        private final int width;
-        private final int height;
-        private final int[][] paletteColors; // array[x][y] of palette colors
-        private final byte[][] palette;// array[paletteLength][4] RGBA color palette
-        private final TracePathLayers[] layers;// traceData
+        int width;
+        int height;
+        int[][] paletteColors; // array[x][y] of palette colors
+        byte[][] palette;// array[paletteLength][4] RGBA color palette
+        TracePathLayers[] layers;// traceData
 
         IndexedImage(int[][] paletteColors, byte[][] palette, TracePathLayers[] layers) {
             this.paletteColors = paletteColors;

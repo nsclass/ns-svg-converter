@@ -25,8 +25,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.cassandra.CassandraReactiveDataAutoConfiguration;
 
-@SpringBootApplication(exclude = CassandraDataAutoConfiguration.class)
+@SpringBootApplication(exclude = {CassandraReactiveDataAutoConfiguration.class, CassandraDataAutoConfiguration.class})
 public class AcrocontextReactiveApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {

@@ -62,7 +62,7 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::        (v2.2.2.RELEASE) 
+ :: Spring Boot ::        (v2.3.2.RELEASE)
 ```
 
 * Browsing the application
