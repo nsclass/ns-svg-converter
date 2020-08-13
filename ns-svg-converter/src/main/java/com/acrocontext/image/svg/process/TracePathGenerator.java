@@ -56,8 +56,8 @@ public class TracePathGenerator {
     private static TracePath createTracePath(InterNodeList path, float lThreshold, float qThreshold) {
         int pathIndex = 0, sequenceEnd;
         double sequenceType1, sequenceType2;
-        ArrayList<Double[]> smp = new ArrayList<>();
-        //Double [] thissegment;
+        List<Double[]> smp = new ArrayList<>();
+        //Double [] this segment;
         int pathLength = path.getInterNodes().length;
 
         while (pathIndex < pathLength) {
