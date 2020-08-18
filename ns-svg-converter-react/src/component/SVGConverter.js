@@ -93,26 +93,28 @@ const SVGConverter = ({ imageFilename, imageData }) => {
   }
 
   return (
-    <div className="row col-lg-12 text-center">
-      <div className="col-md-6 col-sm-6 portfolio-item">
-        <img className="img-fluid" src={imageData} />
-        <div className="portfolio-caption">
-          <h4>Original image</h4>
-          <button className="btn btn-success" onClick={(e) => convertSvg()}>
-            Convert
-          </button>
+      <>
+        <div className="row col-lg-12 text-center">
+          <div className="mx-auto">
+            <img className="img-fluid" src={imageData} />
+            <div className="portfolio-caption">
+              <h4>Original image</h4>
+              <button className="btn btn-success" onClick={(e) => convertSvg()}>
+                Convert
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="col-md-6 col-sm-6 align-self-center">
-        <SVGConvertingView
-          imageFilename={imageFilename}
-          loading={loading}
-          svgData={svgData}
-          errorMsg={errorMsg}
-        />
-      </div>
-    </div>
+        <div className="row col-lg-12 text-center">
+          <SVGConvertingView
+              imageFilename={imageFilename}
+              loading={loading}
+              svgData={svgData}
+              errorMsg={errorMsg}
+          />
+        </div>
+      </>
   )
 }
 
