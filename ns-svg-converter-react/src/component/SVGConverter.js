@@ -13,7 +13,7 @@ const SVGConvertingView = ({ imageFilename, loading, svgData, errorMsg }) => {
 
   if (loading) {
     return (
-      <div>
+      <div className="mx-auto">
         <div className="portfolio-caption text-center">
           <h4>Converting an image({imageFilename})...</h4>
           <i className="fa fa-refresh fa-spin fa-3x fa-fw"></i>
@@ -39,7 +39,7 @@ const SVGConvertingView = ({ imageFilename, loading, svgData, errorMsg }) => {
     `data:image/svg+xml;base64,${Buffer.from(SVG).toString("base64")}`
 
   return (
-    <div>
+    <div className="mx-auto">
       <img src={convertSvgToBase64ImgString(svgData)} />
       <div className="portfolio-caption">
         <h4>Converted SVG image</h4>
