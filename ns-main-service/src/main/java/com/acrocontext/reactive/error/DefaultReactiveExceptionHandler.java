@@ -24,6 +24,7 @@ package com.acrocontext.reactive.error;
 import com.acrocontext.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
@@ -48,7 +49,7 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
     public DefaultReactiveExceptionHandler(ServerCodecConfigurer serverCodecConfigurer,
                                            ErrorAttributes errorAttributes,
-                                           ResourceProperties resourceProperties,
+                                           WebProperties.Resources resourceProperties,
                                            ApplicationContext applicationContext) {
         super(errorAttributes, resourceProperties, applicationContext);
 
