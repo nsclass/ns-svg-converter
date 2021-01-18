@@ -23,11 +23,16 @@ package com.acrocontext.reactive;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.cassandra.CassandraHealthContributorAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraReactiveDataAutoConfiguration;
+import org.springframework.context.annotation.Profile;
 
-@SpringBootApplication(exclude = {CassandraReactiveDataAutoConfiguration.class, CassandraDataAutoConfiguration.class})
+// remove CassandraAutoConfiguration.class from exclude if active profile is cassandra
+@SpringBootApplication(exclude = {CassandraAutoConfiguration.class})
+@Profile("dao_memory")
 public class AcrocontextReactiveApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {

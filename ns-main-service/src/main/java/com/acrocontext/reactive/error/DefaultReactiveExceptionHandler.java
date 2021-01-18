@@ -25,6 +25,7 @@ import com.acrocontext.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -68,7 +69,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
     }
 
     private Mono<ServerResponse> svgConversionErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request, false);
+        Map<String, Object> error = getErrorAttributes(request,
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
         return ServerResponse.status(errorStatus)
@@ -101,7 +103,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
     }
 
     private Mono<ServerResponse> beanValidationErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request, false);
+        Map<String, Object> error = getErrorAttributes(request,
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
         return ServerResponse.status(errorStatus)
@@ -121,7 +124,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
     }
 
     private Mono<ServerResponse> accessDeniedErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request, false);
+        Map<String, Object> error = getErrorAttributes(request,
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         HttpStatus errorStatus = HttpStatus.FORBIDDEN;
         return ServerResponse.status(errorStatus)
@@ -140,7 +144,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
     }
 
     private Mono<ServerResponse> tokenSecurityErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request, false);
+        Map<String, Object> error = getErrorAttributes(request,
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         HttpStatus errorStatus = HttpStatus.FORBIDDEN;
         return ServerResponse.status(errorStatus)
@@ -161,7 +166,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
     }
 
     private Mono<ServerResponse> registrationErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request, false);
+        Map<String, Object> error = getErrorAttributes(request,
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         HttpStatus errorStatus = HttpStatus.METHOD_NOT_ALLOWED;
         return ServerResponse.status(errorStatus)
@@ -180,7 +186,8 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
     }
 
     private Mono<ServerResponse> changePasswordErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request, false);
+        Map<String, Object> error = getErrorAttributes(request,
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         HttpStatus errorStatus = HttpStatus.FORBIDDEN;
         return ServerResponse.status(errorStatus)

@@ -27,7 +27,7 @@ wrapper {
 
 buildscript {
 	ext {
-		springBootVersion = '2.3.2.RELEASE'
+		springBootVersion = '2.4.2'
         buildDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 	}
 	repositories {

@@ -33,7 +33,7 @@ import java.util.Set;
  * @author Nam Seob Seo
  */
 
-public class SimpleValidataion {
+public class SimpleValidation {
 
     public static <T> BeanValidationException validate(Validator validator, T object) {
 

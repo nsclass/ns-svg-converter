@@ -21,7 +21,7 @@
 
 package com.acrocontext.reactive.services;
 
-import com.acrocontext.common.utils.SimpleValidataion;
+import com.acrocontext.common.utils.SimpleValidation;
 import com.acrocontext.exceptions.BeanValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,6 @@ public class BeanValidatorService {
     }
 
     public <T> BeanValidationException validate(T object) {
-        return SimpleValidataion.validate(validator, object);
+        return SimpleValidation.validate(validator, object);
     }
 }
