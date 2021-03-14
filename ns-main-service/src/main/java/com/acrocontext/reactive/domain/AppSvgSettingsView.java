@@ -23,10 +23,9 @@ import lombok.Data;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 public class AppSvgSettingsView {
-    private boolean useLimit;
-    private int numberOfColorLimitation;
-    private int imageSizeLimitation;
+  private boolean useLimit;
+  private int numberOfColorLimitation;
+  private int imageSizeLimitation;
 }

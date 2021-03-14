@@ -30,25 +30,25 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class CustomUserDetailService implements ReactiveUserDetailsService {
-    private final UserService userService;
+  private final UserService userService;
 
-    @Autowired
-    public CustomUserDetailService(UserService userService) {
-        this.userService = userService;
-    }
+  @Autowired
+  public CustomUserDetailService(UserService userService) {
+    this.userService = userService;
+  }
 
-    @Override
-    public Mono<UserDetails> findByUsername(String username) {
-        Mono<User> userFound = userService.findUserByEmail(username);
-        return userFound.map(user -> {
+  @Override
+  public Mono<UserDetails> findByUsername(String username) {
+    Mono<User> userFound = userService.findUserByEmail(username);
+    return userFound.map(
+        user -> {
+          UserDetails userDetails =
+              org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+                  .roles(user.getRoleNames().toArray(new String[user.getRoleNames().size()]))
+                  .password(user.getPassword())
+                  .build();
 
-            UserDetails userDetails = org.springframework.security.core.userdetails.User
-                    .withUsername(user.getEmail())
-                    .roles(user.getRoleNames().toArray(new String[user.getRoleNames().size()]))
-                    .password(user.getPassword())
-                    .build();
-
-            return userDetails;
+          return userDetails;
         });
-    }
+  }
 }

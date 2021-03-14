@@ -32,40 +32,42 @@ import reactor.core.publisher.Mono;
 import java.util.function.Function;
 
 @Component
-public class TokenAuthenticationConverter implements Function<ServerWebExchange,Mono<Authentication>> {
+public class TokenAuthenticationConverter
+    implements Function<ServerWebExchange, Mono<Authentication>> {
 
-    private String usernameParameter = "username";
+  private String usernameParameter = "username";
 
-    private String passwordParameter = "password";
+  private String passwordParameter = "password";
 
-    @Override
-    public Mono<Authentication> apply(ServerWebExchange serverWebExchange) {
-        return serverWebExchange.getFormData()
-                .map( data -> createAuthentication(data));
-    }
+  @Override
+  public Mono<Authentication> apply(ServerWebExchange serverWebExchange) {
+    return serverWebExchange.getFormData().map(data -> createAuthentication(data));
+  }
 
-    private UsernamePasswordAuthenticationToken createAuthentication(
-            MultiValueMap<String, String> data) {
-        String username = data.getFirst(this.usernameParameter);
-        String password = data.getFirst(this.passwordParameter);
-        return new UsernamePasswordAuthenticationToken(username, password);
-    }
+  private UsernamePasswordAuthenticationToken createAuthentication(
+      MultiValueMap<String, String> data) {
+    String username = data.getFirst(this.usernameParameter);
+    String password = data.getFirst(this.passwordParameter);
+    return new UsernamePasswordAuthenticationToken(username, password);
+  }
 
-    /**
-     * The parameter name of the form data to extract the username
-     * @param usernameParameter the username HTTP parameter
-     */
-    public void setUsernameParameter(String usernameParameter) {
-        Assert.notNull(usernameParameter, "usernameParameter cannot be null");
-        this.usernameParameter = usernameParameter;
-    }
+  /**
+   * The parameter name of the form data to extract the username
+   *
+   * @param usernameParameter the username HTTP parameter
+   */
+  public void setUsernameParameter(String usernameParameter) {
+    Assert.notNull(usernameParameter, "usernameParameter cannot be null");
+    this.usernameParameter = usernameParameter;
+  }
 
-    /**
-     * The parameter name of the form data to extract the password
-     * @param passwordParameter the password HTTP parameter
-     */
-    public void setPasswordParameter(String passwordParameter) {
-        Assert.notNull(passwordParameter, "passwordParameter cannot be null");
-        this.passwordParameter = passwordParameter;
-    }
+  /**
+   * The parameter name of the form data to extract the password
+   *
+   * @param passwordParameter the password HTTP parameter
+   */
+  public void setPasswordParameter(String passwordParameter) {
+    Assert.notNull(passwordParameter, "passwordParameter cannot be null");
+    this.passwordParameter = passwordParameter;
+  }
 }

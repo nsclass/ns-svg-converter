@@ -26,54 +26,54 @@ wrapper {
 }
 
 buildscript {
-	ext {
-		springBootVersion = '2.4.2'
+    ext {
+        springBootVersion = '2.4.2'
         buildDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
-	}
-	repositories {
+    }
+    repositories {
         jcenter()
         mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-	}
+    }
 }
 
 apply from: file('gradle/bdd.gradle')
 
 allprojects {
-	group = "$appGroupName"
-	version = "$appVersion"
+    group = "$appGroupName"
+    version = "$appVersion"
 }
 
 subprojects {
-	apply plugin: 'java'
-	apply plugin: 'eclipse'
-	apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'io.spring.dependency-management'
 
     sourceCompatibility = 11
     targetCompatibility = 11
 
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
 
-	dependencies {
-		compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
-		compile('org.springframework.boot:spring-boot-starter-security')
+    dependencies {
+        compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
+        compile('org.springframework.boot:spring-boot-starter-security')
         compile('org.springframework.boot:spring-boot-starter-webflux')
         compile('org.springframework.boot:spring-boot-starter-actuator')
         compile('org.springframework.boot:spring-boot-starter-validation')
         compile('org.springframework.boot:spring-boot-configuration-processor')
         compileOnly('org.projectlombok:lombok')
         annotationProcessor("org.projectlombok:lombok")
-		testCompile('org.springframework.boot:spring-boot-starter-test')
-		testCompile('io.projectreactor:reactor-test')
-		testCompile('org.springframework.security:spring-security-test')
-	}
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+        testCompile('io.projectreactor:reactor-test')
+        testCompile('org.springframework.security:spring-security-test')
+    }
 
     dependencyManagement {
         imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }

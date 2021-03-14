@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class TokenAuthExceptionBase extends RuntimeException {
-    public TokenAuthExceptionBase(String message) {
-        super(message);
-    }
+  public TokenAuthExceptionBase(String message) {
+    super(message);
+  }
 }

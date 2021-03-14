@@ -1,5 +1,6 @@
 @token_settings
 Feature: Token settings
+
   Scenario: Verifying token expire
     When I login /api/v1/login with "read@user.com:password"
     And I expect HTTP status code is 200

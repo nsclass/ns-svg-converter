@@ -24,10 +24,9 @@ import lombok.Data;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 @Builder
 public class SvgConvertRespondView {
-    private String filename;
-    private String svgString;
+  private String filename;
+  private String svgString;
 }

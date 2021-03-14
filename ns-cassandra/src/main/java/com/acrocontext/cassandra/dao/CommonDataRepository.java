@@ -30,6 +30,6 @@ import reactor.core.publisher.Mono;
 @Profile({"dao_cassandra", "default"})
 public interface CommonDataRepository extends ReactiveCrudRepository<CommonData, String> {
 
-    @Query("select * from common_data where rowKey = ?0")
-    Mono<CommonData> findByRowKey(String rowKey);
+  @Query("select * from common_data where rowKey = ?0")
+  Mono<CommonData> findByRowKey(String rowKey);
 }

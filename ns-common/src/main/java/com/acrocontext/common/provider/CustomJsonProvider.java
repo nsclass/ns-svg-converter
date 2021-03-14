@@ -31,25 +31,25 @@ import java.io.IOException;
 
 @Service
 public class CustomJsonProvider {
-    private ObjectMapper objectMapper = new ObjectMapper();
+  private ObjectMapper objectMapper = new ObjectMapper();
 
-    public CustomJsonProvider() {
-        objectMapper.registerModule(new JavaTimeModule());
-    }
+  public CustomJsonProvider() {
+    objectMapper.registerModule(new JavaTimeModule());
+  }
 
-    public Mono<String> toJson(Object entity) {
-        try {
-            return Mono.just(objectMapper.writeValueAsString(entity));
-        } catch (JsonProcessingException e) {
-            return Mono.error(e);
-        }
+  public Mono<String> toJson(Object entity) {
+    try {
+      return Mono.just(objectMapper.writeValueAsString(entity));
+    } catch (JsonProcessingException e) {
+      return Mono.error(e);
     }
+  }
 
-    public <T> Mono<T> fromString(String value, Class<T> entityType) {
-        try {
-            return Mono.just(entityType.cast(objectMapper.readValue(value, entityType)));
-        } catch (IOException e) {
-            return Mono.error(e);
-        }
+  public <T> Mono<T> fromString(String value, Class<T> entityType) {
+    try {
+      return Mono.just(entityType.cast(objectMapper.readValue(value, entityType)));
+    } catch (IOException e) {
+      return Mono.error(e);
     }
+  }
 }

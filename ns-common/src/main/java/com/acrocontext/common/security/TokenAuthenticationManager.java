@@ -34,25 +34,26 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class TokenAuthenticationManager implements ReactiveAuthenticationManager {
-    private final CustomUserDetailService userDetailService;
-    private final CustomPasswordProvider passwordProvider;
+  private final CustomUserDetailService userDetailService;
+  private final CustomPasswordProvider passwordProvider;
 
-    @Autowired
-    public TokenAuthenticationManager(CustomUserDetailService userDetailService,
-                                      CustomPasswordProvider passwordProvider) {
-        this.userDetailService = userDetailService;
-        this.passwordProvider = passwordProvider;
-    }
+  @Autowired
+  public TokenAuthenticationManager(
+      CustomUserDetailService userDetailService, CustomPasswordProvider passwordProvider) {
+    this.userDetailService = userDetailService;
+    this.passwordProvider = passwordProvider;
+  }
 
-    @Override
-    public Mono<Authentication> authenticate(Authentication authentication) {
-        final String username = authentication.getName();
-        return userDetailService.findByUsername(username)
-                .publishOn(Schedulers.parallel())
-                .filter( u -> passwordProvider.matches((String) authentication.getCredentials(),
-                        u.getPassword()))
-                .switchIfEmpty(Mono.error(new BadCredentialsException("Invalid Credentials")) )
-                .map( u -> new UsernamePasswordAuthenticationToken(u, u.getPassword(), u.getAuthorities()) );
-    }
-
+  @Override
+  public Mono<Authentication> authenticate(Authentication authentication) {
+    final String username = authentication.getName();
+    return userDetailService
+        .findByUsername(username)
+        .publishOn(Schedulers.parallel())
+        .filter(
+            u ->
+                passwordProvider.matches((String) authentication.getCredentials(), u.getPassword()))
+        .switchIfEmpty(Mono.error(new BadCredentialsException("Invalid Credentials")))
+        .map(u -> new UsernamePasswordAuthenticationToken(u, u.getPassword(), u.getAuthorities()));
+  }
 }

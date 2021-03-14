@@ -41,38 +41,39 @@ import java.util.List;
 @EnableReactiveCassandraRepositories(basePackageClasses = CommonDataRepository.class)
 @Profile({"dao_cassandra", "default"})
 public class NSCassandraConfiguration extends AbstractReactiveCassandraConfiguration {
-    @Value("${cassandra.keyspace}")
-    private String keyspace;
+  @Value("${cassandra.keyspace}")
+  private String keyspace;
 
-    @Value("${cassandra.dataCenter}")
-    private String dataCenter;
+  @Value("${cassandra.dataCenter}")
+  private String dataCenter;
 
-    @Value("${cassandra.replicateFactor}")
-    private int replicateFactor = 1;
+  @Value("${cassandra.replicateFactor}")
+  private int replicateFactor = 1;
 
-    @Override
-    protected String getKeyspaceName() {
-        return keyspace;
-    }
+  @Override
+  protected String getKeyspaceName() {
+    return keyspace;
+  }
 
-    @Override
-    public SchemaAction getSchemaAction() {
-        return SchemaAction.CREATE_IF_NOT_EXISTS;
-    }
+  @Override
+  public SchemaAction getSchemaAction() {
+    return SchemaAction.CREATE_IF_NOT_EXISTS;
+  }
 
-    @Override
-    public String[] getEntityBasePackages() {
-        String[] packages = new String[] { CommonData.class.getPackage().getName() };
-        return packages;
-    }
+  @Override
+  public String[] getEntityBasePackages() {
+    String[] packages = new String[] {CommonData.class.getPackage().getName()};
+    return packages;
+  }
 
-    @Override
-    protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
+  @Override
+  protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
 
-        CreateKeyspaceSpecification defaultKeySpace = CreateKeyspaceSpecification.createKeyspace(keyspace)
-                .ifNotExists()
-                .withNetworkReplication(DataCenterReplication.of(dataCenter, replicateFactor));
+    CreateKeyspaceSpecification defaultKeySpace =
+        CreateKeyspaceSpecification.createKeyspace(keyspace)
+            .ifNotExists()
+            .withNetworkReplication(DataCenterReplication.of(dataCenter, replicateFactor));
 
-        return Collections.singletonList(defaultKeySpace);
-    }
+    return Collections.singletonList(defaultKeySpace);
+  }
 }

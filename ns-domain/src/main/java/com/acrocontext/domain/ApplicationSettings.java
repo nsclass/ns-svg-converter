@@ -28,29 +28,28 @@ import lombok.Data;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 public class ApplicationSettings {
-    public ApplicationSettings() {
-        this.tokenSettings = new TokenSettings();
-        this.svgImageGenerationSettings = new SvgImageGenerationSettings();
-    }
+  public ApplicationSettings() {
+    this.tokenSettings = new TokenSettings();
+    this.svgImageGenerationSettings = new SvgImageGenerationSettings();
+  }
 
-    @Data
-    public static class SvgImageGenerationSettings {
-        private boolean useLimitation = true;
-        private int numberOfColors = 16;
-        private int maxSupportedImageSize = 2 * 1024 * 1024;
-        private int maxNumberOfColors = 16;
-    }
+  @Data
+  public static class SvgImageGenerationSettings {
+    private boolean useLimitation = true;
+    private int numberOfColors = 16;
+    private int maxSupportedImageSize = 2 * 1024 * 1024;
+    private int maxNumberOfColors = 16;
+  }
 
-    private SvgImageGenerationSettings svgImageGenerationSettings;
+  private SvgImageGenerationSettings svgImageGenerationSettings;
 
-    @Data
-    public static class TokenSettings {
-        private int expireInSeconds = 2 * 60 * 60; // 2 hours
-        private String secret = "a.c.r.o.s.e.c.r.e.t";
-    }
+  @Data
+  public static class TokenSettings {
+    private int expireInSeconds = 2 * 60 * 60; // 2 hours
+    private String secret = "a.c.r.o.s.e.c.r.e.t";
+  }
 
-    private TokenSettings tokenSettings;
+  private TokenSettings tokenSettings;
 }

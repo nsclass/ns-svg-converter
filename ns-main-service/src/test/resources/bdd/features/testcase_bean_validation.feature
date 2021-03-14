@@ -1,5 +1,6 @@
 @bean_validation
 Feature: Bean validation
+
   Scenario: This will verify bean validation exception
     When I send POST "/api/v1/users/register" with json without token
     """

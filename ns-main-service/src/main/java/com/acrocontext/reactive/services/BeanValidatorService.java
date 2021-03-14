@@ -33,17 +33,16 @@ import javax.validation.Validator;
  *
  * @author Nam Seob Seo
  */
-
 @Service
 public class BeanValidatorService {
-    private final Validator validator;
+  private final Validator validator;
 
-    @Autowired
-    public BeanValidatorService(Validator validator) {
-        this.validator = validator;
-    }
+  @Autowired
+  public BeanValidatorService(Validator validator) {
+    this.validator = validator;
+  }
 
-    public <T> BeanValidationException validate(T object) {
-        return SimpleValidation.validate(validator, object);
-    }
+  public <T> BeanValidationException validate(T object) {
+    return SimpleValidation.validate(validator, object);
+  }
 }

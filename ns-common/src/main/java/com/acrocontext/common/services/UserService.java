@@ -33,53 +33,56 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-
 @Service
 public class UserService {
 
-    private final UserDao userDao;
-    private final NSDomainFactory nsDomainFactory;
-    private final RoleService roleService;
+  private final UserDao userDao;
+  private final NSDomainFactory nsDomainFactory;
+  private final RoleService roleService;
 
-    @Autowired
-    public UserService(UserDao userDao,
-                       NSDomainFactory nsDomainFactory,
-                       RoleService roleService) {
-        this.userDao = userDao;
-        this.nsDomainFactory = nsDomainFactory;
-        this.roleService = roleService;
+  @Autowired
+  public UserService(UserDao userDao, NSDomainFactory nsDomainFactory, RoleService roleService) {
+    this.userDao = userDao;
+    this.nsDomainFactory = nsDomainFactory;
+    this.roleService = roleService;
+  }
+
+  public Mono<User> findUserByEmail(String email) {
+    return userDao.getUser(email);
+  }
+
+  public Mono<User> registerUser(UserRegistration userRegistration) {
+    if (StringUtils.isEmpty(userRegistration.getEmail())
+        || StringUtils.isEmpty(userRegistration.getPassword())) {
+      return Mono.error(new UserRegistrationInvalidData("Invalid user registration data"));
     }
 
-    public Mono<User> findUserByEmail(String email) {
-        return userDao.getUser(email);
+    if (!userRegistration.getPassword().equals(userRegistration.getPasswordConfirm())) {
+      return Mono.error(new UserRegistrationPasswordMismatch("password mismatched"));
     }
 
-    public Mono<User> registerUser(UserRegistration userRegistration) {
-        if (StringUtils.isEmpty(userRegistration.getEmail()) ||
-                StringUtils.isEmpty(userRegistration.getPassword())) {
-            return Mono.error(new UserRegistrationInvalidData("Invalid user registration data"));
-        }
+    Mono<User> result =
+        userDao
+            .getUser(userRegistration.getEmail())
+            .flatMap(
+                user ->
+                    Mono.error(
+                        new UserRegistrationAlreadyExist(user.getEmail() + " already exists")));
 
-        if (!userRegistration.getPassword().equals(userRegistration.getPasswordConfirm())) {
-            return Mono.error(new UserRegistrationPasswordMismatch("password mismatched"));
-        }
+    return result.switchIfEmpty(saveUser(userRegistration));
+  }
 
-        Mono<User> result = userDao.getUser(userRegistration.getEmail())
-                .flatMap(user -> Mono.error(new UserRegistrationAlreadyExist(user.getEmail() + " already exists")));
+  public Mono<User> updateUser(User user) {
+    return userDao.updateUser(user);
+  }
 
-        return result.switchIfEmpty(saveUser(userRegistration));
-    }
+  private Mono<User> saveUser(UserRegistration userRegistration) {
+    User user =
+        nsDomainFactory.createUser(
+            userRegistration.getEmail(),
+            userRegistration.getPassword(),
+            roleService.getMapAuthorities("MEMBER"));
 
-    public Mono<User> updateUser(User user) {
-        return userDao.updateUser(user);
-    }
-
-    private Mono<User> saveUser(UserRegistration userRegistration) {
-        User user = nsDomainFactory.createUser(userRegistration.getEmail(),
-                userRegistration.getPassword(), roleService.getMapAuthorities("MEMBER"));
-
-        return userDao.addUser(user);
-    }
-
+    return userDao.addUser(user);
+  }
 }

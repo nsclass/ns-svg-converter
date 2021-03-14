@@ -26,10 +26,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@ComponentScan(basePackageClasses = {
-        NSCassandraSpringConfiguration.class
-})
+@ComponentScan(basePackageClasses = {NSCassandraSpringConfiguration.class})
 @Profile({"dao_cassandra", "default"})
-public class NSCassandraSpringConfiguration {
-
-}
+public class NSCassandraSpringConfiguration {}

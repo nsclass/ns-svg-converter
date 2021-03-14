@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class BeanValidationException extends RuntimeException {
-    public BeanValidationException(String message) {
-        super(message);
-    }
+  public BeanValidationException(String message) {
+    super(message);
+  }
 }

@@ -27,24 +27,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class NSDomainFactory {
-    private final CustomPasswordProvider passwordProvider;
+  private final CustomPasswordProvider passwordProvider;
 
-    @Autowired
-    public NSDomainFactory(CustomPasswordProvider passwordProvider) {
-        this.passwordProvider = passwordProvider;
-    }
+  @Autowired
+  public NSDomainFactory(CustomPasswordProvider passwordProvider) {
+    this.passwordProvider = passwordProvider;
+  }
 
-    public User createUser(String email, String password, List<String> roles) {
-        return new User(UUID.randomUUID().toString(),
-                email,
-                passwordProvider.encode(password),
-                true,
-                roles,
-                ZonedDateTime.now());
-    }
-
+  public User createUser(String email, String password, List<String> roles) {
+    return new User(
+        UUID.randomUUID().toString(),
+        email,
+        passwordProvider.encode(password),
+        true,
+        roles,
+        ZonedDateTime.now());
+  }
 }

@@ -1,5 +1,6 @@
 @app_setting_api
 Feature: Application Settings API
+
   Scenario: This will verify application settings API
     When I login /api/v1/login with "read@user.com:password"
     And I expect HTTP status code is 200

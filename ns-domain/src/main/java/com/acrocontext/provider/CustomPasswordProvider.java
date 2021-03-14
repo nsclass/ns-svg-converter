@@ -27,19 +27,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomPasswordProvider implements PasswordEncoder {
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    public CustomPasswordProvider() {
-        passwordEncoder = new BCryptPasswordEncoder();
-    }
+  public CustomPasswordProvider() {
+    passwordEncoder = new BCryptPasswordEncoder();
+  }
 
-    @Override
-    public String encode(CharSequence rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }
+  @Override
+  public String encode(CharSequence rawPassword) {
+    return passwordEncoder.encode(rawPassword);
+  }
 
-    @Override
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
+  @Override
+  public boolean matches(CharSequence rawPassword, String encodedPassword) {
+    return passwordEncoder.matches(rawPassword, encodedPassword);
+  }
 }

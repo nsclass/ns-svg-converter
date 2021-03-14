@@ -33,11 +33,11 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @NoArgsConstructor
 @Table("common_data")
 public class CommonData {
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-    private String rowKey;
+  @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+  private String rowKey;
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
-    private String id;
+  @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
+  private String id;
 
-    private String customData;
+  private String customData;
 }

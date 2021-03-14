@@ -23,8 +23,7 @@ import java.time.Duration;
  *
  * @author Nam Seob Seo
  */
-
 @FunctionalInterface
 public interface OperationProgressListener {
-    void onProgressInfo(String description, int current, int total, Duration duration);
+  void onProgressInfo(String description, int current, int total, Duration duration);
 }

@@ -49,101 +49,110 @@ import java.io.SequenceInputStream;
  *
  * @author Nam Seob Seo
  */
-
 @RestController
 @RequestMapping("/api/v1/svg")
 public class SvgConverterController {
-    private final ImageSvgConverter imageSvgConverter;
-    private final ApplicationSettingsService applicationSettingsService;
-    private final ObjectMapper objectMapper;
+  private final ImageSvgConverter imageSvgConverter;
+  private final ApplicationSettingsService applicationSettingsService;
+  private final ObjectMapper objectMapper;
 
-    @Autowired
-    public SvgConverterController(ImageSvgConverter imageSvgConverter,
-                                  ApplicationSettingsService applicationSettingsService,
-                                  ObjectMapper objectMapper) {
-        this.imageSvgConverter = imageSvgConverter;
-        this.applicationSettingsService = applicationSettingsService;
-        this.objectMapper = objectMapper;
+  @Autowired
+  public SvgConverterController(
+      ImageSvgConverter imageSvgConverter,
+      ApplicationSettingsService applicationSettingsService,
+      ObjectMapper objectMapper) {
+    this.imageSvgConverter = imageSvgConverter;
+    this.applicationSettingsService = applicationSettingsService;
+    this.objectMapper = objectMapper;
+  }
 
-    }
+  private SvgConvertRespondView convertRespondView(SvgConvertRequestView convertRequestView) {
+    byte[] imageData = createBytesFromBase64(convertRequestView.getImageDataBase64());
+    try (InputStream inputStream = new ByteArrayInputStream(imageData)) {
+      BufferedImage bufferedImage = ImageIO.read(inputStream);
 
+      ApplicationSettings applicationSettings =
+          applicationSettingsService.getApplicationSettingsInCache();
+      ApplicationSettings.SvgImageGenerationSettings settings =
+          applicationSettings.getSvgImageGenerationSettings();
 
-    private SvgConvertRespondView convertRespondView(SvgConvertRequestView convertRequestView) {
-        byte[] imageData = createBytesFromBase64(convertRequestView.getImageDataBase64());
-        try (InputStream inputStream = new ByteArrayInputStream(imageData)) {
-            BufferedImage bufferedImage = ImageIO.read(inputStream);
-
-            ApplicationSettings applicationSettings = applicationSettingsService.getApplicationSettingsInCache();
-            ApplicationSettings.SvgImageGenerationSettings settings = applicationSettings.getSvgImageGenerationSettings();
-
-            int imageSize = bufferedImage.getData().getDataBuffer().getSize();
-            if (settings.isUseLimitation()) {
-                if (imageSize > settings.getMaxSupportedImageSize()) {
-                    throw new SvgImageGenerationError("Not supported image size");
-                }
-
-                if (convertRequestView.getNumberOfColors() > settings.getMaxNumberOfColors()) {
-                    throw new SvgImageGenerationError("Not supported number of colors");
-                }
-            }
-
-            ImageConvertOptions options = ImageConvertOptions
-                    .builder()
-                    .numberOfColors(convertRequestView.getNumberOfColors())
-                    .colorSampling(true)
-                    .build();
-
-            String svgString = imageSvgConverter.convertImageToSVG(bufferedImage, options, ((description, current, total, duration) ->
-                    System.out.println(String.format("%s, %d/%d, %s", description, current, total, duration))));
-
-            return SvgConvertRespondView.builder()
-                    .filename(convertRequestView.getImageFilename())
-                    .svgString(svgString)
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private <T> T toRequestBody(InputStream inputStream, Class<T> classValue) {
-        try {
-            return objectMapper.readValue(inputStream, classValue);
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static class InputStreamCollector {
-        private InputStream inputStream;
-
-        public void collectInputStream(InputStream inputStream) {
-            if (this.inputStream == null) {
-                this.inputStream = inputStream;
-            }
-
-            this.inputStream = new SequenceInputStream(this.inputStream, inputStream);
+      int imageSize = bufferedImage.getData().getDataBuffer().getSize();
+      if (settings.isUseLimitation()) {
+        if (imageSize > settings.getMaxSupportedImageSize()) {
+          throw new SvgImageGenerationError("Not supported image size");
         }
 
-        public InputStream getInputStream() {
-            return this.inputStream;
+        if (convertRequestView.getNumberOfColors() > settings.getMaxNumberOfColors()) {
+          throw new SvgImageGenerationError("Not supported number of colors");
         }
+      }
+
+      ImageConvertOptions options =
+          ImageConvertOptions.builder()
+              .numberOfColors(convertRequestView.getNumberOfColors())
+              .colorSampling(true)
+              .build();
+
+      String svgString =
+          imageSvgConverter.convertImageToSVG(
+              bufferedImage,
+              options,
+              ((description, current, total, duration) ->
+                  System.out.println(
+                      String.format("%s, %d/%d, %s", description, current, total, duration))));
+
+      return SvgConvertRespondView.builder()
+          .filename(convertRequestView.getImageFilename())
+          .svgString(svgString)
+          .build();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private <T> T toRequestBody(InputStream inputStream, Class<T> classValue) {
+    try {
+      return objectMapper.readValue(inputStream, classValue);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static class InputStreamCollector {
+    private InputStream inputStream;
+
+    public void collectInputStream(InputStream inputStream) {
+      if (this.inputStream == null) {
+        this.inputStream = inputStream;
+      }
+
+      this.inputStream = new SequenceInputStream(this.inputStream, inputStream);
     }
 
-    @PutMapping(path = "/conversion",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<SvgConvertRespondView> convertImage(ServerWebExchange exchange) {
-        return exchange.getRequest().getBody()
-                .collect(InputStreamCollector::new, (inputStreamCollector, dataBuffer)->
-                        inputStreamCollector.collectInputStream(dataBuffer.asInputStream()))
-                .map(InputStreamCollector::getInputStream)
-                .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestView.class))
-                .map(this::convertRespondView);
+    public InputStream getInputStream() {
+      return this.inputStream;
     }
+  }
 
-    private static byte[] createBytesFromBase64(String data) {
-        String base64Image = data.split(",")[1];
-        return javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-    }
+  @PutMapping(
+      path = "/conversion",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<SvgConvertRespondView> convertImage(ServerWebExchange exchange) {
+    return exchange
+        .getRequest()
+        .getBody()
+        .collect(
+            InputStreamCollector::new,
+            (inputStreamCollector, dataBuffer) ->
+                inputStreamCollector.collectInputStream(dataBuffer.asInputStream()))
+        .map(InputStreamCollector::getInputStream)
+        .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestView.class))
+        .map(this::convertRespondView);
+  }
 
+  private static byte[] createBytesFromBase64(String data) {
+    String base64Image = data.split(",")[1];
+    return javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+  }
 }

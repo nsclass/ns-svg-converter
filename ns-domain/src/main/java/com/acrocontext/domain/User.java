@@ -32,11 +32,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private String Id;
-    private String email;
-    private String password;
-    private boolean active;
-    private List<String> roleNames;
-    private ZonedDateTime createdUtcDateTime;
+  private String Id;
+  private String email;
+  private String password;
+  private boolean active;
+  private List<String> roleNames;
+  private ZonedDateTime createdUtcDateTime;
 }
-

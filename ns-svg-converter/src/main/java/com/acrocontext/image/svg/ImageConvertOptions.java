@@ -24,40 +24,23 @@ import lombok.Data;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 @Builder
 public class ImageConvertOptions {
-    @Builder.Default
-    float lThreshold = 1f;
-    @Builder.Default
-    float qThreshold = 1f;
-    @Builder.Default
-    int pathOmit = 8;
-    @Builder.Default
-    boolean colorSampling = true;
-    @Builder.Default
-    int numberOfColors = 16;
-    @Builder.Default
-    float minColorRatio = 0.02f;
-    @Builder.Default
-    int colorQuantCycles = 3;
-    @Builder.Default
-    float scale = 1f;
-    @Builder.Default
-    float simplifyTolerance = 0f;
-    @Builder.Default
-    float roundCoords = 1f;
-    @Builder.Default
-    float lCpr = 0f;
-    @Builder.Default
-    float qCpr = 0f;
-    @Builder.Default
-    boolean showDescription = false;
-    @Builder.Default
-    float viewBox = 0f;
-    @Builder.Default
-    float blurRadius = 0f;
-    @Builder.Default
-    float blurDelta = 20f;
+  @Builder.Default float lThreshold = 1f;
+  @Builder.Default float qThreshold = 1f;
+  @Builder.Default int pathOmit = 8;
+  @Builder.Default boolean colorSampling = true;
+  @Builder.Default int numberOfColors = 16;
+  @Builder.Default float minColorRatio = 0.02f;
+  @Builder.Default int colorQuantCycles = 3;
+  @Builder.Default float scale = 1f;
+  @Builder.Default float simplifyTolerance = 0f;
+  @Builder.Default float roundCoords = 1f;
+  @Builder.Default float lCpr = 0f;
+  @Builder.Default float qCpr = 0f;
+  @Builder.Default boolean showDescription = false;
+  @Builder.Default float viewBox = 0f;
+  @Builder.Default float blurRadius = 0f;
+  @Builder.Default float blurDelta = 20f;
 }

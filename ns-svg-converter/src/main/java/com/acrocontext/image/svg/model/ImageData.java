@@ -24,15 +24,14 @@ import lombok.Value;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class ImageData {
-    private final int width;
-    private final int height;
-    private final byte[] data; // raw byte data: R G B A R G B A ...
+  private final int width;
+  private final int height;
+  private final byte[] data; // raw byte data: R G B A R G B A ...
 
-    public byte dataAt(int idx) {
-        return data[idx];
-    }
+  public byte dataAt(int idx) {
+    return data[idx];
+  }
 }

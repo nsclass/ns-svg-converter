@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class GeneralUserNotFound extends RuntimeException {
-    public GeneralUserNotFound(String message) {
-        super(message);
-    }
+  public GeneralUserNotFound(String message) {
+    super(message);
+  }
 }

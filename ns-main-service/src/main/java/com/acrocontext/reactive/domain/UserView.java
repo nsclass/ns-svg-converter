@@ -32,13 +32,10 @@ import javax.validation.constraints.NotBlank;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 @AllArgsConstructor
 public class UserView {
-    @Email
-    private String email;
-    private boolean active;
-    @NotBlank
-    private String creationTime;
+  @Email private String email;
+  private boolean active;
+  @NotBlank private String creationTime;
 }

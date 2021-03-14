@@ -22,7 +22,7 @@
 package com.acrocontext.exceptions;
 
 public class UserRegistrationAlreadyExist extends UserRegistrationExceptionBase {
-    public UserRegistrationAlreadyExist(String message) {
-        super(message);
-    }
+  public UserRegistrationAlreadyExist(String message) {
+    super(message);
+  }
 }

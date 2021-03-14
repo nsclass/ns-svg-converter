@@ -24,13 +24,12 @@ import lombok.Value;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class InterNode {
-    private final double[] point;
+  private final double[] point;
 
-    public double valueAt(int idx) {
-        return point[idx];
-    }
+  public double valueAt(int idx) {
+    return point[idx];
+  }
 }

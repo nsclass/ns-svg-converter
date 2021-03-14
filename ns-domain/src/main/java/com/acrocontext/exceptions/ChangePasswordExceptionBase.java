@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class ChangePasswordExceptionBase extends RuntimeException {
-    public ChangePasswordExceptionBase(String message) {
-        super(message);
-    }
+  public ChangePasswordExceptionBase(String message) {
+    super(message);
+  }
 }

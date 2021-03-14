@@ -30,35 +30,33 @@ import java.util.function.Supplier;
  *
  * @author Nam Seob Seo
  */
-
 @Slf4j
 public class ParallelOperationUtils {
-    public static void executeTasks(List<Supplier<Integer>> tasks) {
+  public static void executeTasks(List<Supplier<Integer>> tasks) {
 
-        CompletableFuture[] list = new CompletableFuture[tasks.size()];
-        for (int idx = 0; idx < tasks.size(); ++idx) {
-            list[idx] = CompletableFuture.supplyAsync(tasks.get(idx));
-        }
-
-        CompletableFuture.allOf(list).join();
+    CompletableFuture[] list = new CompletableFuture[tasks.size()];
+    for (int idx = 0; idx < tasks.size(); ++idx) {
+      list[idx] = CompletableFuture.supplyAsync(tasks.get(idx));
     }
 
-    public static <T> T[] execute(Class<T> c, List<Supplier<Pair<Integer, T>>> tasks) {
+    CompletableFuture.allOf(list).join();
+  }
 
-        CompletableFuture<Pair<Integer, T>>[] list = new CompletableFuture[tasks.size()];
-        for (int idx = 0; idx < tasks.size(); ++idx) {
-            list[idx] = CompletableFuture.supplyAsync(tasks.get(idx));
-        }
+  public static <T> T[] execute(Class<T> c, List<Supplier<Pair<Integer, T>>> tasks) {
 
-        CompletableFuture.allOf(list);
-
-        @SuppressWarnings(value = "unchecked")
-        final T[] results = (T[]) Array.newInstance(c, tasks.size());
-        Arrays.stream(list).map(CompletableFuture::join)
-                .forEach(item -> results[item.getFirst()] = item.getSecond());
-
-        return results;
-
+    CompletableFuture<Pair<Integer, T>>[] list = new CompletableFuture[tasks.size()];
+    for (int idx = 0; idx < tasks.size(); ++idx) {
+      list[idx] = CompletableFuture.supplyAsync(tasks.get(idx));
     }
 
+    CompletableFuture.allOf(list);
+
+    @SuppressWarnings(value = "unchecked")
+    final T[] results = (T[]) Array.newInstance(c, tasks.size());
+    Arrays.stream(list)
+        .map(CompletableFuture::join)
+        .forEach(item -> results[item.getFirst()] = item.getSecond());
+
+    return results;
+  }
 }

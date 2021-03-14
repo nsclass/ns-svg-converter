@@ -28,9 +28,8 @@ import lombok.Data;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 public class AppSettingsView {
-    private AppTokenSettingsView appTokenSettings;
-    private AppSvgSettingsView appSvgSettings;
+  private AppTokenSettingsView appTokenSettings;
+  private AppSvgSettingsView appSvgSettings;
 }

@@ -24,17 +24,16 @@ import lombok.Value;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class TracePathLayers {
-    private final TracePath[] tracePaths;
+  private final TracePath[] tracePaths;
 
-    public TracePath tracePathAt(int idx) {
-        return tracePaths[idx];
-    }
+  public TracePath tracePathAt(int idx) {
+    return tracePaths[idx];
+  }
 
-    public double valueAt(int idx, int idx2, int idx3) {
-        return tracePaths[idx].valueAt(idx2, idx3);
-    }
+  public double valueAt(int idx, int idx2, int idx3) {
+    return tracePaths[idx].valueAt(idx2, idx3);
+  }
 }

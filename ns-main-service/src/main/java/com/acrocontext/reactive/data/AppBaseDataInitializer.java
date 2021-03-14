@@ -33,59 +33,58 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @Profile({"dao_cassandra", "default"})
 public class AppBaseDataInitializer {
-    private final AdminDataRepository adminDataRepository;
-    private final CassandraDomainDataFactory cassandraDomainDataFactory;
-    private final NSDomainFactory nsDomainFactory;
-    private final RoleService roleService;
+  private final AdminDataRepository adminDataRepository;
+  private final CassandraDomainDataFactory cassandraDomainDataFactory;
+  private final NSDomainFactory nsDomainFactory;
+  private final RoleService roleService;
 
-    @Autowired
-    public AppBaseDataInitializer(AdminDataRepository adminDataRepository,
-                                  CassandraDomainDataFactory cassandraDomainDataFactory,
-                                  NSDomainFactory nsDomainFactory,
-                                  RoleService roleService) {
-        this.adminDataRepository = adminDataRepository;
-        this.cassandraDomainDataFactory = cassandraDomainDataFactory;
-        this.nsDomainFactory = nsDomainFactory;
-        this.roleService = roleService;
+  @Autowired
+  public AppBaseDataInitializer(
+      AdminDataRepository adminDataRepository,
+      CassandraDomainDataFactory cassandraDomainDataFactory,
+      NSDomainFactory nsDomainFactory,
+      RoleService roleService) {
+    this.adminDataRepository = adminDataRepository;
+    this.cassandraDomainDataFactory = cassandraDomainDataFactory;
+    this.nsDomainFactory = nsDomainFactory;
+    this.roleService = roleService;
+  }
+
+  @PostConstruct
+  void init() {
+
+    // add roles
+    for (String roleName : roleService.getAllRoles()) {
+      Role role = new Role(UUID.randomUUID().toString(), roleName);
+      cassandraDomainDataFactory
+          .createRoleData(role)
+          .flatMap(
+              data -> {
+                return adminDataRepository
+                    .findByRowKey(cassandraDomainDataFactory.getRoleRowKey(roleName))
+                    .switchIfEmpty(adminDataRepository.save(data));
+              })
+          .subscribe(value -> log.info("Role: " + value.getRowKey()));
     }
 
-    @PostConstruct
-    void init() {
-
-        // add roles
-        for (String roleName : roleService.getAllRoles()) {
-            Role role = new Role(UUID.randomUUID().toString(), roleName);
-            cassandraDomainDataFactory.createRoleData(role)
-                    .flatMap(data -> {
-                        return adminDataRepository
-                                .findByRowKey(cassandraDomainDataFactory
-                                        .getRoleRowKey(roleName))
-                                .switchIfEmpty(adminDataRepository.save(data));
-                    })
-                    .subscribe(value ->
-                            log.info("Role: " + value.getRowKey()));
-        }
-
-        // add admin user
-        User adminUser = nsDomainFactory.createUser("admin@admin.com",
-                "pleasechangepassword",
-                roleService.getMapAuthorities("ADMIN"));
-        cassandraDomainDataFactory.createAdminUserData(adminUser)
-                .flatMap(data -> {
-                    return adminDataRepository
-                            .findByRowKey(cassandraDomainDataFactory
-                                    .getUserRowKey(adminUser.getEmail()))
-                            .switchIfEmpty(adminDataRepository.save(data));
-                })
-                .subscribe(value ->
-                        log.info("Admin user: " + value.getRowKey()));
-
-    }
+    // add admin user
+    User adminUser =
+        nsDomainFactory.createUser(
+            "admin@admin.com", "pleasechangepassword", roleService.getMapAuthorities("ADMIN"));
+    cassandraDomainDataFactory
+        .createAdminUserData(adminUser)
+        .flatMap(
+            data -> {
+              return adminDataRepository
+                  .findByRowKey(cassandraDomainDataFactory.getUserRowKey(adminUser.getEmail()))
+                  .switchIfEmpty(adminDataRepository.save(data));
+            })
+        .subscribe(value -> log.info("Admin user: " + value.getRowKey()));
+  }
 }

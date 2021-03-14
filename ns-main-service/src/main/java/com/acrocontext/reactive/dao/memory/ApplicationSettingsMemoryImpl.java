@@ -27,22 +27,22 @@ import reactor.core.publisher.Mono;
  *
  * @author Nam Seob Seo
  */
-
 @Repository
 @Profile("dao_memory")
 public class ApplicationSettingsMemoryImpl implements ApplicationSettingsDao {
 
-    private ApplicationSettings applicationSettings = new ApplicationSettings();
+  private ApplicationSettings applicationSettings = new ApplicationSettings();
 
-    @Override
-    public Mono<ApplicationSettings> loadApplicationSettings() {
-        return Mono.just(applicationSettings);
-    }
+  @Override
+  public Mono<ApplicationSettings> loadApplicationSettings() {
+    return Mono.just(applicationSettings);
+  }
 
-    @Override
-    public Mono<ApplicationSettings> saveApplicationSettings(ApplicationSettings applicationSettings) {
+  @Override
+  public Mono<ApplicationSettings> saveApplicationSettings(
+      ApplicationSettings applicationSettings) {
 
-        this.applicationSettings = applicationSettings;
-        return Mono.just(applicationSettings);
-    }
+    this.applicationSettings = applicationSettings;
+    return Mono.just(applicationSettings);
+  }
 }

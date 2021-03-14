@@ -25,6 +25,7 @@ import com.acrocontext.domain.Role;
 import reactor.core.publisher.Mono;
 
 public interface RoleDao {
-    Mono<Role> getRole(String roleName);
-    Mono<Role> addRole(Role role);
+  Mono<Role> getRole(String roleName);
+
+  Mono<Role> addRole(Role role);
 }

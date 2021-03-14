@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class ChangePasswordNotMatchOldPassword extends ChangePasswordExceptionBase {
-    public ChangePasswordNotMatchOldPassword(String message) {
-        super(message);
-    }
+  public ChangePasswordNotMatchOldPassword(String message) {
+    super(message);
+  }
 }

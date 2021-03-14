@@ -21,9 +21,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class SvgImageGenerationError extends RuntimeException {
-    public SvgImageGenerationError(String message) {
-        super(message);
-    }
+  public SvgImageGenerationError(String message) {
+    super(message);
+  }
 }

@@ -33,20 +33,20 @@ import reactor.core.publisher.Flux;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-    @PreAuthorize("hasRole('MEMBER')")
-    @GetMapping(path ="/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Flux<Product> getAllProduct() {
-        return Flux.just(new Product("test", "test", "test"));
-    }
+  @PreAuthorize("hasRole('MEMBER')")
+  @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Flux<Product> getAllProduct() {
+    return Flux.just(new Product("test", "test", "test"));
+  }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Flux<Product> getProductList() {
-        return Flux.just(new Product("test1", "test1", "test1"));
-    }
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public Flux<Product> getProductList() {
+    return Flux.just(new Product("test1", "test1", "test1"));
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(path = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Flux<Product> getProductListForAdmin() {
-        return Flux.just(new Product("test_admin", "test_admin", "test_admin"));
-    }
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping(path = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Flux<Product> getProductListForAdmin() {
+    return Flux.just(new Product("test_admin", "test_admin", "test_admin"));
+  }
 }

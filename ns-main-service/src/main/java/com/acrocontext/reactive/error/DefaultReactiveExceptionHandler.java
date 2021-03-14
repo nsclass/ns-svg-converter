@@ -21,9 +21,12 @@
 
 package com.acrocontext.reactive.error;
 
-import com.acrocontext.exceptions.*;
+import com.acrocontext.exceptions.BeanValidationException;
+import com.acrocontext.exceptions.ChangePasswordExceptionBase;
+import com.acrocontext.exceptions.SvgImageGenerationError;
+import com.acrocontext.exceptions.TokenAuthExceptionBase;
+import com.acrocontext.exceptions.UserRegistrationExceptionBase;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -47,159 +50,137 @@ import java.util.concurrent.CompletionException;
 @Component
 public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHandler {
 
-    public DefaultReactiveExceptionHandler(ServerCodecConfigurer serverCodecConfigurer,
-                                           ErrorAttributes errorAttributes,
-                                           WebProperties.Resources resourceProperties,
-                                           ApplicationContext applicationContext) {
-        super(errorAttributes, resourceProperties, applicationContext);
+  public DefaultReactiveExceptionHandler(
+      ServerCodecConfigurer serverCodecConfigurer,
+      ErrorAttributes errorAttributes,
+      WebProperties.Resources resourceProperties,
+      ApplicationContext applicationContext) {
+    super(errorAttributes, resourceProperties, applicationContext);
 
-        super.setMessageReaders(serverCodecConfigurer.getReaders());
-        super.setMessageWriters(serverCodecConfigurer.getWriters());
+    super.setMessageReaders(serverCodecConfigurer.getReaders());
+    super.setMessageWriters(serverCodecConfigurer.getWriters());
+  }
+
+  @Override
+  protected RouterFunction<ServerResponse> getRoutingFunction(ErrorAttributes errorAttributes) {
+
+    return RouterFunctions.route(this::isUserRegistrationException, this::registrationErrorResponse)
+        .andRoute(this::isAccessDeniedException, this::accessDeniedErrorResponse)
+        .andRoute(this::isBeanValidationException, this::beanValidationErrorResponse)
+        .andRoute(this::isTokenSecurityException, this::tokenSecurityErrorResponse)
+        .andRoute(this::isSvgConversionException, this::svgConversionErrorResponse)
+        .andRoute(this::isChangePasswordException, this::changePasswordErrorResponse);
+  }
+
+  private Mono<ServerResponse> svgConversionErrorResponse(ServerRequest request) {
+    Map<String, Object> error =
+        getErrorAttributes(
+            request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
+
+    HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
+    return ServerResponse.status(errorStatus)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(error)
+        .doOnNext(resp -> logError(request, errorStatus));
+  }
+
+  private boolean isSvgConversionException(ServerRequest request) {
+    Throwable exception = getError(request);
+    if (exception instanceof CompletionException) {
+      CompletionException ex = (CompletionException) exception;
+      exception = ex.getCause();
     }
 
-    @Override
-    protected RouterFunction<ServerResponse> getRoutingFunction(ErrorAttributes errorAttributes) {
+    return exception instanceof SvgImageGenerationError;
+  }
 
-        return RouterFunctions
-                .route(this::isUserRegistrationException, this::registrationErrorResponse)
-                .andRoute(this::isAccessDeniedException, this::accessDeniedErrorResponse)
-                .andRoute(this::isBeanValidationException, this::beanValidationErrorResponse)
-                .andRoute(this::isTokenSecurityException, this::tokenSecurityErrorResponse)
-                .andRoute(this::isSvgConversionException, this::svgConversionErrorResponse)
-                .andRoute(this::isChangePasswordException, this::changePasswordErrorResponse);
-    }
+  private boolean isBeanValidationException(ServerRequest request) {
+    Throwable exception = getError(request);
+    return exception instanceof BeanValidationException;
+  }
 
-    private Mono<ServerResponse> svgConversionErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request,
-                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
+  private Mono<ServerResponse> beanValidationErrorResponse(ServerRequest request) {
+    Map<String, Object> error =
+        getErrorAttributes(
+            request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
-        HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
-        return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(error)
-                .doOnNext(resp -> logError(request, errorStatus));
-    }
+    HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
+    return ServerResponse.status(errorStatus)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(error)
+        .doOnNext(resp -> logError(request, errorStatus));
+  }
 
-    private boolean isSvgConversionException(ServerRequest request) {
-        Throwable exception = getError(request);
-        if (exception instanceof CompletionException) {
-            CompletionException ex = (CompletionException) exception;
-            exception = ex.getCause();
-        }
+  private boolean isAccessDeniedException(ServerRequest request) {
+    Throwable exception = getError(request);
+    return exception instanceof AccessDeniedException;
+  }
 
-        if (exception instanceof SvgImageGenerationError) {
-            return true;
-        }
+  private Mono<ServerResponse> accessDeniedErrorResponse(ServerRequest request) {
+    Map<String, Object> error =
+        getErrorAttributes(
+            request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
-        return false;
-    }
+    HttpStatus errorStatus = HttpStatus.FORBIDDEN;
+    return ServerResponse.status(errorStatus)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(error)
+        .doOnNext(resp -> logError(request, errorStatus));
+  }
 
-    private boolean isBeanValidationException(ServerRequest request) {
-        Throwable exception = getError(request);
-        if (exception instanceof BeanValidationException) {
-            return true;
-        }
+  private boolean isTokenSecurityException(ServerRequest request) {
+    Throwable exception = getError(request);
+    return exception instanceof TokenAuthExceptionBase;
+  }
 
-        return false;
-    }
+  private Mono<ServerResponse> tokenSecurityErrorResponse(ServerRequest request) {
+    Map<String, Object> error =
+        getErrorAttributes(
+            request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
-    private Mono<ServerResponse> beanValidationErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request,
-                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
+    HttpStatus errorStatus = HttpStatus.FORBIDDEN;
+    return ServerResponse.status(errorStatus)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(error)
+        .doOnNext(resp -> logError(request, errorStatus));
+  }
 
-        HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
-        return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(error)
-                .doOnNext(resp -> logError(request, errorStatus));
-    }
+  private boolean isUserRegistrationException(ServerRequest request) {
+    Throwable exception = getError(request);
+    return exception instanceof UserRegistrationExceptionBase;
+  }
 
+  private Mono<ServerResponse> registrationErrorResponse(ServerRequest request) {
+    Map<String, Object> error =
+        getErrorAttributes(
+            request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
-    private boolean isAccessDeniedException(ServerRequest request) {
-        Throwable exception = getError(request);
-        if (exception instanceof AccessDeniedException) {
-            return true;
-        }
+    HttpStatus errorStatus = HttpStatus.METHOD_NOT_ALLOWED;
+    return ServerResponse.status(errorStatus)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(error)
+        .doOnNext(resp -> logError(request, errorStatus));
+  }
 
-        return false;
-    }
+  private boolean isChangePasswordException(ServerRequest serverRequest) {
+    Throwable exception = getError(serverRequest);
+    return exception instanceof ChangePasswordExceptionBase;
+  }
 
-    private Mono<ServerResponse> accessDeniedErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request,
-                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
+  private Mono<ServerResponse> changePasswordErrorResponse(ServerRequest request) {
+    Map<String, Object> error =
+        getErrorAttributes(
+            request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
-        HttpStatus errorStatus = HttpStatus.FORBIDDEN;
-        return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(error)
-                .doOnNext(resp -> logError(request, errorStatus));
-    }
+    HttpStatus errorStatus = HttpStatus.FORBIDDEN;
+    return ServerResponse.status(errorStatus)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(error)
+        .doOnNext(resp -> logError(request, errorStatus));
+  }
 
-    private boolean isTokenSecurityException(ServerRequest request) {
-        Throwable exception = getError(request);
-        if (exception instanceof TokenAuthExceptionBase) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private Mono<ServerResponse> tokenSecurityErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request,
-                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
-
-        HttpStatus errorStatus = HttpStatus.FORBIDDEN;
-        return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(error)
-                .doOnNext(resp -> logError(request, errorStatus));
-    }
-
-
-    private boolean isUserRegistrationException(ServerRequest request) {
-        Throwable exception = getError(request);
-        if (exception instanceof UserRegistrationExceptionBase) {
-            return true;
-        }
-
-        return false;
-
-    }
-
-    private Mono<ServerResponse> registrationErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request,
-                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
-
-        HttpStatus errorStatus = HttpStatus.METHOD_NOT_ALLOWED;
-        return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(error)
-                .doOnNext(resp -> logError(request, errorStatus));
-    }
-
-    private boolean isChangePasswordException(ServerRequest serverRequest) {
-        Throwable exception = getError(serverRequest);
-        if (exception instanceof ChangePasswordExceptionBase) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private Mono<ServerResponse> changePasswordErrorResponse(ServerRequest request) {
-        Map<String, Object> error = getErrorAttributes(request,
-                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
-
-        HttpStatus errorStatus = HttpStatus.FORBIDDEN;
-        return ServerResponse.status(errorStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(error)
-                .doOnNext(resp -> logError(request, errorStatus));
-    }
-
-    private void logError(ServerRequest request, HttpStatus errorStatus) {
-        Throwable ex = getError(request);
-        log.error("Exception [" + request.methodName() + " "
-                + request.uri() + "]", ex);
-    }
+  private void logError(ServerRequest request, HttpStatus errorStatus) {
+    Throwable ex = getError(request);
+    log.error("Exception [" + request.methodName() + " " + request.uri() + "]", ex);
+  }
 }

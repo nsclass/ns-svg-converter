@@ -32,9 +32,10 @@ import reactor.core.publisher.Mono;
  *
  * @author Nam Seob Seo
  */
-
 @Profile({"dao_cassandra", "default"})
-public interface ApplicationSettingsRepository extends ReactiveCrudRepository<ApplicationSettingsData, String> {
-    @Query("select * from app_settings_data where rowKey = '" + ApplicationSettingsData.ROW_KEY + '\'')
-    Mono<ApplicationSettingsData> loadSettings();
+public interface ApplicationSettingsRepository
+    extends ReactiveCrudRepository<ApplicationSettingsData, String> {
+  @Query(
+      "select * from app_settings_data where rowKey = '" + ApplicationSettingsData.ROW_KEY + '\'')
+  Mono<ApplicationSettingsData> loadSettings();
 }

@@ -7,12 +7,12 @@ import MainView from "./component/MainView"
 import ErrorBoundary from "./component/ErrorBoundary"
 
 const App = () => {
-  return (
-    <ErrorBoundary>
-      <MainNavBar />
-      <MainView />
-    </ErrorBoundary>
-  )
+    return (
+        <ErrorBoundary>
+            <MainNavBar/>
+            <MainView/>
+        </ErrorBoundary>
+    )
 }
 
 export default App

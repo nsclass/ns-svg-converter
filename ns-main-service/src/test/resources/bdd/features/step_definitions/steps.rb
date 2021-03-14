@@ -1,4 +1,3 @@
-
 When(/^I send (GET|POST|PUT|PATCH) "(.+)" without token$/) do |method, url|
   request_http_with_token(method, url, get_bearer_token)
 end
@@ -10,7 +9,6 @@ end
 When(/^I login (.+) with "(.+):(.+)"$/) do |url, username, password|
   request_http_login(username, password, url)
 end
-
 
 When(/^I send (GET|POST|PUT|PATCH) "(.+)" with (json|text|form)$/) do |method, url, content_type, content|
   request_http_with_token(method, url, get_bearer_token, content_type, content)
@@ -49,7 +47,7 @@ Then(/^I expect HTTP JSON error message contains text$/) do |string|
   rescue RSpec::Expectations::ExpectationNotMetError => json_error
     # better error msg with actual JSON vs just the diff from json_spec
     full_error = "Actual full JSON:\n" + $http_json_response.body +
-        "\n--------Text Not matched ----------\n" + error_message + "\n"
+      "\n--------Text Not matched ----------\n" + error_message + "\n"
     raise RSpec::Expectations::ExpectationNotMetError.new(full_error)
   end
 end
@@ -65,7 +63,7 @@ Then(/^I expect HTTP JSON field (.+) contains text$/) do |field, string|
   rescue RSpec::Expectations::ExpectationNotMetError => json_error
     # better error msg with actual JSON vs just the diff from json_spec
     full_error = "Actual full JSON:\n" + $http_json_response.body +
-        "\n--------Text Not matched ----------\n" + json_field + "\n"
+      "\n--------Text Not matched ----------\n" + json_field + "\n"
     raise RSpec::Expectations::ExpectationNotMetError.new(full_error)
   end
 end
@@ -81,13 +79,13 @@ Then(/^I expect HTTP JSON field (.+) matches to$/) do |field, string|
   rescue RSpec::Expectations::ExpectationNotMetError => json_error
     # better error msg with actual JSON vs just the diff from json_spec
     full_error = "Actual full JSON:\n" + $http_json_response.body +
-        "\n--------Text Not matched ----------\n" + json_field + "\n"
+      "\n--------Text Not matched ----------\n" + json_field + "\n"
     raise RSpec::Expectations::ExpectationNotMetError.new(full_error)
   end
 end
 
 Then(/^I expect JSON result to, except fields "(.*?)"$/) do |except_fields, string|
-  string = replace_memorized_variables(string,false)
+  string = replace_memorized_variables(string, false)
   expected = JSON.parse(string)
 
   except_field_names = except_fields.gsub(/\s+/, "").split(",").to_set
@@ -105,8 +103,8 @@ Then(/^I expect JSON result to, except fields "(.*?)"$/) do |except_fields, stri
   rescue RSpec::Expectations::ExpectationNotMetError => json_error
     # better error msg with actual JSON vs just the diff from json_spec
     full_error = "Actual full JSON:\n" + JSON.pretty_generate(actual) +
-        "\n------------------------------\nActual JSON with expected fields only:\n" + JSON.pretty_generate(actual_compare) +
-        "\n------------------------------\n" + json_error.to_s
+      "\n------------------------------\nActual JSON with expected fields only:\n" + JSON.pretty_generate(actual_compare) +
+      "\n------------------------------\n" + json_error.to_s
     raise RSpec::Expectations::ExpectationNotMetError.new(full_error)
   end
 
@@ -124,7 +122,7 @@ Then(/^I expect JSON result to$/) do |string|
 end
 
 Then(/^I expect that the JSON include:$/) do |string|
-  string = replace_memorized_variables(string,false)
+  string = replace_memorized_variables(string, false)
   expected = JSON.parse(string)
   expected_field_names = get_unique_field_names(expected)
 
@@ -137,8 +135,8 @@ Then(/^I expect that the JSON include:$/) do |string|
   rescue RSpec::Expectations::ExpectationNotMetError => json_error
     # better error msg with actual JSON vs just the diff from json_spec
     full_error = "Actual full JSON:\n" + JSON.pretty_generate(actual) +
-        "\n------------------------------\nActual JSON with expected fields only:\n" + JSON.pretty_generate(actual_compare) +
-        "\n------------------------------\n" + json_error.to_s
+      "\n------------------------------\nActual JSON with expected fields only:\n" + JSON.pretty_generate(actual_compare) +
+      "\n------------------------------\n" + json_error.to_s
     raise RSpec::Expectations::ExpectationNotMetError.new(full_error)
   end
 end

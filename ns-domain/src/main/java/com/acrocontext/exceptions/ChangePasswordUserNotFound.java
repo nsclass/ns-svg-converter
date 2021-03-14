@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class ChangePasswordUserNotFound extends ChangePasswordExceptionBase {
-    public ChangePasswordUserNotFound(String message) {
-        super(message);
-    }
+  public ChangePasswordUserNotFound(String message) {
+    super(message);
+  }
 }

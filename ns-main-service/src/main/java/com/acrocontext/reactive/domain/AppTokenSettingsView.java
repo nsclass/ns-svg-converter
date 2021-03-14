@@ -30,9 +30,8 @@ import javax.validation.constraints.Positive;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 public class AppTokenSettingsView {
-    @Positive(message = "expire in seconds should be positive integer")
-    private int expireInSeconds;
+  @Positive(message = "expire in seconds should be positive integer")
+  private int expireInSeconds;
 }

@@ -29,11 +29,13 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import reactor.core.publisher.Mono;
 
 public class TokenAuthenticationFailureHandler implements ServerAuthenticationFailureHandler {
-    @Override
-    public Mono<Void> onAuthenticationFailure(WebFilterExchange webFilterExchange, AuthenticationException exception) {
-        return Mono.fromRunnable(() -> {
-            ServerHttpResponse response = webFilterExchange.getExchange().getResponse();
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+  @Override
+  public Mono<Void> onAuthenticationFailure(
+      WebFilterExchange webFilterExchange, AuthenticationException exception) {
+    return Mono.fromRunnable(
+        () -> {
+          ServerHttpResponse response = webFilterExchange.getExchange().getResponse();
+          response.setStatusCode(HttpStatus.UNAUTHORIZED);
         });
-    }
+  }
 }

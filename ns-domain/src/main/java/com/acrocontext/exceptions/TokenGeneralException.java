@@ -22,7 +22,7 @@
 package com.acrocontext.exceptions;
 
 public class TokenGeneralException extends TokenAuthExceptionBase {
-    public TokenGeneralException(String message) {
-        super(message);
-    }
+  public TokenGeneralException(String message) {
+    super(message);
+  }
 }

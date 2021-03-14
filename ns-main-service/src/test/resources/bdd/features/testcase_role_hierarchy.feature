@@ -1,5 +1,6 @@
 @role_hierarchy
 Feature: Role hierarchy
+
   Scenario: Verifying role hierarchy
     When I login /api/v1/login with "admin@admin.com:password"
     And I expect HTTP status code is 200

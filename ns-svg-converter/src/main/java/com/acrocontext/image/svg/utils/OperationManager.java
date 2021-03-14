@@ -30,44 +30,45 @@ import java.util.function.Function;
  *
  * @author Nam Seob Seo
  */
-
-
 public class OperationManager<T> {
 
-    private final OperationProgressListener progressListener;
+  private final OperationProgressListener progressListener;
 
-    @Value
-    @AllArgsConstructor
-    private static class OperationCommand<T> {
-        private String description;
-        private Function<T, T> function;
+  @Value
+  @AllArgsConstructor
+  private static class OperationCommand<T> {
+    private String description;
+    private Function<T, T> function;
+  }
+
+  public OperationManager(OperationProgressListener listener) {
+    this.progressListener = listener;
+  }
+
+  private List<OperationCommand<T>> operationCommandList = new ArrayList<>();
+
+  public OperationManager<T> addOperation(String description, Function<T, T> operation) {
+    operationCommandList.add(new OperationCommand<>(description, operation));
+    return this;
+  }
+
+  public T execute(T context) {
+    int idx = 0;
+    int totalCount = operationCommandList.size();
+    for (OperationCommand<T> operationCommand : operationCommandList) {
+      Instant start = Instant.now();
+
+      operationCommand.function.apply(context);
+      Instant end = Instant.now();
+      progressListener.onProgressInfo(
+          "Done: " + operationCommand.getDescription(),
+          idx,
+          totalCount,
+          Duration.between(start, end));
+
+      ++idx;
     }
 
-    public OperationManager(OperationProgressListener listener) {
-        this.progressListener = listener;
-    }
-
-    private List<OperationCommand<T>> operationCommandList = new ArrayList<>();
-
-    public OperationManager<T> addOperation(String description, Function<T, T> operation) {
-        operationCommandList.add(new OperationCommand<>(description, operation));
-        return this;
-    }
-
-    public T execute(T context) {
-        int idx = 0;
-        int totalCount = operationCommandList.size();
-        for (OperationCommand<T> operationCommand : operationCommandList) {
-            Instant start = Instant.now();
-
-            operationCommand.function.apply(context);
-            Instant end = Instant.now();
-            progressListener.onProgressInfo("Done: " + operationCommand.getDescription(), idx, totalCount, Duration.between(start, end));
-
-            ++idx;
-        }
-
-        return context;
-    }
-
+    return context;
+  }
 }

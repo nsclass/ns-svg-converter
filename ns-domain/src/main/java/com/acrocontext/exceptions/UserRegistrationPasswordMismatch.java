@@ -22,7 +22,7 @@
 package com.acrocontext.exceptions;
 
 public class UserRegistrationPasswordMismatch extends UserRegistrationExceptionBase {
-    public UserRegistrationPasswordMismatch(String message) {
-        super(message);
-    }
+  public UserRegistrationPasswordMismatch(String message) {
+    super(message);
+  }
 }

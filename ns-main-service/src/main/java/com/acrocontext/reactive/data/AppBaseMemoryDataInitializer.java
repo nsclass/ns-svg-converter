@@ -30,28 +30,28 @@ import javax.annotation.PostConstruct;
  *
  * @author Nam Seob Seo
  */
-
 @Service
 @Profile({"dao_memory"})
 public class AppBaseMemoryDataInitializer {
 
-    private final NSDomainFactory nsDomainFactory;
-    private final RoleService roleService;
-    private final UserDao userDao;
+  private final NSDomainFactory nsDomainFactory;
+  private final RoleService roleService;
+  private final UserDao userDao;
 
-    public AppBaseMemoryDataInitializer(NSDomainFactory nsDomainFactory, RoleService roleService, UserDao userDao) {
-        this.nsDomainFactory = nsDomainFactory;
-        this.roleService = roleService;
-        this.userDao = userDao;
-    }
+  public AppBaseMemoryDataInitializer(
+      NSDomainFactory nsDomainFactory, RoleService roleService, UserDao userDao) {
+    this.nsDomainFactory = nsDomainFactory;
+    this.roleService = roleService;
+    this.userDao = userDao;
+  }
 
-    @PostConstruct
-    void init() {
-        // add admin user
-        User adminUser = nsDomainFactory.createUser("admin@admin.com",
-                "pleasechangepassword",
-                roleService.getMapAuthorities("ADMIN"));
+  @PostConstruct
+  void init() {
+    // add admin user
+    User adminUser =
+        nsDomainFactory.createUser(
+            "admin@admin.com", "pleasechangepassword", roleService.getMapAuthorities("ADMIN"));
 
-        userDao.addUser(adminUser);
-    }
+    userDao.addUser(adminUser);
+  }
 }

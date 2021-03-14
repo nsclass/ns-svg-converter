@@ -1,5 +1,6 @@
 @user_creation_time
 Feature: User creation time
+
   Scenario: Verifying user creation time
     When I register a user "/api/v1/users/register" with email: "test@test.com" and password: "password"
     And I expect HTTP status code is 200

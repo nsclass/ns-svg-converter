@@ -34,41 +34,43 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenAuthenticationFilterBuilder {
 
-    private final TokenAuthenticationSuccessHandler tokenAuthenticationSuccessHandler;
-    private final TokenAuthenticationWebFilter tokenAuthenticationWebFilter;
-    private final TokenAuthenticationManager tokenAuthenticationManager;
+  private final TokenAuthenticationSuccessHandler tokenAuthenticationSuccessHandler;
+  private final TokenAuthenticationWebFilter tokenAuthenticationWebFilter;
+  private final TokenAuthenticationManager tokenAuthenticationManager;
 
-    @Autowired
-    public TokenAuthenticationFilterBuilder(TokenAuthenticationSuccessHandler tokenAuthenticationSuccessHandler,
-                                            TokenAuthenticationWebFilter tokenAuthenticationWebFilter,
-                                            TokenAuthenticationManager tokenAuthenticationManager) {
-        this.tokenAuthenticationSuccessHandler = tokenAuthenticationSuccessHandler;
-        this.tokenAuthenticationWebFilter = tokenAuthenticationWebFilter;
-        this.tokenAuthenticationManager = tokenAuthenticationManager;
-    }
+  @Autowired
+  public TokenAuthenticationFilterBuilder(
+      TokenAuthenticationSuccessHandler tokenAuthenticationSuccessHandler,
+      TokenAuthenticationWebFilter tokenAuthenticationWebFilter,
+      TokenAuthenticationManager tokenAuthenticationManager) {
+    this.tokenAuthenticationSuccessHandler = tokenAuthenticationSuccessHandler;
+    this.tokenAuthenticationWebFilter = tokenAuthenticationWebFilter;
+    this.tokenAuthenticationManager = tokenAuthenticationManager;
+  }
 
-    private ServerHttpSecurity configureLogin(ServerHttpSecurity serverHttpSecurity) {
+  private ServerHttpSecurity configureLogin(ServerHttpSecurity serverHttpSecurity) {
 
-        AuthenticationWebFilter authenticationFilter = new AuthenticationWebFilter(
-                this.tokenAuthenticationManager);
-        authenticationFilter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/api/v1/login"));
-        authenticationFilter.setAuthenticationFailureHandler(new TokenAuthenticationFailureHandler());
-        authenticationFilter.setServerAuthenticationConverter( new ServerFormLoginAuthenticationConverter());
-        authenticationFilter.setAuthenticationSuccessHandler(tokenAuthenticationSuccessHandler);
+    AuthenticationWebFilter authenticationFilter =
+        new AuthenticationWebFilter(this.tokenAuthenticationManager);
+    authenticationFilter.setRequiresAuthenticationMatcher(
+        ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/api/v1/login"));
+    authenticationFilter.setAuthenticationFailureHandler(new TokenAuthenticationFailureHandler());
+    authenticationFilter.setServerAuthenticationConverter(
+        new ServerFormLoginAuthenticationConverter());
+    authenticationFilter.setAuthenticationSuccessHandler(tokenAuthenticationSuccessHandler);
 
-        serverHttpSecurity.addFilterAt(authenticationFilter, SecurityWebFiltersOrder.FORM_LOGIN);
-        return serverHttpSecurity;
-    }
+    serverHttpSecurity.addFilterAt(authenticationFilter, SecurityWebFiltersOrder.FORM_LOGIN);
+    return serverHttpSecurity;
+  }
 
-    public ServerHttpSecurity configure(ServerHttpSecurity serverHttpSecurity,
-                                        ServerWebExchangeMatcher permitAllPatternMatcher) {
+  public ServerHttpSecurity configure(
+      ServerHttpSecurity serverHttpSecurity, ServerWebExchangeMatcher permitAllPatternMatcher) {
 
-        tokenAuthenticationWebFilter.setPermitAllPatternMatcher(permitAllPatternMatcher);
+    tokenAuthenticationWebFilter.setPermitAllPatternMatcher(permitAllPatternMatcher);
 
-        configureLogin(serverHttpSecurity)
-                .addFilterAt(tokenAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+    configureLogin(serverHttpSecurity)
+        .addFilterAt(tokenAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION);
 
-        return serverHttpSecurity;
-    }
+    return serverHttpSecurity;
+  }
 }
-

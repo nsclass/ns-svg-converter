@@ -25,8 +25,8 @@ import com.acrocontext.cassandra.dao.AdminDataRepository;
 import com.acrocontext.cassandra.dao.CommonDataRepository;
 import com.acrocontext.cassandra.domain.CommonData;
 import com.acrocontext.cassandra.factory.CassandraDomainDataFactory;
-import com.acrocontext.common.provider.CustomJsonProvider;
 import com.acrocontext.common.dao.UserDao;
+import com.acrocontext.common.provider.CustomJsonProvider;
 import com.acrocontext.common.services.RoleService;
 import com.acrocontext.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,87 +35,89 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 @Repository
 @Profile({"dao_cassandra", "default"})
 public class UserDaoImpl implements UserDao {
-    private final CustomJsonProvider jsonProvider;
-    private final CassandraDomainDataFactory domainDataFactory;
-    private final CommonDataRepository commonDataRepository;
-    private final AdminDataRepository adminDataRepository;
-    private final RoleService roleService;
+  private final CustomJsonProvider jsonProvider;
+  private final CassandraDomainDataFactory domainDataFactory;
+  private final CommonDataRepository commonDataRepository;
+  private final AdminDataRepository adminDataRepository;
+  private final RoleService roleService;
 
-    @Autowired
-    public UserDaoImpl(CustomJsonProvider jsonProvider,
-                       CassandraDomainDataFactory domainDataFactory,
-                       CommonDataRepository commonDataRepository,
-                       AdminDataRepository adminDataRepository,
-                       RoleService roleService) {
-        this.jsonProvider = jsonProvider;
-        this.domainDataFactory = domainDataFactory;
-        this.commonDataRepository = commonDataRepository;
-        this.adminDataRepository = adminDataRepository;
-        this.roleService = roleService;
+  @Autowired
+  public UserDaoImpl(
+      CustomJsonProvider jsonProvider,
+      CassandraDomainDataFactory domainDataFactory,
+      CommonDataRepository commonDataRepository,
+      AdminDataRepository adminDataRepository,
+      RoleService roleService) {
+    this.jsonProvider = jsonProvider;
+    this.domainDataFactory = domainDataFactory;
+    this.commonDataRepository = commonDataRepository;
+    this.adminDataRepository = adminDataRepository;
+    this.roleService = roleService;
+  }
+
+  @Override
+  public Mono<User> getUser(String email) {
+    String rowKey = domainDataFactory.getUserRowKey(email);
+    if (isAdmin(email)) {
+      return adminDataRepository
+          .findByRowKey(rowKey)
+          .flatMap(data -> jsonProvider.fromString(data.getCustomData(), User.class));
+    } else {
+      return commonDataRepository
+          .findByRowKey(rowKey)
+          .flatMap(data -> jsonProvider.fromString(data.getCustomData(), User.class));
+    }
+  }
+
+  private boolean isAdmin(String email) {
+    if (email.equals("admin@admin.com")) {
+      return true;
     }
 
-    @Override
-    public Mono<User> getUser(String email) {
-        String rowKey = domainDataFactory.getUserRowKey(email);
-        if (isAdmin(email)) {
-            return adminDataRepository.findByRowKey(rowKey)
-                    .flatMap(data ->
-                            jsonProvider.fromString(data.getCustomData(), User.class));
-        } else {
-            return commonDataRepository.findByRowKey(rowKey)
-                    .flatMap(data ->
-                            jsonProvider.fromString(data.getCustomData(), User.class));
-        }
+    return false;
+  }
+
+  @Override
+  public Mono<User> addUser(User user) {
+    if (!StringUtils.isEmpty(user) && !StringUtils.isEmpty(user.getPassword())) {
+
+      String userKey = domainDataFactory.getUserRowKey(user.getEmail());
+      return commonDataRepository
+          .findByRowKey(userKey)
+          .switchIfEmpty(createUser(user))
+          .flatMap(commonData -> jsonProvider.fromString(commonData.getCustomData(), User.class));
+    } else {
+      return Mono.error(new RuntimeException("User email or password is empty"));
+    }
+  }
+
+  @Override
+  public Mono<User> updateUser(User user) {
+    if (isAdmin(user.getEmail())) {
+      return domainDataFactory
+          .createAdminUserData(user)
+          .flatMap(adminDataRepository::save)
+          .flatMap(adminData -> jsonProvider.fromString(adminData.getCustomData(), User.class));
+
+    } else {
+      return domainDataFactory
+          .createUserData(user)
+          .flatMap(commonDataRepository::save)
+          .flatMap(commonData -> jsonProvider.fromString(commonData.getCustomData(), User.class));
+    }
+  }
+
+  private Mono<CommonData> createUser(User user) {
+    // generate Id
+    if (StringUtils.isEmpty(user.getId())) {
+      user.setId(UUID.randomUUID().toString());
     }
 
-    private boolean isAdmin(String email) {
-        if (email.equals("admin@admin.com")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public Mono<User> addUser(User user) {
-        if (!StringUtils.isEmpty(user) && !StringUtils.isEmpty(user.getPassword())) {
-
-            String userKey = domainDataFactory.getUserRowKey(user.getEmail());
-            return commonDataRepository.findByRowKey(userKey)
-                    .switchIfEmpty(createUser(user))
-                    .flatMap(commonData -> jsonProvider.fromString(commonData.getCustomData(), User.class));
-        } else {
-            return Mono.error(new RuntimeException("User email or password is empty"));
-        }
-    }
-
-    @Override
-    public Mono<User> updateUser(User user) {
-        if (isAdmin(user.getEmail())) {
-            return domainDataFactory.createAdminUserData(user)
-                    .flatMap(adminDataRepository::save)
-                    .flatMap(adminData -> jsonProvider.fromString(adminData.getCustomData(), User.class));
-
-        } else {
-            return domainDataFactory.createUserData(user)
-                    .flatMap(commonDataRepository::save)
-                    .flatMap(commonData -> jsonProvider.fromString(commonData.getCustomData(), User.class));
-        }
-    }
-
-    private Mono<CommonData> createUser(User user) {
-        // generate Id
-        if (StringUtils.isEmpty(user.getId())) {
-            user.setId(UUID.randomUUID().toString());
-        }
-
-        return domainDataFactory.createUserData(user)
-                .flatMap(data -> commonDataRepository.save(data));
-    }
+    return domainDataFactory.createUserData(user).flatMap(data -> commonDataRepository.save(data));
+  }
 }

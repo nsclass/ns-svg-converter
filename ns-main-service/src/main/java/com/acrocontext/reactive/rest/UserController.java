@@ -37,104 +37,120 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserService userService;
-    private final CustomPasswordProvider passwordProvider;
-    private final BeanValidatorService validatorService;
+  private final UserService userService;
+  private final CustomPasswordProvider passwordProvider;
+  private final BeanValidatorService validatorService;
 
-    @Autowired
-    public UserController(UserService userService,
-                          CustomPasswordProvider passwordProvider,
-                          BeanValidatorService validatorService) {
-        this.userService = userService;
-        this.passwordProvider = passwordProvider;
-        this.validatorService = validatorService;
-    }
+  @Autowired
+  public UserController(
+      UserService userService,
+      CustomPasswordProvider passwordProvider,
+      BeanValidatorService validatorService) {
+    this.userService = userService;
+    this.passwordProvider = passwordProvider;
+    this.validatorService = validatorService;
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(path = "/{username}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<UserView> getUser(@PathVariable String username) {
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<UserView> getUser(@PathVariable String username) {
 
-        return userService.findUserByEmail(username)
-                .map(user -> {
-                    return new UserView(user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
-                });
-    }
+    return userService
+        .findUserByEmail(username)
+        .map(
+            user -> {
+              return new UserView(
+                  user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
+            });
+  }
 
-    @PreAuthorize("hasRole('MEMBER')")
-    @GetMapping(path = "/operations/profile",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<UserView> getUserProfile() {
+  @PreAuthorize("hasRole('MEMBER')")
+  @GetMapping(path = "/operations/profile", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<UserView> getUserProfile() {
 
-        return ReactiveSecurityContextHolder
-                .getContext()
-                .flatMap(securityContext -> {
-                    UserDetails userDetails = (UserDetails)securityContext.getAuthentication()
-                            .getDetails();
+    return ReactiveSecurityContextHolder.getContext()
+        .flatMap(
+            securityContext -> {
+              UserDetails userDetails =
+                  (UserDetails) securityContext.getAuthentication().getDetails();
 
-                    return userService.findUserByEmail(userDetails.getUsername());
-                })
-                .switchIfEmpty(Mono.error(new GeneralUserNotFound("Failed to find a user")))
-                .map(user -> {
-                    return new UserView(user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
-                });
+              return userService.findUserByEmail(userDetails.getUsername());
+            })
+        .switchIfEmpty(Mono.error(new GeneralUserNotFound("Failed to find a user")))
+        .map(
+            user -> {
+              return new UserView(
+                  user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
+            });
+  }
 
-    }
+  @PostMapping(
+      path = "/register",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<UserView> addUser(@RequestBody UserRegistration userRegistration) {
 
-    @PostMapping(path = "/register",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<UserView> addUser(@RequestBody UserRegistration userRegistration) {
+    BeanValidationException exception = validatorService.validate(userRegistration);
+    if (exception != null) return Mono.error(exception);
 
-        BeanValidationException exception = validatorService.validate(userRegistration);
-        if (exception != null)
-            return Mono.error(exception);
+    return userService
+        .registerUser(userRegistration)
+        .map(
+            user -> {
+              return new UserView(
+                  user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
+            });
+  }
 
-        return userService.registerUser(userRegistration)
-                .map(user -> {
-                    return new UserView(user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
-                });
-    }
+  @PatchMapping(
+      path = "/operations/password",
+      consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<GeneralResponseView> changePassword(ServerWebExchange exchange) {
 
-    @PatchMapping(path = "/operations/password",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<GeneralResponseView> changePassword(ServerWebExchange exchange) {
+    Mono<MultiValueMap<String, String>> data = exchange.getFormData();
+    return data.flatMap(
+        formData -> {
+          String oldPassword = formData.getFirst("oldpassword");
+          String newPassword = formData.getFirst("newpassword");
 
-        Mono<MultiValueMap<String, String>> data = exchange.getFormData();
-        return data.flatMap(formData -> {
-            String oldPassword = formData.getFirst("oldpassword");
-            String newPassword = formData.getFirst("newpassword");
+          return ReactiveSecurityContextHolder.getContext()
+              .flatMap(
+                  securityContext -> {
+                    UserDetails userDetails =
+                        (UserDetails) securityContext.getAuthentication().getDetails();
 
-            return ReactiveSecurityContextHolder
-                    .getContext()
-                    .flatMap(securityContext -> {
-                        UserDetails userDetails = (UserDetails)securityContext.getAuthentication()
-                                .getDetails();
+                    if (passwordProvider.matches(oldPassword, userDetails.getPassword())) {
+                      return userService
+                          .findUserByEmail(userDetails.getUsername())
+                          .flatMap(
+                              user -> {
+                                user.setPassword(passwordProvider.encode(newPassword));
+                                return userService.updateUser(user);
+                              })
+                          .switchIfEmpty(
+                              Mono.error(new ChangePasswordUserNotFound("Invalid user/password")));
 
-                        if (passwordProvider.matches(oldPassword, userDetails.getPassword())) {
-                            return userService.findUserByEmail(userDetails.getUsername())
-                                    .flatMap(user -> {
-                                        user.setPassword(passwordProvider.encode(newPassword));
-                                        return userService.updateUser(user);
-                                    })
-                                    .switchIfEmpty(Mono.error(new ChangePasswordUserNotFound("Invalid user/password")));
-
-                        } else {
-                            return Mono.error(new ChangePasswordNotMatchOldPassword("Invalid user/password"));
-                        }
-                    })
-                    .map(user -> new GeneralResponseView("Successfully changed a password"));
+                    } else {
+                      return Mono.error(
+                          new ChangePasswordNotMatchOldPassword("Invalid user/password"));
+                    }
+                  })
+              .map(user -> new GeneralResponseView("Successfully changed a password"));
         });
-    }
+  }
 }

@@ -26,29 +26,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class TokenAuthentication extends AbstractAuthenticationToken {
 
-    private String token;
-    private final UserDetails userDetails;
+  private String token;
+  private final UserDetails userDetails;
 
-    public TokenAuthentication(UserDetails userDetails, String token) {
-        super(userDetails.getAuthorities());
-        super.setAuthenticated(true);
-        super.setDetails(userDetails);
+  public TokenAuthentication(UserDetails userDetails, String token) {
+    super(userDetails.getAuthorities());
+    super.setAuthenticated(true);
+    super.setDetails(userDetails);
 
-        this.userDetails = userDetails;
-        this.token = token;
-    }
+    this.userDetails = userDetails;
+    this.token = token;
+  }
 
-    public String getToken() {
-        return token;
-    }
+  public String getToken() {
+    return token;
+  }
 
-    @Override
-    public String getCredentials() {
-        return token;
-    }
+  @Override
+  public String getCredentials() {
+    return token;
+  }
 
-    @Override
-    public UserDetails getPrincipal() {
-        return userDetails;
-    }
+  @Override
+  public UserDetails getPrincipal() {
+    return userDetails;
+  }
 }

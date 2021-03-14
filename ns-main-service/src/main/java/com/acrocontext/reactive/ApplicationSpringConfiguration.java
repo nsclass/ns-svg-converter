@@ -42,24 +42,27 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 
 @Configuration
 @Import({
-        NSDomainSpringConfiguration.class,
-        NSCommonSpringConfiguration.class,
-        NSCassandraSpringConfiguration.class,
-        NSCassandraConfiguration.class
-        })
+  NSDomainSpringConfiguration.class,
+  NSCommonSpringConfiguration.class,
+  NSCassandraSpringConfiguration.class,
+  NSCassandraConfiguration.class
+})
 @ComponentScan(basePackageClasses = ApplicationSpringConfiguration.class)
 @EnableWebFlux
 public class ApplicationSpringConfiguration {
-    @Value("classpath:/static/index.html")
-    private Resource indexHtml;
+  @Value("classpath:/static/index.html")
+  private Resource indexHtml;
 
-    @Bean
-    RouterFunction<?> routerFunction() {
-        RouterFunction router = RouterFunctions.resources("/**", new ClassPathResource("static/"))
-                // workaround solution for forwarding / to /index.html
-                .andRoute(GET("/"), request -> {
-                    return ServerResponse.ok().contentType(TEXT_HTML).syncBody(indexHtml);
+  @Bean
+  RouterFunction<?> routerFunction() {
+    RouterFunction router =
+        RouterFunctions.resources("/**", new ClassPathResource("static/"))
+            // workaround solution for forwarding / to /index.html
+            .andRoute(
+                GET("/"),
+                request -> {
+                  return ServerResponse.ok().contentType(TEXT_HTML).syncBody(indexHtml);
                 });
-        return router;
-    }
+    return router;
+  }
 }

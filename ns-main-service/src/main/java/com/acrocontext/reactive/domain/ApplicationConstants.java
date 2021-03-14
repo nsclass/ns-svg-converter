@@ -26,7 +26,6 @@ package com.acrocontext.reactive.domain;
  *
  * @author Nam Seob Seo
  */
-
 public class ApplicationConstants {
-    public static final int DEFAULT_TOKEN_EXPIRE_TIME_IN_SECONDS = 60 * 60 * 2;
+  public static final int DEFAULT_TOKEN_EXPIRE_TIME_IN_SECONDS = 60 * 60 * 2;
 }

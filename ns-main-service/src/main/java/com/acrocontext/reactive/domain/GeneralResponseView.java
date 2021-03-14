@@ -29,9 +29,8 @@ import lombok.Data;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 @AllArgsConstructor
 public class GeneralResponseView {
-    private String message;
+  private String message;
 }

@@ -26,9 +26,8 @@ package com.acrocontext.exceptions;
  *
  * @author Nam Seob Seo
  */
-
 public class UserRegistrationExceptionBase extends RuntimeException {
-    public UserRegistrationExceptionBase(String message) {
-        super(message);
-    }
+  public UserRegistrationExceptionBase(String message) {
+    super(message);
+  }
 }

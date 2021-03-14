@@ -25,12 +25,9 @@ import javax.validation.constraints.NotBlank;
  *
  * @author Nam Seob Seo
  */
-
 @Data
 public class SvgConvertRequestView {
-    @NotBlank
-    private String imageFilename;
-    @NotBlank
-    private String imageDataBase64;
-    private int numberOfColors = 16;
+  @NotBlank private String imageFilename;
+  @NotBlank private String imageDataBase64;
+  private int numberOfColors = 16;
 }

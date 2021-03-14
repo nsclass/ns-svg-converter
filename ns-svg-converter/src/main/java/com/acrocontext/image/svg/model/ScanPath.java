@@ -26,10 +26,8 @@ import java.util.List;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class ScanPath {
-    private final List<Path> scanPath;
-
+  private final List<Path> scanPath;
 }

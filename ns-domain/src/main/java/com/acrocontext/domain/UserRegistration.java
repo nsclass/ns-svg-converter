@@ -28,10 +28,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class UserRegistration {
-    @Email
-    private String email;
-    @NotBlank
-    private String password;
-    @NotBlank
-    private String passwordConfirm;
+  @Email private String email;
+  @NotBlank private String password;
+  @NotBlank private String passwordConfirm;
 }

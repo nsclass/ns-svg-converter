@@ -33,29 +33,28 @@ import reactor.core.publisher.Mono;
  *
  * @author Nam Seob Seo
  */
-
 @RestController
 @RequestMapping("/api/v1/admin")
 @Profile("dao_memory")
 public class MemoryDaoAdminController {
-    private final UserDaoMemoryImpl userDaoMemory;
-    private final ApplicationSettingsService applicationSettingsService;
+  private final UserDaoMemoryImpl userDaoMemory;
+  private final ApplicationSettingsService applicationSettingsService;
 
-    @Autowired
-    public MemoryDaoAdminController(UserDaoMemoryImpl userDaoMemory,
-                                    ApplicationSettingsService applicationSettingsService) {
-        this.userDaoMemory = userDaoMemory;
-        this.applicationSettingsService = applicationSettingsService;
-    }
+  @Autowired
+  public MemoryDaoAdminController(
+      UserDaoMemoryImpl userDaoMemory, ApplicationSettingsService applicationSettingsService) {
+    this.userDaoMemory = userDaoMemory;
+    this.applicationSettingsService = applicationSettingsService;
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(path ="/clear",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> clearData() {
-        userDaoMemory.clearData();
+  @PreAuthorize("hasRole('ADMIN')")
+  @PutMapping(path = "/clear", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<String> clearData() {
+    userDaoMemory.clearData();
 
-        applicationSettingsService.setTokenSettingsInAsync(new ApplicationSettings.TokenSettings());
-        applicationSettingsService.setSvgSettingsInAsync(new ApplicationSettings.SvgImageGenerationSettings());
-        return Mono.just("success");
-    }
+    applicationSettingsService.setTokenSettingsInAsync(new ApplicationSettings.TokenSettings());
+    applicationSettingsService.setSvgSettingsInAsync(
+        new ApplicationSettings.SvgImageGenerationSettings());
+    return Mono.just("success");
+  }
 }

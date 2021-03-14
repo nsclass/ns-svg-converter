@@ -24,9 +24,8 @@ import lombok.Value;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class InterNodeListLayers {
-    private final InterNodeList[] interNodeLists;
+  private final InterNodeList[] interNodeLists;
 }

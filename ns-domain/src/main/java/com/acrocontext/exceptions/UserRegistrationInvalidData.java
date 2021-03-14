@@ -22,7 +22,7 @@
 package com.acrocontext.exceptions;
 
 public class UserRegistrationInvalidData extends UserRegistrationExceptionBase {
-    public UserRegistrationInvalidData(String message) {
-        super(message);
-    }
+  public UserRegistrationInvalidData(String message) {
+    super(message);
+  }
 }

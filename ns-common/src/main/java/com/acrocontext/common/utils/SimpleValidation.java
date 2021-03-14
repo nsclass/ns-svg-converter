@@ -32,22 +32,22 @@ import java.util.Set;
  *
  * @author Nam Seob Seo
  */
-
 public class SimpleValidation {
 
-    public static <T> BeanValidationException validate(Validator validator, T object) {
+  public static <T> BeanValidationException validate(Validator validator, T object) {
 
-        Set<ConstraintViolation<T>> validatorSet = validator.validate(object);
+    Set<ConstraintViolation<T>> validatorSet = validator.validate(object);
 
-        if (!validatorSet.isEmpty()) {
-            StringBuilder errorMsg = new StringBuilder();
-            validatorSet.forEach(cv -> {
-                errorMsg.append(cv.getPropertyPath() + " - " + cv.getMessage() + "\n");
-            });
+    if (!validatorSet.isEmpty()) {
+      StringBuilder errorMsg = new StringBuilder();
+      validatorSet.forEach(
+          cv -> {
+            errorMsg.append(cv.getPropertyPath() + " - " + cv.getMessage() + "\n");
+          });
 
-            return new BeanValidationException(errorMsg.toString());
-        }
-
-        return null;
+      return new BeanValidationException(errorMsg.toString());
     }
+
+    return null;
+  }
 }

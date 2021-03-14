@@ -32,22 +32,20 @@ import java.util.List;
  *
  * @author Nam Seob Seo
  */
-
 @Service
 public class RoleService {
-    private List<String> roles = Arrays.asList("ADMIN", "STAFF", "MEMBER", "LIMITED_MEMBER");
+  private List<String> roles = Arrays.asList("ADMIN", "STAFF", "MEMBER", "LIMITED_MEMBER");
 
-    public List<String> getAllRoles() {
-        return roles;
+  public List<String> getAllRoles() {
+    return roles;
+  }
+
+  public List<String> getMapAuthorities(String role) {
+    int idx = roles.indexOf(role);
+    if (idx >= 0) {
+      return roles.subList(idx, roles.size());
     }
 
-    public List<String> getMapAuthorities(String role) {
-        int idx = roles.indexOf(role);
-        if (idx >= 0) {
-            return roles.subList(idx, roles.size());
-        }
-
-        return new ArrayList<>();
-    }
-
+    return new ArrayList<>();
+  }
 }

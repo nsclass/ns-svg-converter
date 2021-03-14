@@ -25,7 +25,9 @@ import com.acrocontext.domain.User;
 import reactor.core.publisher.Mono;
 
 public interface UserDao {
-    Mono<User> getUser(String email);
-    Mono<User> addUser(User user);
-    Mono<User> updateUser(User user);
+  Mono<User> getUser(String email);
+
+  Mono<User> addUser(User user);
+
+  Mono<User> updateUser(User user);
 }

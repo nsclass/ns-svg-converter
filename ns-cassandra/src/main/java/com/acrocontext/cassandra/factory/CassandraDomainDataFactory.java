@@ -21,51 +21,47 @@
 
 package com.acrocontext.cassandra.factory;
 
-import com.acrocontext.cassandra.domain.*;
+import com.acrocontext.cassandra.domain.AdminData;
+import com.acrocontext.cassandra.domain.CommonData;
 import com.acrocontext.common.provider.CustomJsonProvider;
-import com.acrocontext.domain.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.acrocontext.domain.Role;
+import com.acrocontext.domain.User;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
 @Service
 @Profile({"dao_cassandra", "default"})
 public class CassandraDomainDataFactory {
-    private final CustomJsonProvider jsonProvider;
+  private final CustomJsonProvider jsonProvider;
 
-    public CassandraDomainDataFactory(CustomJsonProvider jsonProvider) {
-        this.jsonProvider = jsonProvider;
-    }
+  public CassandraDomainDataFactory(CustomJsonProvider jsonProvider) {
+    this.jsonProvider = jsonProvider;
+  }
 
-    public String getUserRowKey(String email) {
-        return "USER_DATA$" + email;
-    }
+  public String getUserRowKey(String email) {
+    return "USER_DATA$" + email;
+  }
 
-    public Mono<CommonData> createUserData(User user) {
-        return jsonProvider.toJson(user)
-                .map(value ->
-                        new CommonData(getUserRowKey(user.getEmail()), user.getId(), value));
+  public Mono<CommonData> createUserData(User user) {
+    return jsonProvider
+        .toJson(user)
+        .map(value -> new CommonData(getUserRowKey(user.getEmail()), user.getId(), value));
+  }
 
-    }
+  public String getRoleRowKey(String roleName) {
+    return "ROLE_DATA$" + roleName;
+  }
 
-    public String getRoleRowKey(String roleName) {
-        return "ROLE_DATA$" + roleName;
-    }
+  public Mono<AdminData> createRoleData(Role role) {
+    return jsonProvider
+        .toJson(role)
+        .map(value -> new AdminData(getRoleRowKey(role.getRoleName()), role.getId(), value));
+  }
 
-    public Mono<AdminData> createRoleData(Role role) {
-        return jsonProvider.toJson(role)
-                .map(value ->
-                        new AdminData(getRoleRowKey(role.getRoleName()), role.getId(), value));
-
-    }
-
-    public Mono<AdminData> createAdminUserData(User user) {
-        return jsonProvider.toJson(user)
-                .map(value ->
-                        new AdminData(getUserRowKey(user.getEmail()), user.getId(), value));
-
-    }
+  public Mono<AdminData> createAdminUserData(User user) {
+    return jsonProvider
+        .toJson(user)
+        .map(value -> new AdminData(getUserRowKey(user.getEmail()), user.getId(), value));
+  }
 }

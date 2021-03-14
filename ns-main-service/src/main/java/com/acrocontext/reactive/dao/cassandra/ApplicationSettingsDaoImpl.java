@@ -36,38 +36,45 @@ import reactor.core.publisher.Mono;
  *
  * @author Nam Seob Seo
  */
-
 @Repository
 @Profile({"dao_cassandra", "default"})
 public class ApplicationSettingsDaoImpl implements ApplicationSettingsDao {
 
-    private final CustomJsonProvider jsonProvider;
-    private final ApplicationSettingsRepository applicationSettingsRepository;
+  private final CustomJsonProvider jsonProvider;
+  private final ApplicationSettingsRepository applicationSettingsRepository;
 
-    @Autowired
-    public ApplicationSettingsDaoImpl(CustomJsonProvider jsonProvider,
-                                      ApplicationSettingsRepository applicationSettingsRepository) {
-        this.jsonProvider = jsonProvider;
-        this.applicationSettingsRepository = applicationSettingsRepository;
-    }
+  @Autowired
+  public ApplicationSettingsDaoImpl(
+      CustomJsonProvider jsonProvider,
+      ApplicationSettingsRepository applicationSettingsRepository) {
+    this.jsonProvider = jsonProvider;
+    this.applicationSettingsRepository = applicationSettingsRepository;
+  }
 
-    @Override
-    public Mono<ApplicationSettings> loadApplicationSettings() {
-        return applicationSettingsRepository.loadSettings()
-                .flatMap(settings -> {
-                    return jsonProvider.fromString(settings.getCustomData(), ApplicationSettings.class);
-                });
-    }
+  @Override
+  public Mono<ApplicationSettings> loadApplicationSettings() {
+    return applicationSettingsRepository
+        .loadSettings()
+        .flatMap(
+            settings -> {
+              return jsonProvider.fromString(settings.getCustomData(), ApplicationSettings.class);
+            });
+  }
 
-    @Override
-    public Mono<ApplicationSettings> saveApplicationSettings(ApplicationSettings applicationSettings) {
-        return jsonProvider.toJson(applicationSettings)
-                .flatMap(settingsData -> {
-                    ApplicationSettingsData data = new ApplicationSettingsData(ApplicationSettingsData.ROW_KEY,
-                            settingsData);
-                    return applicationSettingsRepository.save(data);
-                }).flatMap(data -> {
-                    return jsonProvider.fromString(data.getCustomData(), ApplicationSettings.class);
-                });
-    }
+  @Override
+  public Mono<ApplicationSettings> saveApplicationSettings(
+      ApplicationSettings applicationSettings) {
+    return jsonProvider
+        .toJson(applicationSettings)
+        .flatMap(
+            settingsData -> {
+              ApplicationSettingsData data =
+                  new ApplicationSettingsData(ApplicationSettingsData.ROW_KEY, settingsData);
+              return applicationSettingsRepository.save(data);
+            })
+        .flatMap(
+            data -> {
+              return jsonProvider.fromString(data.getCustomData(), ApplicationSettings.class);
+            });
+  }
 }

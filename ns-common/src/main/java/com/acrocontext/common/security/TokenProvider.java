@@ -39,68 +39,70 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-
 @Slf4j
 @Component
 @EnableConfigurationProperties
 public class TokenProvider {
 
-    @Value("${app.name}")
-    private String appName;
+  @Value("${app.name}")
+  private String appName;
 
-    private final ApplicationSettingsService applicationSettingsService;
+  private final ApplicationSettingsService applicationSettingsService;
 
-    private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+  private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    @Autowired
-    public TokenProvider(ApplicationSettingsService applicationSettingsService) {
-        this.applicationSettingsService = applicationSettingsService;
+  @Autowired
+  public TokenProvider(ApplicationSettingsService applicationSettingsService) {
+    this.applicationSettingsService = applicationSettingsService;
+  }
+
+  public Mono<String> getUsernameFromToken(String token) {
+    return getClaimsFromToken(token).map(Claims::getSubject);
+  }
+
+  public String generateToken(String username) {
+    String token =
+        Jwts.builder()
+            .setIssuer(appName)
+            .setSubject(username)
+            .setIssuedAt(generateCurrentDate())
+            .setExpiration(generateExpirationDate())
+            .signWith(
+                SIGNATURE_ALGORITHM,
+                applicationSettingsService.getTokenSettingsInCache().getSecret())
+            .compact();
+    return token;
+  }
+
+  public Mono<Claims> getClaimsFromToken(String token) {
+    try {
+      Claims claims =
+          Jwts.parser()
+              .setSigningKey(applicationSettingsService.getTokenSettingsInCache().getSecret())
+              .parseClaimsJws(token)
+              .getBody();
+
+      return Mono.just(claims);
+    } catch (ExpiredJwtException e) {
+      return Mono.error(new TokenExpiredException(e.getMessage()));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return Mono.error(new TokenGeneralException(e.getMessage()));
     }
+  }
 
-    public Mono<String> getUsernameFromToken(String token) {
-        return getClaimsFromToken(token)
-                .map(Claims::getSubject);
-    }
+  private Date generateCurrentDate() {
+    LocalDateTime localDateTime = LocalDateTime.now();
+    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
 
-    public String generateToken(String username) {
-        String token = Jwts.builder()
-                .setIssuer(appName)
-                .setSubject(username)
-                .setIssuedAt(generateCurrentDate())
-                .setExpiration(generateExpirationDate())
-                .signWith(SIGNATURE_ALGORITHM,
-                        applicationSettingsService.getTokenSettingsInCache().getSecret())
-                .compact();
-        return token;
-    }
+  private Date generateExpirationDate() {
 
-    public Mono<Claims> getClaimsFromToken(String token) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(applicationSettingsService.getTokenSettingsInCache().getSecret())
-                    .parseClaimsJws(token)
-                    .getBody();
+    LocalDateTime localDateTime = LocalDateTime.now();
+    localDateTime =
+        localDateTime.plusSeconds(
+            applicationSettingsService.getTokenSettingsInCache().getExpireInSeconds());
 
-            return Mono.just(claims);
-        } catch (ExpiredJwtException e) {
-            return Mono.error(new TokenExpiredException(e.getMessage()));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Mono.error(new TokenGeneralException(e.getMessage()));
-        }
-    }
-
-
-    private Date generateCurrentDate() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    private Date generateExpirationDate() {
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        localDateTime = localDateTime.plusSeconds(applicationSettingsService.getTokenSettingsInCache().getExpireInSeconds());
-
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
+    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
 }

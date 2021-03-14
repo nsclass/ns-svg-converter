@@ -19,7 +19,6 @@ package com.acrocontext.image.svg.model;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,13 +26,12 @@ import java.util.List;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class TracePath {
-    private final List<Double[]> tracePath;
+  private final List<Double[]> tracePath;
 
-    public double valueAt(int idx1, int idx2) {
-        return tracePath.get(idx1)[idx2];
-    }
+  public double valueAt(int idx1, int idx2) {
+    return tracePath.get(idx1)[idx2];
+  }
 }

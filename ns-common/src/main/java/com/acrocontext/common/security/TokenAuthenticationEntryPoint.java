@@ -29,11 +29,12 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 public class TokenAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
-    @Override
-    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
-        return Mono.fromRunnable(() -> {
-            ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+  @Override
+  public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
+    return Mono.fromRunnable(
+        () -> {
+          ServerHttpResponse response = exchange.getResponse();
+          response.setStatusCode(HttpStatus.UNAUTHORIZED);
         });
-    }
+  }
 }

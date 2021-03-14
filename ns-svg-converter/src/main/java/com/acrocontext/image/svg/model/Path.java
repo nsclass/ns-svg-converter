@@ -26,12 +26,12 @@ import java.util.List;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 @AllArgsConstructor
 public class Path {
-    private final List<Integer[]> path;
-    public Integer[] indexAt(int idx) {
-        return path.get(idx);
-    }
+  private final List<Integer[]> path;
+
+  public Integer[] indexAt(int idx) {
+    return path.get(idx);
+  }
 }

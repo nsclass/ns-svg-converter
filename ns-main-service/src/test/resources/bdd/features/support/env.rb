@@ -39,7 +39,7 @@ def clear_in_memory_data
   admin_login_status = false
   admin_current_password = 'pleasechangepassword'
 
-  (1..120).each {|idx|
+  (1..120).each { |idx|
     puts "Waiting for logging in with admin (retry: #{idx}) ..."
 
     unless admin_login_status
@@ -78,7 +78,8 @@ def connect_cassandra
   host_list = [cassandra_cfg['host']]
   cluster = Cassandra.cluster(:hosts => host_list)
 
-  cluster.each_host do |host| # automatically discovers all peers
+  cluster.each_host do |host|
+    # automatically discovers all peers
     puts "Host #{host.ip}: id=#{host.id} datacenter=#{host.datacenter} rack=#{host.rack}"
   end
 
@@ -100,7 +101,7 @@ def truncate_tables(session, table_list, excluded_list)
 
   table_list.each do |table|
 
-    result = excluded_list.bsearch { |x| x == table}
+    result = excluded_list.bsearch { |x| x == table }
     if result == nil
       # truncate
       query = "truncate #{table}"
@@ -129,7 +130,7 @@ def wait_for_main_app_start
   admin_login_status = false
   admin_current_password = 'pleasechangepassword'
 
-  (1..120).each {|idx|
+  (1..120).each { |idx|
     puts "Waiting for ns-main-service to start(retry: #{idx}) ..."
 
     unless admin_login_status

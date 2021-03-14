@@ -29,8 +29,8 @@ import reactor.core.publisher.Mono;
  *
  * @author Nam Seob Seo
  */
-
 public interface ApplicationSettingsDao {
-    Mono<ApplicationSettings> loadApplicationSettings();
-    Mono<ApplicationSettings> saveApplicationSettings(ApplicationSettings applicationSettings);
+  Mono<ApplicationSettings> loadApplicationSettings();
+
+  Mono<ApplicationSettings> saveApplicationSettings(ApplicationSettings applicationSettings);
 }

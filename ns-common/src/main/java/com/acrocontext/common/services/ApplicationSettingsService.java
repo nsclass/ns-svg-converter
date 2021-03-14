@@ -32,53 +32,58 @@ import reactor.core.publisher.Mono;
  *
  * @author Nam Seob Seo
  */
-
 @Service
 public class ApplicationSettingsService {
-    private final ApplicationSettingsDao applicationSettingsDao;
-    private ApplicationSettings applicationSettings;
+  private final ApplicationSettingsDao applicationSettingsDao;
+  private ApplicationSettings applicationSettings;
 
-    @Autowired
-    public ApplicationSettingsService(ApplicationSettingsDao applicationSettingsDao) {
-        this.applicationSettingsDao = applicationSettingsDao;
+  @Autowired
+  public ApplicationSettingsService(ApplicationSettingsDao applicationSettingsDao) {
+    this.applicationSettingsDao = applicationSettingsDao;
+  }
+
+  private void refresh() {
+    applicationSettingsDao
+        .loadApplicationSettings()
+        .switchIfEmpty(applicationSettingsDao.saveApplicationSettings(new ApplicationSettings()))
+        .subscribe(
+            settings -> {
+              applicationSettings = settings;
+            });
+  }
+
+  public Mono<ApplicationSettings> getApplicationSettingsInAsync() {
+    return applicationSettingsDao
+        .loadApplicationSettings()
+        .switchIfEmpty(applicationSettingsDao.saveApplicationSettings(new ApplicationSettings()));
+  }
+
+  public ApplicationSettings getApplicationSettingsInCache() {
+    if (applicationSettings == null) {
+      applicationSettings = new ApplicationSettings();
+      refresh();
     }
 
-    private void refresh() {
-        applicationSettingsDao.loadApplicationSettings()
-                .switchIfEmpty(applicationSettingsDao.saveApplicationSettings(new ApplicationSettings()))
-                .subscribe(settings -> {
-                    applicationSettings = settings;
-                });
-    }
+    return applicationSettings;
+  }
 
-    public Mono<ApplicationSettings> getApplicationSettingsInAsync() {
-        return applicationSettingsDao.loadApplicationSettings()
-                .switchIfEmpty(applicationSettingsDao.saveApplicationSettings(new ApplicationSettings()));
-    }
+  public ApplicationSettings.TokenSettings getTokenSettingsInCache() {
+    return getApplicationSettingsInCache().getTokenSettings();
+  }
 
-    public ApplicationSettings getApplicationSettingsInCache() {
-        if (applicationSettings == null) {
-            applicationSettings = new ApplicationSettings();
-            refresh();
-        }
+  public Mono<ApplicationSettings.TokenSettings> setTokenSettingsInAsync(
+      ApplicationSettings.TokenSettings tokenSettings) {
+    getApplicationSettingsInCache().setTokenSettings(tokenSettings);
+    return applicationSettingsDao
+        .saveApplicationSettings(applicationSettings)
+        .map(ApplicationSettings::getTokenSettings);
+  }
 
-        return applicationSettings;
-    }
-
-    public ApplicationSettings.TokenSettings getTokenSettingsInCache() {
-        return getApplicationSettingsInCache().getTokenSettings();
-    }
-
-    public Mono<ApplicationSettings.TokenSettings> setTokenSettingsInAsync(ApplicationSettings.TokenSettings tokenSettings) {
-        getApplicationSettingsInCache().setTokenSettings(tokenSettings);
-        return applicationSettingsDao.saveApplicationSettings(applicationSettings)
-                .map(ApplicationSettings::getTokenSettings);
-    }
-
-    public Mono<ApplicationSettings.SvgImageGenerationSettings> setSvgSettingsInAsync(ApplicationSettings.SvgImageGenerationSettings svgImageGenerationSettings) {
-        getApplicationSettingsInCache().setSvgImageGenerationSettings(svgImageGenerationSettings);
-        return applicationSettingsDao.saveApplicationSettings(applicationSettings)
-                .map(ApplicationSettings::getSvgImageGenerationSettings);
-    }
-
+  public Mono<ApplicationSettings.SvgImageGenerationSettings> setSvgSettingsInAsync(
+      ApplicationSettings.SvgImageGenerationSettings svgImageGenerationSettings) {
+    getApplicationSettingsInCache().setSvgImageGenerationSettings(svgImageGenerationSettings);
+    return applicationSettingsDao
+        .saveApplicationSettings(applicationSettings)
+        .map(ApplicationSettings::getSvgImageGenerationSettings);
+  }
 }

@@ -26,6 +26,4 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(basePackageClasses = NSDomainSpringConfiguration.class)
-public class NSDomainSpringConfiguration {
-
-}
+public class NSDomainSpringConfiguration {}

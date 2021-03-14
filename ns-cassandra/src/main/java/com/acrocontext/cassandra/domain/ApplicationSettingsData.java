@@ -36,9 +36,10 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @AllArgsConstructor
 @Table("app_settings_data")
 public class ApplicationSettingsData {
-    public static final String ROW_KEY = "APP_SETTINGS_DATA";
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-    private String rowKey = ROW_KEY;
+  public static final String ROW_KEY = "APP_SETTINGS_DATA";
 
-    private String customData;
+  @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+  private String rowKey = ROW_KEY;
+
+  private String customData;
 }

@@ -23,12 +23,11 @@ import lombok.Value;
  *
  * @author Nam Seob Seo
  */
-
 @Value
 public class InterNodeList {
-    private final InterNode[] interNodes;
+  private final InterNode[] interNodes;
 
-    public double valueAtWithSequenceIdx(int sequenceIdx, int idx) {
-        return interNodes[sequenceIdx].valueAt(idx);
-    }
+  public double valueAtWithSequenceIdx(int sequenceIdx, int idx) {
+    return interNodes[sequenceIdx].valueAt(idx);
+  }
 }

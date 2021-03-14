@@ -1,5 +1,6 @@
 @svg_image_converter
 Feature: SVG image converter
+
   @create_svg_successfully
   Scenario: Verifying SVG image conversion
     When I login /api/v1/login with "admin@admin.com:password"

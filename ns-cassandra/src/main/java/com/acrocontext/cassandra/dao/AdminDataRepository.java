@@ -29,6 +29,6 @@ import reactor.core.publisher.Mono;
 
 @Profile({"dao_cassandra", "default"})
 public interface AdminDataRepository extends ReactiveCrudRepository<AdminData, String> {
-    @Query("select * from admin_data where rowKey = ?0")
-    Mono<AdminData> findByRowKey(String rowKey);
+  @Query("select * from admin_data where rowKey = ?0")
+  Mono<AdminData> findByRowKey(String rowKey);
 }

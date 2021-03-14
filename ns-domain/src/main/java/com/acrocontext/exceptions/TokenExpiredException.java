@@ -22,7 +22,7 @@
 package com.acrocontext.exceptions;
 
 public class TokenExpiredException extends TokenAuthExceptionBase {
-    public TokenExpiredException(String message) {
-        super(message);
-    }
+  public TokenExpiredException(String message) {
+    super(message);
+  }
 }
