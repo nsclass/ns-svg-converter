@@ -39,6 +39,8 @@ shadowJar {
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
     compile project(':ns-cassandra')
     compile project(':ns-svg-converter')
 }
