@@ -22,12 +22,12 @@ import java.text.SimpleDateFormat
  */
 
 wrapper {
-    gradleVersion = '6.5.1'
+    gradleVersion = '7.1.1'
 }
 
 buildscript {
     ext {
-        springBootVersion = '2.4.2'
+        springBootVersion = '2.5.2'
         buildDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
     }
     repositories {
@@ -62,17 +62,17 @@ subprojects {
     }
 
     dependencies {
-        compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
-        compile('org.springframework.boot:spring-boot-starter-security')
-        compile('org.springframework.boot:spring-boot-starter-webflux')
-        compile('org.springframework.boot:spring-boot-starter-actuator')
-        compile('org.springframework.boot:spring-boot-starter-validation')
-        compile('org.springframework.boot:spring-boot-configuration-processor')
+        implementation('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
+        implementation('org.springframework.boot:spring-boot-starter-security')
+        implementation('org.springframework.boot:spring-boot-starter-webflux')
+        implementation('org.springframework.boot:spring-boot-starter-actuator')
+        implementation('org.springframework.boot:spring-boot-starter-validation')
+        implementation('org.springframework.boot:spring-boot-configuration-processor')
         compileOnly('org.projectlombok:lombok')
         annotationProcessor("org.projectlombok:lombok")
-        testCompile('org.springframework.boot:spring-boot-starter-test')
-        testCompile('io.projectreactor:reactor-test')
-        testCompile('org.springframework.security:spring-security-test')
+        testImplementation('org.springframework.boot:spring-boot-starter-test')
+        testImplementation('io.projectreactor:reactor-test')
+        testImplementation('org.springframework.security:spring-security-test')
     }
 
     dependencyManagement {

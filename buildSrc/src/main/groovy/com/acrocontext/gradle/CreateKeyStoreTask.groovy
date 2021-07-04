@@ -22,6 +22,7 @@
 package com.acrocontext.gradle
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 class CreateKeyStoreTask extends DefaultTask {
@@ -33,10 +34,14 @@ class CreateKeyStoreTask extends DefaultTask {
         group = "certificate"
     }
 
+    @Internal
     def outputDirectory = "$project.projectDir/build"
+    @Internal
     def keystore = "$outputDirectory/keystore.jks"
-    def keyStoreAlias
-    def keyStoreDName
+    @Internal
+    def keyStoreAlias ='ns'
+    @Internal
+    def keyStoreDName ='ns'
 
     @TaskAction
     def exec() {

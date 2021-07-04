@@ -14,11 +14,4 @@ Feature: application health check and status API
       {"status": "UP"}
     """
 
-    When I send GET "/actuator/info"
-    And I expect HTTP status code is 200
-    And the JSON response should be:
-    """
-      {
-      }
-    """
 

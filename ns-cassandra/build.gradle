@@ -20,5 +20,6 @@
  */
 
 dependencies {
-    compile project(':ns-common')
+    implementation project(':ns-domain')
+    implementation project(':ns-common')
 }

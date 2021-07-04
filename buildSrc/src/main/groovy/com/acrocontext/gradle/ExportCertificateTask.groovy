@@ -22,6 +22,7 @@
 package com.acrocontext.gradle
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 class ExportCertificateTask extends DefaultTask {
@@ -31,9 +32,13 @@ class ExportCertificateTask extends DefaultTask {
         group = "certificate"
     }
 
+    @Internal
     def keyStoreAlias
+    @Internal
     def outputDirectory = "$project.projectDir/build"
+    @Internal
     def keystore = "$outputDirectory/keystore.jks"
+    @Internal
     def cert = "$outputDirectory/cert.crt"
 
     @TaskAction
