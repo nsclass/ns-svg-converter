@@ -31,12 +31,10 @@ buildscript {
         buildDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
     }
     repositories {
-        jcenter()
         mavenCentral()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
     }
 }
 
@@ -48,7 +46,7 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'eclipse'
     apply plugin: 'io.spring.dependency-management'
 

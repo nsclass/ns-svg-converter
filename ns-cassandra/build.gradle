@@ -20,6 +20,5 @@
  */
 
 dependencies {
-    implementation project(':ns-domain')
-    implementation project(':ns-common')
+    api project(':ns-common')
 }

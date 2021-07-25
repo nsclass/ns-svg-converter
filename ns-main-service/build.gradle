@@ -31,11 +31,6 @@ jar {
     }
 }
 
-apply plugin: 'com.github.johnrengelman.shadow'
-shadowJar {
-    classifier = "standalone"
-}
-
 apply plugin: 'org.springframework.boot'
 
 dependencies {
@@ -43,8 +38,6 @@ dependencies {
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
     implementation project(':ns-cassandra')
     implementation project(':ns-svg-converter')
-    implementation project(':ns-domain')
-    implementation project(':ns-common')
 }
 
 task createKeystore(type: CreateKeyStoreTask) {
@@ -60,5 +53,4 @@ task importCertificate(type: ImportCertificateTask, dependsOn: exportCertificate
     keyStoreAlias = "svg-converter"
 }
 
-//tasks.build.dependsOn("shadowJar")
 tasks.build.dependsOn("importCertificate")
