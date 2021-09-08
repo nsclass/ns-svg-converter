@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public Mono<User> getUser(String email) {
-    String rowKey = domainDataFactory.getUserRowKey(email);
+    String rowKey = domainDataFactory.getUserPartitionKey(email);
     if (isAdmin(email)) {
       return adminDataRepository
           .findByRowKey(rowKey)
@@ -86,7 +86,7 @@ public class UserDaoImpl implements UserDao {
   public Mono<User> addUser(User user) {
     if (!StringUtils.isEmpty(user) && !StringUtils.isEmpty(user.getPassword())) {
 
-      String userKey = domainDataFactory.getUserRowKey(user.getEmail());
+      String userKey = domainDataFactory.getUserPartitionKey(user.getEmail());
       return commonDataRepository
           .findByRowKey(userKey)
           .switchIfEmpty(createUser(user))

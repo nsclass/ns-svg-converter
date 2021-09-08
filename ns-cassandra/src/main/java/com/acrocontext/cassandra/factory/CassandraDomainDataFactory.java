@@ -39,29 +39,29 @@ public class CassandraDomainDataFactory {
     this.jsonProvider = jsonProvider;
   }
 
-  public String getUserRowKey(String email) {
+  public String getUserPartitionKey(String email) {
     return "USER_DATA$" + email;
   }
 
   public Mono<CommonData> createUserData(User user) {
     return jsonProvider
         .toJson(user)
-        .map(value -> new CommonData(getUserRowKey(user.getEmail()), user.getId(), value));
+        .map(value -> new CommonData(getUserPartitionKey(user.getEmail()), user.getId(), value));
   }
 
-  public String getRoleRowKey(String roleName) {
+  public String getRolePartitionKey(String roleName) {
     return "ROLE_DATA$" + roleName;
   }
 
   public Mono<AdminData> createRoleData(Role role) {
     return jsonProvider
         .toJson(role)
-        .map(value -> new AdminData(getRoleRowKey(role.getRoleName()), role.getId(), value));
+        .map(value -> new AdminData(getRolePartitionKey(role.getRoleName()), role.getId(), value));
   }
 
   public Mono<AdminData> createAdminUserData(User user) {
     return jsonProvider
         .toJson(user)
-        .map(value -> new AdminData(getUserRowKey(user.getEmail()), user.getId(), value));
+        .map(value -> new AdminData(getUserPartitionKey(user.getEmail()), user.getId(), value));
   }
 }

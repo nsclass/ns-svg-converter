@@ -67,10 +67,10 @@ public class AppBaseDataInitializer {
           .flatMap(
               data -> {
                 return adminDataRepository
-                    .findByRowKey(cassandraDomainDataFactory.getRoleRowKey(roleName))
+                    .findByRowKey(cassandraDomainDataFactory.getRolePartitionKey(roleName))
                     .switchIfEmpty(adminDataRepository.save(data));
               })
-          .subscribe(value -> log.info("Role: " + value.getRowKey()));
+          .subscribe(value -> log.info("Role: " + value.getPartitionKey()));
     }
 
     // add admin user
@@ -82,9 +82,9 @@ public class AppBaseDataInitializer {
         .flatMap(
             data -> {
               return adminDataRepository
-                  .findByRowKey(cassandraDomainDataFactory.getUserRowKey(adminUser.getEmail()))
+                  .findByRowKey(cassandraDomainDataFactory.getUserPartitionKey(adminUser.getEmail()))
                   .switchIfEmpty(adminDataRepository.save(data));
             })
-        .subscribe(value -> log.info("Admin user: " + value.getRowKey()));
+        .subscribe(value -> log.info("Admin user: " + value.getPartitionKey()));
   }
 }

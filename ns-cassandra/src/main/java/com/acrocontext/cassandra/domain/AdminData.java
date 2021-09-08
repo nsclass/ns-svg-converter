@@ -34,7 +34,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("admin_data")
 public class AdminData {
   @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-  private String rowKey;
+  private String partitionKey;
 
   @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED)
   private String id;
