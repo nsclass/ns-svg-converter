@@ -39,7 +39,7 @@ public class ApplicationSettingsData {
   public static final String ROW_KEY = "APP_SETTINGS_DATA";
 
   @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-  private String rowKey = ROW_KEY;
+  private String partitionKey = ROW_KEY;
 
   private String customData;
 }
