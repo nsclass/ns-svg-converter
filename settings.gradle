@@ -19,10 +19,15 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
+pluginManagement {
+    repositories {
+        // ...
+        maven { url 'https://repo.spring.io/release' }
+    }
+}
 include 'ns-main-service'
 include 'ns-domain'
 include 'ns-common'
 include 'ns-cassandra'
 include 'ns-svg-converter'
-
 

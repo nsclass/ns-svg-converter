@@ -21,13 +21,8 @@ import java.text.SimpleDateFormat
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-wrapper {
-    gradleVersion = '7.1.1'
-}
-
 buildscript {
     ext {
-        springBootVersion = '2.5.2'
         buildDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
     }
     repositories {
@@ -38,6 +33,11 @@ buildscript {
     }
 }
 
+plugins {
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'org.springframework.experimental.aot' version '0.10.3'
+}
+
 apply from: file('gradle/bdd.gradle')
 
 allprojects {
@@ -45,9 +45,12 @@ allprojects {
     version = "$appVersion"
 }
 
+wrapper {
+    gradleVersion = '7.1.1'
+}
+
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'eclipse'
     apply plugin: 'io.spring.dependency-management'
 
     sourceCompatibility = 11
@@ -55,8 +58,7 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
+        maven { url 'https://repo.spring.io/release' }
     }
 
     dependencies {
@@ -75,6 +77,10 @@ subprojects {
 
     dependencyManagement {
         imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 
