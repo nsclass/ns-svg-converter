@@ -22,8 +22,6 @@
 package com.acrocontext.reactive;
 
 import com.acrocontext.NSDomainSpringConfiguration;
-import com.acrocontext.cassandra.NSCassandraSpringConfiguration;
-import com.acrocontext.cassandra.config.NSCassandraConfiguration;
 import com.acrocontext.common.NSCommonSpringConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -44,8 +42,6 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @Import({
   NSDomainSpringConfiguration.class,
   NSCommonSpringConfiguration.class,
-  NSCassandraSpringConfiguration.class,
-  NSCassandraConfiguration.class
 })
 @ComponentScan(basePackageClasses = ApplicationSpringConfiguration.class)
 @EnableWebFlux

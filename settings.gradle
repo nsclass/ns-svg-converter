@@ -28,6 +28,5 @@ pluginManagement {
 include 'ns-main-service'
 include 'ns-domain'
 include 'ns-common'
-include 'ns-cassandra'
 include 'ns-svg-converter'
 

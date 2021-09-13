@@ -22,7 +22,7 @@ import com.acrocontext.image.svg.model.InterNodeListLayers;
 import com.acrocontext.image.svg.model.Path;
 import com.acrocontext.image.svg.model.ScanPath;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-import org.springframework.data.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
