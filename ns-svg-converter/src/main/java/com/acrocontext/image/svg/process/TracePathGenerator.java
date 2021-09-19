@@ -21,7 +21,7 @@ import com.acrocontext.image.svg.model.InterNodeListLayers;
 import com.acrocontext.image.svg.model.TracePath;
 import com.acrocontext.image.svg.model.TracePathLayers;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

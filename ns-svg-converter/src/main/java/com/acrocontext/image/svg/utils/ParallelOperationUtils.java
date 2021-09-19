@@ -17,7 +17,7 @@
 package com.acrocontext.image.svg.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.util.Pair;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class ParallelOperationUtils {
     final T[] results = (T[]) Array.newInstance(c, tasks.size());
     Arrays.stream(list)
         .map(CompletableFuture::join)
-        .forEach(item -> results[item.getKey()] = item.getValue());
+        .forEach(item -> results[item.getFirst()] = item.getSecond());
 
     return results;
   }

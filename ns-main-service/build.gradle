@@ -33,6 +33,7 @@ jar {
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'org.springframework.experimental.aot'
+apply plugin: 'org.graalvm.buildtools.native'
 
 dependencies {
     // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
