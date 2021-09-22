@@ -4,11 +4,14 @@ SVG image converter application made of Spring Boot 2.x.x and React for UI
 
 ### SVG image converter ###
 
-Main purpose of this project is to demonstrate building a reactive web application with SpringBoot 2.x.x which is enabling security feature with JWT token. 
-Also, this project includes UI application which is made of react framework.
+Main purpose of this project is to demonstrate building a reactive web application with SpringBoot 2.x.x.
 
-For data access layer, it is showing Cassandra DB design however it is configured to use memory based
-DAO by default. User can easily enable the Cassandra DAO by setting the active profile as dao_cassandra in application.yml file.
+#### Main Features
+- Security with JWT token
+- Cassandra data access
+- React UI application with Spring boot framework
+
+For data access layer, it is showing Cassandra DB design however it is configured to use memory based DAO by default. User can easily enable the Cassandra DAO by setting the active profile as dao_cassandra in application.yml file.
 
 For automatic integration tests, this project is using Ruby Cucumber framework.
 
