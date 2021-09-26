@@ -32,7 +32,7 @@ import com.acrocontext.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -75,16 +75,12 @@ public class UserDaoImpl implements UserDao {
   }
 
   private boolean isAdmin(String email) {
-    if (email.equals("admin@admin.com")) {
-      return true;
-    }
-
-    return false;
+    return email.equals("admin@admin.com");
   }
 
   @Override
   public Mono<User> addUser(User user) {
-    if (!StringUtils.isEmpty(user) && !StringUtils.isEmpty(user.getPassword())) {
+    if (!ObjectUtils.isEmpty(user) && !ObjectUtils.isEmpty(user.getPassword())) {
 
       String userKey = domainDataFactory.getUserPartitionKey(user.getEmail());
       return commonDataRepository
@@ -114,10 +110,10 @@ public class UserDaoImpl implements UserDao {
 
   private Mono<CommonData> createUser(User user) {
     // generate Id
-    if (StringUtils.isEmpty(user.getId())) {
+    if (ObjectUtils.isEmpty(user.getId())) {
       user.setId(UUID.randomUUID().toString());
     }
 
-    return domainDataFactory.createUserData(user).flatMap(data -> commonDataRepository.save(data));
+    return domainDataFactory.createUserData(user).flatMap(commonDataRepository::save);
   }
 }
