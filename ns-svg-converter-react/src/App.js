@@ -6,7 +6,7 @@ import {MainNavBar} from "./component/MainNavBar"
 import {MainView} from "./component/MainView"
 import {ErrorBoundary} from "./component/ErrorBoundary"
 
-const App = () => {
+export const App = () => {
   return (
     <ErrorBoundary>
       <MainNavBar/>
@@ -14,5 +14,3 @@ const App = () => {
     </ErrorBoundary>
   )
 }
-
-export default App
