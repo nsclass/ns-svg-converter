@@ -1,6 +1,7 @@
 # README #
 
-SVG image converter application made of Spring Boot 2.x.x and React for UI
+SVG image converter application made of Spring Boot 2.x.x and React for UI ![build](https://github.com/nsclass/ns-svg-converter/actions/workflows/gradle-build/badge.svg)
+
 
 ### SVG image converter ###
 
