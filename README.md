@@ -80,14 +80,14 @@ Since ns-main-service project contains the Dockerfile, it can be run in Docker c
 
 * Creating a container
 
-```$xslt
+```bash
 $ cd ns-main-service
 $ docker build -t [tagname] .
 ```
 
 * Running a container
 
-```$xslt
+```bash
 $ docker run --rm -d --name=[name] -p 8080:8080 [image name]
 ```
 
@@ -99,13 +99,13 @@ In order to run the test, Ruby should be installed.
 
 * Running test
 
-```
+```bash
 $ ./gradlew bdd 
 ```
 
 * BDD run result example
 
-```
+```bash
 17 scenarios (17 passed)
 135 steps (135 passed)
 0m11.789s
