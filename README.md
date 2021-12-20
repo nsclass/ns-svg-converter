@@ -1,11 +1,10 @@
 # SVG Image Converter ![build](https://github.com/nsclass/ns-svg-converter/actions/workflows/gradle-build.yml/badge.svg)
 
-SVG image converter application made of Spring Boot 2.x.x and React for UI 
-
+SVG image converter application made of Spring Boot 2.x.x and ReactJS for UI 
 
 ### SVG image converter ###
 
-Main purpose of this project is to demonstrate building a reactive web application with SpringBoot 2.x.x.
+Main purpose of this project is to demonstrate building a reactive web application with SpringBoot 2.x.x. and ReactJS
 
 #### Main Features
 - Security with JWT token
@@ -16,51 +15,50 @@ For data access layer, it is showing Cassandra DB design however it is configure
 
 For automatic integration tests, this project is using Ruby Cucumber framework.
 
-### Working application example ###
+### Application Demo ###
 
-The following URL will demonstrate a working application. It will take some time to start up the application. So please be patient on opening this
-URL.
+The following URL will demonstrate a live working application. It will take some time to start up the application. So please be patient on opening the first time
 
 https://svg-converter.herokuapp.com/
 
-### Compile project ###
+### Compile Project ###
 
-This application is using a Gradle as a build system and minimum required JDK is Java 8.
+This application is using a Gradle as a build system and minimum required JDK is Java 11.
 
 * Compiling UI project
 
 The following gradle task will build and deploy the React application into Java backend project.
 
-```
+```bash
 $ ./gradlew deployReactDist
 ```
 
 Compiling React UI application
 
-```$xslt
+```bash
 # cd ns-svg-converter-react
 $ yarn build
 ``` 
 
 * Compiling backend application
 
-```
+```bash
 $ ./gradlew clean build
 ```
 
-### Running application ###
+### Run Application ###
 
-* Compiling application including UI and running application
+* Compiling application including UI
 
-```
+```bash
 $ ./gradlew clean
 $ ./gradlew deployReactDist build
 $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 ```
 
-* Running application log
+* Application log
 
-```$xslt
+```bash
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
@@ -72,13 +70,13 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 
 * Browsing the application
 
-```$xslt
+```bash
 http://localhost:8080/
 ```
 
 ### Creating docker container ###
 
-Since ns-main-service project contains the Dockerfile, it can be run in Docker environment and Kubernetes cluster.
+Since ns-main-service project contains the Dockerfile, it can be run in Docker container environment and Kubernetes cluster.
 
 * Creating a container
 
@@ -90,10 +88,10 @@ $ docker build -t [tagname] .
 * Running a container
 
 ```$xslt
-$ docker run -d --name=[name] -p 8080:8080 [image name]
+$ docker run --rm -d --name=[name] -p 8080:8080 [image name]
 ```
 
-### Running test ###
+### Test ###
 
 This project is using cucumber BDD testing framework.
 
