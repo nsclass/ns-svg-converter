@@ -74,18 +74,18 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 http://localhost:8080/
 ```
 
-### Creating docker container ###
+### Docker Container Image ###
 
-Since ns-main-service project contains the Dockerfile, it can be run in Docker container environment and Kubernetes cluster.
+This project provides a Dockerfile to run an application in Docker container environment and Kubernetes cluster.
 
-* Creating a container
+* Creating a Docker image
 
 ```bash
 $ cd ns-main-service
 $ docker build -t [tagname] .
 ```
 
-* Running a container
+* Running an application in Docker container
 
 ```bash
 $ docker run --rm -d --name=[name] -p 8080:8080 [image name]
