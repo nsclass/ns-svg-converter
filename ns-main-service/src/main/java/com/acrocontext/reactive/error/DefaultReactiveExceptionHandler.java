@@ -53,9 +53,9 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
   public DefaultReactiveExceptionHandler(
       ServerCodecConfigurer serverCodecConfigurer,
       ErrorAttributes errorAttributes,
-      WebProperties.Resources resourceProperties,
+      WebProperties webProperties,
       ApplicationContext applicationContext) {
-    super(errorAttributes, resourceProperties, applicationContext);
+    super(errorAttributes, webProperties.getResources(), applicationContext);
 
     super.setMessageReaders(serverCodecConfigurer.getReaders());
     super.setMessageWriters(serverCodecConfigurer.getWriters());
