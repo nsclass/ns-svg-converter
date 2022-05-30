@@ -35,8 +35,10 @@ const SVGConvertingView = ({imageFilename, loading, svgData, errorMsg}) => {
     return null
   }
 
-  const convertSvgToBase64ImgString = (SVG) =>
-    `data:image/svg+xml;base64,${Buffer.from(SVG).toString("base64")}`
+  const convertSvgToBase64ImgString = (SVG) => {
+    const base64 = btoa(SVG);
+    return `data:image/svg+xml;base64,${base64}`
+  }
 
   return (
     <div className="mx-auto">
