@@ -53,6 +53,12 @@ subprojects {
     sourceCompatibility = 11
     targetCompatibility = 11
 
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
     repositories {
         mavenCentral()
         maven { url 'https://repo.spring.io/release' }
