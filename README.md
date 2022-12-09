@@ -4,7 +4,7 @@ SVG image converter application made of Spring Boot 3.x.x and ReactJS for UI
 
 ### SVG image converter ###
 
-Main purpose of this project is to demonstrate building a reactive web application with SpringBoot 2.x.x. and ReactJS
+Main purpose of this project is to demonstrate building a reactive web application with SpringBoot 3.x.x. and ReactJS
 
 #### Main Features
 - Security with JWT token
