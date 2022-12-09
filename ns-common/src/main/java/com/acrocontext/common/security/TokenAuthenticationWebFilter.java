@@ -132,7 +132,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
         .then(
             this.authenticationSuccessHandler.onAuthenticationSuccess(
                 webFilterExchange, authentication))
-        .subscriberContext(
+        .contextWrite(
             ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
   }
 

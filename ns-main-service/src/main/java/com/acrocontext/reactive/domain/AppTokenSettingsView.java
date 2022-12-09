@@ -21,9 +21,9 @@
 
 package com.acrocontext.reactive.domain;
 
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
-import javax.validation.constraints.Positive;
 
 /**
  * Date 11/25/17

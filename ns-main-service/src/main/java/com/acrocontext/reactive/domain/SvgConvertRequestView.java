@@ -16,9 +16,9 @@
 
 package com.acrocontext.reactive.domain;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 
 /**
  * Date 12/24/17
@@ -27,7 +27,8 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 public class SvgConvertRequestView {
-  @NotBlank private String imageFilename;
+  @NotBlank
+  private String imageFilename;
   @NotBlank private String imageDataBase64;
   private int numberOfColors = 16;
 }

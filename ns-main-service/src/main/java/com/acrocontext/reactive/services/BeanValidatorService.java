@@ -23,10 +23,10 @@ package com.acrocontext.reactive.services;
 
 import com.acrocontext.common.utils.SimpleValidation;
 import com.acrocontext.exceptions.BeanValidationException;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Validator;
 
 /**
  * Date 12/5/17

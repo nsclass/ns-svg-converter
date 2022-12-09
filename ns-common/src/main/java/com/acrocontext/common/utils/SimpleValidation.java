@@ -22,10 +22,11 @@
 package com.acrocontext.common.utils;
 
 import com.acrocontext.exceptions.BeanValidationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.Set;
+
 
 /**
  * Date 12/5/17

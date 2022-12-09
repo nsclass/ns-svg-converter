@@ -1,6 +1,6 @@
 # SVG Image Converter ![build](https://github.com/nsclass/ns-svg-converter/actions/workflows/gradle-build.yml/badge.svg)
 
-SVG image converter application made of Spring Boot 2.x.x and ReactJS for UI 
+SVG image converter application made of Spring Boot 3.x.x and ReactJS for UI 
 
 ### SVG image converter ###
 
@@ -23,7 +23,7 @@ https://svg-converter.herokuapp.com/
 
 ### Compile Project ###
 
-This application is using a Gradle as a build system and minimum required JDK is Java 11.
+This application is using a Gradle as a build system and minimum required JDK is Java 17.
 
 * Compiling UI project
 
@@ -65,7 +65,7 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::                (v2.6.1) 
+ :: Spring Boot ::                (v3.0.0) 
 ```
 
 * Browsing the application

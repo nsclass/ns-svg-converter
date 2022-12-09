@@ -21,11 +21,11 @@
 
 package com.acrocontext.reactive.domain;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 /**
  * Date 11/26/17
@@ -35,7 +35,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class UserView {
-  @Email private String email;
+  @Email
+  private String email;
   private boolean active;
-  @NotBlank private String creationTime;
+  @NotBlank
+  private String creationTime;
 }

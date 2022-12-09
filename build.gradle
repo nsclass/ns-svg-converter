@@ -32,7 +32,6 @@ buildscript {
 
 plugins {
     id 'org.springframework.boot' version "$springBootVersion"
-    id 'org.springframework.experimental.aot' version "$springExperimentalAot"
 }
 
 apply from: file('gradle/bdd.gradle')
@@ -50,8 +49,8 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     configurations {
         compileOnly {

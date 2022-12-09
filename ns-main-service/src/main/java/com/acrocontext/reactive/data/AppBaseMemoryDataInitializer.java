@@ -20,10 +20,10 @@ import com.acrocontext.common.dao.UserDao;
 import com.acrocontext.common.services.RoleService;
 import com.acrocontext.domain.User;
 import com.acrocontext.factory.NSDomainFactory;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 
 /**
  * Date 12/25/17

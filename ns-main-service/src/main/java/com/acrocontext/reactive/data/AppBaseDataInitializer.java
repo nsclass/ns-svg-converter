@@ -27,12 +27,12 @@ import com.acrocontext.common.services.RoleService;
 import com.acrocontext.domain.Role;
 import com.acrocontext.domain.User;
 import com.acrocontext.factory.NSDomainFactory;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.UUID;
 
 @Slf4j
