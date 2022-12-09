@@ -23,7 +23,7 @@ fi
 TZ="UTC"
 export TZ
 
-JVM_BASE_OPTS="-XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -XX:MaxGCPauseMillis=10 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+JVM_BASE_OPTS="-XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -XX:MaxGCPauseMillis=100"
 
 JVM_OPTS="-Xmx${JVM_MAX_HEAP} -Xms${JVM_MIN_HEAP} ${JVM_BASE_OPTS}"
 
