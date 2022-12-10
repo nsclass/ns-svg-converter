@@ -25,8 +25,7 @@ ext {
     childProcesses = [:]
 }
 
-def startJavaProcess(String processName, String jarPath, List serviceArgs) {
-
+def startJavaProcess(String processName, String jarPath, List<String> serviceArgs) {
     if (ext.childProcesses[processName] == null) {
 
         // ensure file exists
@@ -66,7 +65,6 @@ def shutdownRunningApps(String name) {
         }
         ext.childProcesses.clear()
     }
-
 }
 
 addShutdownHook {
@@ -82,10 +80,10 @@ configure(subprojects.findAll { it.name.contains('-service') }) { project ->
 
         doLast {
 
-            shutdownRunningApps(project.name)
+            shutdownRunningApps(project.name.toString())
 
             //do a clean restart since we are truncating the DB
-            startJavaProcess(project.name,
+            startJavaProcess(project.name.toString(),
                     "${project.name}/build/libs/${project.name}-${version}.jar",
                     ["--spring.config.location=${project.name}/application.yml"])
         }
@@ -110,7 +108,7 @@ configure(subprojects.findAll { it.name.contains('-service') }) { project ->
 
 }
 
-List buildCucumberCommandLine(String folder, String tags = "", List excludedTags = []) {
+List buildCucumberCommandLine(String folder, String tags = "", List<String> excludedTags = []) {
 
     List bundleCmd = Os.isFamily(Os.FAMILY_WINDOWS) ? ['cmd', '/c', 'bundle.bat', 'exec'] : ['bundle', 'exec']
 

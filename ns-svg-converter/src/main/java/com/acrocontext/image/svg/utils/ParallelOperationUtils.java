@@ -33,8 +33,7 @@ import java.util.function.Supplier;
 @Slf4j
 public class ParallelOperationUtils {
   public static void executeTasks(List<Supplier<Integer>> tasks) {
-
-    CompletableFuture[] list = new CompletableFuture[tasks.size()];
+    CompletableFuture<?>[] list = new CompletableFuture[tasks.size()];
     for (int idx = 0; idx < tasks.size(); ++idx) {
       list[idx] = CompletableFuture.supplyAsync(tasks.get(idx));
     }
@@ -42,6 +41,7 @@ public class ParallelOperationUtils {
     CompletableFuture.allOf(list).join();
   }
 
+  @SuppressWarnings(value = "unchecked")
   public static <T> T[] execute(Class<T> c, List<Supplier<Pair<Integer, T>>> tasks) {
 
     CompletableFuture<Pair<Integer, T>>[] list = new CompletableFuture[tasks.size()];
@@ -51,7 +51,6 @@ public class ParallelOperationUtils {
 
     CompletableFuture.allOf(list);
 
-    @SuppressWarnings(value = "unchecked")
     final T[] results = (T[]) Array.newInstance(c, tasks.size());
     Arrays.stream(list)
         .map(CompletableFuture::join)
