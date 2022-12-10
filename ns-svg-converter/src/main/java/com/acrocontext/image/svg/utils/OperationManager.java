@@ -16,9 +16,6 @@
 
 package com.acrocontext.image.svg.utils;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,18 +31,13 @@ public class OperationManager<T> {
 
   private final OperationProgressListener progressListener;
 
-  @Value
-  @AllArgsConstructor
-  private static class OperationCommand<T> {
-    private String description;
-    private Function<T, T> function;
-  }
+  private record OperationCommand<T>(String description, Function<T, T> function) { }
 
   public OperationManager(OperationProgressListener listener) {
     this.progressListener = listener;
   }
 
-  private List<OperationCommand<T>> operationCommandList = new ArrayList<>();
+  private final List<OperationCommand<T>> operationCommandList = new ArrayList<>();
 
   public OperationManager<T> addOperation(String description, Function<T, T> operation) {
     operationCommandList.add(new OperationCommand<>(description, operation));
@@ -61,7 +53,7 @@ public class OperationManager<T> {
       operationCommand.function.apply(context);
       Instant end = Instant.now();
       progressListener.onProgressInfo(
-          "Done: " + operationCommand.getDescription(),
+"Done: " + operationCommand.description(),
           idx,
           totalCount,
           Duration.between(start, end));
