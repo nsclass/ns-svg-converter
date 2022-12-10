@@ -31,12 +31,9 @@ import com.acrocontext.reactive.domain.SvgConvertRespondView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -153,6 +150,6 @@ public class SvgConverterController {
 
   private static byte[] createBytesFromBase64(String data) {
     String base64Image = data.split(",")[1];
-    return javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+    return jakarta.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
   }
 }

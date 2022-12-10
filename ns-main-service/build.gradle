@@ -26,28 +26,19 @@ import com.acrocontext.gradle.ImportCertificateTask
 jar {
     manifest {
         attributes 'Main-Class': 'com.acrocontext.reactive.AcrocontextReactiveApplication'
-        attributes 'Implementation-Title': 'Acrocontext Reactive App', 'Implementation-Version': version
+        attributes 'Implementation-Title': 'Acrocontext Reactive App', 'Implementation-Version': rootProject.version
         attributes 'Timestamp': buildDateTime
     }
 }
 
 apply plugin: 'org.springframework.boot'
-//apply plugin: 'org.springframework.experimental.aot'
 
 dependencies {
-    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
     implementation project(':ns-cassandra')
     implementation project(':ns-svg-converter')
+    // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
 }
-
-//bootBuildImage {
-//    builder = "paketobuildpacks/builder:tiny"
-//    environment = [
-//            "BP_NATIVE_IMAGE" : "true"
-//    ]
-//    buildpacks = ["gcr.io/paketo-buildpacks/java-native-image:7.1.0"]
-//}
 
 task createKeystore(type: CreateKeyStoreTask) {
     keyStoreAlias = "svg-converter"

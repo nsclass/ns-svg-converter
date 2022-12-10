@@ -52,8 +52,8 @@ public class UserService {
   }
 
   public Mono<User> registerUser(UserRegistration userRegistration) {
-    if (StringUtils.isEmpty(userRegistration.getEmail())
-        || StringUtils.isEmpty(userRegistration.getPassword())) {
+    if (!StringUtils.hasText(userRegistration.getEmail())
+        || !StringUtils.hasText(userRegistration.getPassword())) {
       return Mono.error(new UserRegistrationInvalidData("Invalid user registration data"));
     }
 

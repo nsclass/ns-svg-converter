@@ -38,8 +38,8 @@ plugins {
 apply from: file('gradle/bdd.gradle')
 
 allprojects {
-    group = "$appGroupName"
-    version = "$appVersion"
+    group = "${appGroupName}"
+    version = "${appVersion}"
 }
 
 wrapper {

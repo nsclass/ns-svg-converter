@@ -48,7 +48,7 @@ public class ApplicationSettings {
   @Data
   public static class TokenSettings {
     private int expireInSeconds = 2 * 60 * 60; // 2 hours
-    private String secret = "a.c.r.o.s.e.c.r.e.t";
+    private String secret = "YS5jLnIuby5zLmUuYy5yLmUudC52LmUuci55Lmwuby5uLmcucy5oLm8udS5sLmQuYi5lLjUuMS4yLnMuaS56LmUudC5oLmkucy5tLmkuZy5oLnQuYi5lLmUubi5vLnUuZy5o"; // a.c.r.o.s.e.c.r.e.t.v.e.r.y.l.o.n.g.s.h.o.u.l.d.b.e.5.1.2.s.i.z.e.t.h.i.s.m.i.g.h.t.b.e.e.n.o.u.g.h
   }
 
   private TokenSettings tokenSettings;

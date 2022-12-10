@@ -49,7 +49,7 @@ public class TokenProvider {
 
   private final ApplicationSettingsService applicationSettingsService;
 
-  private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+  private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
   @Autowired
   public TokenProvider(ApplicationSettingsService applicationSettingsService) {
@@ -61,17 +61,15 @@ public class TokenProvider {
   }
 
   public String generateToken(String username) {
-    String token =
-        Jwts.builder()
-            .setIssuer(appName)
-            .setSubject(username)
-            .setIssuedAt(generateCurrentDate())
-            .setExpiration(generateExpirationDate())
-            .signWith(
-                SIGNATURE_ALGORITHM,
-                applicationSettingsService.getTokenSettingsInCache().getSecret())
-            .compact();
-    return token;
+    return Jwts.builder()
+        .setIssuer(appName)
+        .setSubject(username)
+        .setIssuedAt(generateCurrentDate())
+        .setExpiration(generateExpirationDate())
+        .signWith(
+            SIGNATURE_ALGORITHM,
+            applicationSettingsService.getTokenSettingsInCache().getSecret())
+        .compact();
   }
 
   public Mono<Claims> getClaimsFromToken(String token) {
