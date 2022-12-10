@@ -72,10 +72,8 @@ public class UserController {
     return userService
         .findUserByEmail(username)
         .map(
-            user -> {
-              return new UserView(
-                  user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
-            });
+            user -> new UserView(
+                user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString()));
   }
 
   @PreAuthorize("hasRole('MEMBER')")
@@ -110,10 +108,8 @@ public class UserController {
     return userService
         .registerUser(userRegistration)
         .map(
-            user -> {
-              return new UserView(
-                  user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
-            });
+            user -> new UserView(
+                user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString()));
   }
 
   @PatchMapping(

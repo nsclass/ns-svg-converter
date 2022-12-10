@@ -98,8 +98,7 @@ public class SvgConverterController {
               bufferedImage,
               options,
               ((description, current, total, duration) ->
-                  System.out.println(
-                      String.format("%s, %d/%d, %s", description, current, total, duration))));
+                  System.out.printf("%s, %d/%d, %s%n", description, current, total, duration)));
 
       return SvgConvertRespondView.builder()
           .filename(convertRequestView.getImageFilename())
@@ -115,22 +114,6 @@ public class SvgConverterController {
       return objectMapper.readValue(inputStream, classValue);
     } catch (Exception e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  public static class InputStreamCollector {
-    private InputStream inputStream;
-
-    public void collectInputStream(InputStream inputStream) {
-      if (this.inputStream == null) {
-        this.inputStream = inputStream;
-      }
-
-      this.inputStream = new SequenceInputStream(this.inputStream, inputStream);
-    }
-
-    public InputStream getInputStream() {
-      return this.inputStream;
     }
   }
 

@@ -61,7 +61,7 @@ public class ApplicationSpringConfiguration {
             .andRoute(
                 GET("/"),
                 request -> {
-                  return ServerResponse.ok().contentType(TEXT_HTML).syncBody(indexHtml);
+                  return ServerResponse.ok().contentType(TEXT_HTML).bodyValue(indexHtml);
                 });
     return router;
   }
