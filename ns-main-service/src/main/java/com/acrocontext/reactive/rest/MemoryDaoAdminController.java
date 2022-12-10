@@ -52,9 +52,8 @@ public class MemoryDaoAdminController {
   public Mono<String> clearData() {
     userDaoMemory.clearData();
 
-    applicationSettingsService.setTokenSettingsInAsync(new ApplicationSettings.TokenSettings());
-    applicationSettingsService.setSvgSettingsInAsync(
-        new ApplicationSettings.SvgImageGenerationSettings());
-    return Mono.just("success");
+    return applicationSettingsService.setTokenSettingsInAsync(new ApplicationSettings.TokenSettings())
+            .then(applicationSettingsService.setSvgSettingsInAsync(new ApplicationSettings.SvgImageGenerationSettings()))
+            .then(Mono.just("success"));
   }
 }
