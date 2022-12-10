@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Date 12/23/17
@@ -41,21 +41,22 @@ public class ParallelOperationUtils {
     CompletableFuture.allOf(list).join();
   }
 
-  @SuppressWarnings(value = "unchecked")
-  public static <T> T[] execute(Class<T> c, List<Supplier<Pair<Integer, T>>> tasks) {
+  public record ExecuteItem<T>(int idx, T item) {}
 
-    CompletableFuture<Pair<Integer, T>>[] list = new CompletableFuture[tasks.size()];
-    for (int idx = 0; idx < tasks.size(); ++idx) {
-      list[idx] = CompletableFuture.supplyAsync(tasks.get(idx));
-    }
+  public static <T> T[] execute(T[] array, List<Supplier<ExecuteItem<T>>> tasks) {
+    List<CompletableFuture<ExecuteItem<T>>> list = tasks.stream()
+            .map(CompletableFuture::supplyAsync)
+            .toList();
 
-    CompletableFuture.allOf(list);
+    var computableList = list.toArray(new CompletableFuture[0]);
+    CompletableFuture.allOf(computableList);
 
-    final T[] results = (T[]) Array.newInstance(c, tasks.size());
-    Arrays.stream(list)
-        .map(CompletableFuture::join)
-        .forEach(item -> results[item.getFirst()] = item.getSecond());
+    var results = list.stream()
+            .map(CompletableFuture::join)
+            .sorted(Comparator.comparingInt(x -> x.idx))
+            .map(item -> item.item)
+            .toList();
 
-    return results;
+    return results.toArray(array);
   }
 }

@@ -21,7 +21,6 @@ import com.acrocontext.image.svg.model.InterNodeListLayers;
 import com.acrocontext.image.svg.model.TracePath;
 import com.acrocontext.image.svg.model.TracePathLayers;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -258,20 +257,15 @@ public class TracePathGenerator {
   // 5. Batch tracing layers
   public TracePathLayers[] createBatchTracePathList(
       InterNodeListLayers[] batchInterNodes, float lThreshold, float qThreshold) {
-    List<Supplier<Pair<Integer, TracePathLayers>>> tasks = new ArrayList<>(batchInterNodes.length);
+    var tasks = IntStream.range(0, batchInterNodes.length)
+      .mapToObj(
+        idx -> (Supplier<ParallelOperationUtils.ExecuteItem<TracePathLayers>>) () -> {
+          TracePathLayers tracePathLayers =
+              new TracePathLayers(
+                  batchTracePaths(batchInterNodes[idx], lThreshold, qThreshold));
+          return new ParallelOperationUtils.ExecuteItem<>(idx, tracePathLayers);
+        }).toList();
 
-    IntStream.range(0, batchInterNodes.length)
-        .forEach(
-            idx -> {
-              tasks.add(
-                  () -> {
-                    TracePathLayers tracePathLayers =
-                        new TracePathLayers(
-                            batchTracePaths(batchInterNodes[idx], lThreshold, qThreshold));
-                    return Pair.of(idx, tracePathLayers);
-                  });
-            });
-
-    return ParallelOperationUtils.execute(TracePathLayers.class, tasks);
+    return ParallelOperationUtils.execute(new TracePathLayers[0], tasks);
   }
 }

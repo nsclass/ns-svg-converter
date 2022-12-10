@@ -19,7 +19,6 @@ package com.acrocontext.image.svg.process;
 import com.acrocontext.image.svg.model.Path;
 import com.acrocontext.image.svg.model.ScanPath;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,18 +146,13 @@ public class ScanPathGenerator {
 
   // 3. Batch createScanPath
   public ScanPath[] createBatchScanPath(int[][][] layers, float pathOmit) {
-    List<Supplier<Pair<Integer, ScanPath>>> tasks = new ArrayList<>(layers.length);
+    var tasks = IntStream.range(0, layers.length)
+        .mapToObj(
+          idx -> (Supplier<ParallelOperationUtils.ExecuteItem<ScanPath>>) () -> {
+            ScanPath scanPath = createScanPath(layers[idx], pathOmit);
+            return new ParallelOperationUtils.ExecuteItem<>(idx, scanPath);
+          }).toList();
 
-    IntStream.range(0, layers.length)
-        .forEach(
-            idx -> {
-              tasks.add(
-                  () -> {
-                    ScanPath scanPath = createScanPath(layers[idx], pathOmit);
-                    return Pair.of(idx, scanPath);
-                  });
-            });
-
-    return ParallelOperationUtils.execute(ScanPath.class, tasks);
+    return ParallelOperationUtils.execute(new ScanPath[0], tasks);
   }
 }
