@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Profile("dao_memory")
 public class UserDaoMemoryImpl implements UserDao {
 
-  private Map<String, User> userMap = new ConcurrentHashMap<>();
+  private final Map<String, User> userMap = new ConcurrentHashMap<>();
 
   @Override
   public Mono<User> getUser(String email) {

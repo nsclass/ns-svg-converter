@@ -40,7 +40,7 @@ import java.util.List;
  * @author Nam Seob Seo
  */
 public class CustomWebExchangerMatcherBuilder {
-  private List<ServerWebExchangeMatcher> matchers = new ArrayList<>();
+  private final List<ServerWebExchangeMatcher> matchers = new ArrayList<>();
 
   public CustomWebExchangerMatcherBuilder addPattern(HttpMethod method, String pattern) {
     matchers.add(new PathPatternParserServerWebExchangeMatcher(pattern, method));

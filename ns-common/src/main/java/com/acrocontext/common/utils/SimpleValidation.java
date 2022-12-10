@@ -43,7 +43,7 @@ public class SimpleValidation {
       StringBuilder errorMsg = new StringBuilder();
       validatorSet.forEach(
           cv -> {
-            errorMsg.append(cv.getPropertyPath() + " - " + cv.getMessage() + "\n");
+            errorMsg.append(cv.getPropertyPath()).append(" - ").append(cv.getMessage()).append("\n");
           });
 
       return new BeanValidationException(errorMsg.toString());

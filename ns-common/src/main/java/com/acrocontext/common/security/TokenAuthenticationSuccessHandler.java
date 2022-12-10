@@ -23,7 +23,6 @@ package com.acrocontext.common.security;
 
 import com.acrocontext.common.provider.CustomJsonProvider;
 import com.acrocontext.common.services.ApplicationSettingsService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -95,18 +94,8 @@ public class TokenAuthenticationSuccessHandler implements ServerAuthenticationSu
 
   private DataBuffer encodeString(String str, DataBufferFactory bufferFactory) {
     byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
-    DataBuffer buffer = bufferFactory.wrap(bytes);
-    return buffer;
+    return bufferFactory.wrap(bytes);
   }
 
-  @Data
-  private class UserTokenData {
-    private String token;
-    private int expires;
-
-    UserTokenData(String token, int expires) {
-      this.token = token;
-      this.expires = expires;
-    }
-  }
+  private record UserTokenData(String token, int expires) {}
 }

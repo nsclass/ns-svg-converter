@@ -31,7 +31,7 @@ import java.io.IOException;
 
 @Service
 public class CustomJsonProvider {
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   public CustomJsonProvider() {
     objectMapper.registerModule(new JavaTimeModule());

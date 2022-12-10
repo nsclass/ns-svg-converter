@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class TokenAuthentication extends AbstractAuthenticationToken {
 
-  private String token;
+  private final String token;
   private final UserDetails userDetails;
 
   public TokenAuthentication(UserDetails userDetails, String token) {

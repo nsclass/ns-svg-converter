@@ -34,7 +34,7 @@ import java.util.List;
  */
 @Service
 public class RoleService {
-  private List<String> roles = Arrays.asList("ADMIN", "STAFF", "MEMBER", "LIMITED_MEMBER");
+  private final List<String> roles = Arrays.asList("ADMIN", "STAFF", "MEMBER", "LIMITED_MEMBER");
 
   public List<String> getAllRoles() {
     return roles;

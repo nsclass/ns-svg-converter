@@ -32,5 +32,6 @@ public class UserRegistration {
   private String email;
   @NotBlank
   private String password;
-  @NotBlank private String passwordConfirm;
+  @NotBlank
+  private String passwordConfirm;
 }

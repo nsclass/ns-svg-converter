@@ -32,6 +32,7 @@ import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.DataCenterReplication;
 import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
+import org.springframework.lang.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,22 +52,25 @@ public class NSCassandraConfiguration extends AbstractReactiveCassandraConfigura
   private int replicateFactor = 1;
 
   @Override
+  @NonNull
   protected String getKeyspaceName() {
     return keyspace;
   }
 
   @Override
+  @NonNull
   public SchemaAction getSchemaAction() {
     return SchemaAction.CREATE_IF_NOT_EXISTS;
   }
 
   @Override
+  @NonNull
   public String[] getEntityBasePackages() {
-    String[] packages = new String[] {CommonData.class.getPackage().getName()};
-    return packages;
+    return new String[] {CommonData.class.getPackage().getName()};
   }
 
   @Override
+  @NonNull
   protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
 
     CreateKeyspaceSpecification defaultKeySpace =

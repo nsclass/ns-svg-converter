@@ -25,6 +25,7 @@ import com.acrocontext.common.services.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -52,16 +53,16 @@ public class TokenAuthenticationWebFilter implements WebFilter {
   private final CustomUserDetailService userDetailService;
   private final TokenProvider tokenProvider;
 
-  private DefaultTokenProtectionMatcher tokenProtectionMatcher =
+  private final DefaultTokenProtectionMatcher tokenProtectionMatcher =
       new DefaultTokenProtectionMatcher();
 
   private ServerWebExchangeMatcher permitAllPatternMatcher =
       ServerWebExchangeMatchers.pathMatchers("/api/v1/users/register", "/api/v1/login");
 
-  private ServerSecurityContextRepository securityContextRepository =
+  private final ServerSecurityContextRepository securityContextRepository =
       new WebSessionServerSecurityContextRepository();
 
-  private ServerAuthenticationSuccessHandler authenticationSuccessHandler =
+  private final ServerAuthenticationSuccessHandler authenticationSuccessHandler =
       new WebFilterChainServerAuthenticationSuccessHandler();
 
   @Autowired
@@ -79,20 +80,17 @@ public class TokenAuthenticationWebFilter implements WebFilter {
     return tokenProvider
         .getUsernameFromToken(token)
         .flatMap(
-            username -> {
-              return userDetailService
-                  .findByUsername(username)
-                  .map(
-                      userDetails -> {
-                        return new TokenAuthentication(userDetails, token);
-                      })
-                  .switchIfEmpty(
-                      Mono.error(new AccessDeniedException("Invalid Authentication Token")));
-            });
+            username -> userDetailService
+              .findByUsername(username)
+              .map(
+                  userDetails -> new TokenAuthentication(userDetails, token))
+              .switchIfEmpty(
+                  Mono.error(new AccessDeniedException("Invalid Authentication Token"))));
   }
 
   @Override
-  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+  @NonNull
+  public Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
     return this.permitAllPatternMatcher
         .matches(exchange)
         .flatMap(
@@ -118,7 +116,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
         .filter(
             matchResult -> matchResult.isMatch() && matchResult.getVariables().containsKey(TOKEN))
         .map(found -> (String) found.getVariables().get(TOKEN))
-        .flatMap(token -> tryTokenAuthentication(token))
+        .flatMap(this::tryTokenAuthentication)
         .flatMap(authenticate -> onAuthenticationSuccess(authenticate, webFilterExchange));
   }
 
@@ -155,7 +153,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
       if (authorization.length() <= BEARER.length()) {
         return Mono.error(new AccessDeniedException("Access denied: invalid bearer token access"));
       } else {
-        String token = authorization.substring(BEARER.length(), authorization.length());
+        String token = authorization.substring(BEARER.length());
         matchResult.put(TOKEN, token);
         return MatchResult.match(matchResult);
       }

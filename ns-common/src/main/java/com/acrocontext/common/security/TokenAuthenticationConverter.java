@@ -41,7 +41,7 @@ public class TokenAuthenticationConverter
 
   @Override
   public Mono<Authentication> apply(ServerWebExchange serverWebExchange) {
-    return serverWebExchange.getFormData().map(data -> createAuthentication(data));
+    return serverWebExchange.getFormData().map(this::createAuthentication);
   }
 
   private UsernamePasswordAuthenticationToken createAuthentication(

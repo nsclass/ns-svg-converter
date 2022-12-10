@@ -41,14 +41,9 @@ public class CustomUserDetailService implements ReactiveUserDetailsService {
   public Mono<UserDetails> findByUsername(String username) {
     Mono<User> userFound = userService.findUserByEmail(username);
     return userFound.map(
-        user -> {
-          UserDetails userDetails =
-              org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                  .roles(user.getRoleNames().toArray(new String[user.getRoleNames().size()]))
-                  .password(user.getPassword())
-                  .build();
-
-          return userDetails;
-        });
+        user -> org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+            .roles(user.getRoleNames().toArray(new String[0]))
+            .password(user.getPassword())
+            .build());
   }
 }
