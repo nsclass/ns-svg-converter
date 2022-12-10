@@ -31,7 +31,8 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version "$springBootVersion"
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'org.graalvm.buildtools.native' version "${graalvmBuildToolVersion}"
 }
 
 apply from: file('gradle/bdd.gradle')
