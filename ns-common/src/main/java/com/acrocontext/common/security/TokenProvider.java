@@ -27,7 +27,7 @@ import com.acrocontext.exceptions.TokenGeneralException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +35,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -43,13 +45,10 @@ import java.util.Date;
 @Component
 @EnableConfigurationProperties
 public class TokenProvider {
-
   @Value("${app.name}")
   private String appName;
 
   private final ApplicationSettingsService applicationSettingsService;
-
-  private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
   @Autowired
   public TokenProvider(ApplicationSettingsService applicationSettingsService) {
@@ -60,23 +59,23 @@ public class TokenProvider {
     return getClaimsFromToken(token).map(Claims::getSubject);
   }
 
+
+  private SecretKey createKey() {
+    return Keys.hmacShaKeyFor(applicationSettingsService.getTokenSettingsInCache().getSecret().getBytes(StandardCharsets.UTF_8));
+  }
   public String generateToken(String username) {
     return Jwts.builder()
         .setIssuer(appName)
         .setSubject(username)
         .setIssuedAt(generateCurrentDate())
         .setExpiration(generateExpirationDate())
-        .signWith(
-            SIGNATURE_ALGORITHM,
-            applicationSettingsService.getTokenSettingsInCache().getSecret())
+        .signWith(createKey())
         .compact();
   }
-
   public Mono<Claims> getClaimsFromToken(String token) {
     try {
-      Claims claims =
-          Jwts.parser()
-              .setSigningKey(applicationSettingsService.getTokenSettingsInCache().getSecret())
+      var parser = Jwts.parserBuilder().setSigningKey(createKey()).build();
+      Claims claims = parser
               .parseClaimsJws(token)
               .getBody();
 
