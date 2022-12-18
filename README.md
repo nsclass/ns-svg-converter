@@ -15,12 +15,6 @@ For data access layer, it is showing Cassandra DB design however it is configure
 
 For automatic integration tests, this project is using Ruby Cucumber framework.
 
-### Application Demo ###
-
-The following URL will demonstrate a live working application. It will take some time to start up the application. So please be patient on opening the first time
-
-https://svg-converter.herokuapp.com/
-
 ### Compile Project ###
 
 This application is using a Gradle as a build system and minimum required JDK is Java 17.
