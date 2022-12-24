@@ -86,8 +86,7 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
   private boolean isSvgConversionException(ServerRequest request) {
     Throwable exception = getError(request);
-    if (exception instanceof CompletionException) {
-      CompletionException ex = (CompletionException) exception;
+    if (exception instanceof CompletionException ex) {
       exception = ex.getCause();
     }
 
@@ -181,6 +180,6 @@ public class DefaultReactiveExceptionHandler extends AbstractErrorWebExceptionHa
 
   private void logError(ServerRequest request, HttpStatus errorStatus) {
     Throwable ex = getError(request);
-    log.error("Exception [" + request.methodName() + " " + request.uri() + "]", ex);
+    log.error("Exception [" + request.method().name() + " " + request.uri() + "]", ex);
   }
 }
