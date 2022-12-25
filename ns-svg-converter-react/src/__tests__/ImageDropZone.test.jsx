@@ -19,7 +19,7 @@
  */
 
 import {expect, test} from "@jest/globals"
-import {renderHook} from "@testing-library/react-hooks";
+import {renderHook} from "@testing-library/react";
 import {useImageDropZone} from "../hooks/useImageDropZone";
 
 test("should render useImageDropZone", async () => {
