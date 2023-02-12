@@ -19,18 +19,19 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.acrocontext.reactive.domain;
+package com.acrocontext.reactive.domain.dto;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+
 /**
- * Date 11/23/17
+ * Date 11/25/17
  *
  * @author Nam Seob Seo
  */
 @Data
-@AllArgsConstructor
-public class GeneralResponseView {
-  private String message;
+public class AppTokenSettingsDto {
+  @Positive(message = "expire in seconds should be positive integer")
+  private int expireInSeconds;
 }

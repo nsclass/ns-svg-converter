@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.acrocontext.reactive.domain;
+package com.acrocontext.reactive.domain.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-
 /**
- * Date 12/24/17
+ * Date 12/25/17
  *
  * @author Nam Seob Seo
  */
 @Data
-public class SvgConvertRequestView {
-  @NotBlank
-  private String imageFilename;
-  @NotBlank private String imageDataBase64;
-  private int numberOfColors = 16;
+public class AppSvgSettingsDto {
+  private boolean useLimit;
+  private int numberOfColorLimitation;
+  private int imageSizeLimitation;
 }

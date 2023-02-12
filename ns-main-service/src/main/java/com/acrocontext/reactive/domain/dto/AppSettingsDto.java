@@ -19,7 +19,7 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.acrocontext.reactive.domain;
+package com.acrocontext.reactive.domain.dto;
 
 import lombok.Data;
 
@@ -29,7 +29,7 @@ import lombok.Data;
  * @author Nam Seob Seo
  */
 @Data
-public class AppSettingsView {
-  private AppTokenSettingsView appTokenSettings;
-  private AppSvgSettingsView appSvgSettings;
+public class AppSettingsDto {
+  private AppTokenSettingsDto appTokenSettings;
+  private AppSvgSettingsDto appSvgSettings;
 }

@@ -23,9 +23,9 @@ package com.acrocontext.reactive.rest;
 
 import com.acrocontext.common.services.ApplicationSettingsService;
 import com.acrocontext.domain.ApplicationSettings;
-import com.acrocontext.reactive.domain.AppSettingsView;
-import com.acrocontext.reactive.domain.AppSvgSettingsView;
-import com.acrocontext.reactive.domain.AppTokenSettingsView;
+import com.acrocontext.reactive.domain.dto.AppSettingsDto;
+import com.acrocontext.reactive.domain.dto.AppSvgSettingsDto;
+import com.acrocontext.reactive.domain.dto.AppTokenSettingsDto;
 import com.acrocontext.reactive.domain.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -54,32 +54,32 @@ public class ApplicationSettingsController {
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<AppSettingsView> getApplicationSettings() {
+  public Mono<AppSettingsDto> getApplicationSettings() {
     return applicationSettingsService
         .getApplicationSettingsInAsync()
         .map(this::fromApplicationSettings);
   }
 
-  private AppSettingsView fromApplicationSettings(ApplicationSettings applicationSettings) {
-    AppSettingsView appSettingsView = new AppSettingsView();
-    appSettingsView.setAppTokenSettings(
+  private AppSettingsDto fromApplicationSettings(ApplicationSettings applicationSettings) {
+    AppSettingsDto appSettingsDto = new AppSettingsDto();
+    appSettingsDto.setAppTokenSettings(
         fromAppTokenSettings(applicationSettings.getTokenSettings()));
-    appSettingsView.setAppSvgSettings(
+    appSettingsDto.setAppSvgSettings(
         fromAppSvgSettings(applicationSettings.getSvgImageGenerationSettings()));
 
-    return appSettingsView;
+    return appSettingsDto;
   }
 
-  private AppTokenSettingsView fromAppTokenSettings(
+  private AppTokenSettingsDto fromAppTokenSettings(
       ApplicationSettings.TokenSettings tokenSettings) {
-    AppTokenSettingsView appTokenSettingsView = new AppTokenSettingsView();
-    appTokenSettingsView.setExpireInSeconds(tokenSettings.getExpireInSeconds());
-    return appTokenSettingsView;
+    AppTokenSettingsDto appTokenSettingsDto = new AppTokenSettingsDto();
+    appTokenSettingsDto.setExpireInSeconds(tokenSettings.getExpireInSeconds());
+    return appTokenSettingsDto;
   }
 
-  private AppSvgSettingsView fromAppSvgSettings(
+  private AppSvgSettingsDto fromAppSvgSettings(
       ApplicationSettings.SvgImageGenerationSettings settings) {
-    AppSvgSettingsView svgSettings = new AppSvgSettingsView();
+    AppSvgSettingsDto svgSettings = new AppSvgSettingsDto();
     svgSettings.setUseLimit(settings.isUseLimitation());
     svgSettings.setImageSizeLimitation(settings.getMaxSupportedImageSize());
     svgSettings.setNumberOfColorLimitation(settings.getMaxNumberOfColors());
@@ -92,8 +92,8 @@ public class ApplicationSettingsController {
       path = "/tokenSettings",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<AppTokenSettingsView> updateTokenSettings(
-      @RequestBody AppTokenSettingsView inputTokenSettings) {
+  public Mono<AppTokenSettingsDto> updateTokenSettings(
+      @RequestBody AppTokenSettingsDto inputTokenSettings) {
     ApplicationSettings.TokenSettings tokenSettings = new ApplicationSettings.TokenSettings();
 
     int expireInSeconds = ApplicationConstants.DEFAULT_TOKEN_EXPIRE_TIME_IN_SECONDS;
@@ -105,9 +105,9 @@ public class ApplicationSettingsController {
         .setTokenSettingsInAsync(tokenSettings)
         .map(
             settings -> {
-              AppTokenSettingsView appTokenSettingsView = new AppTokenSettingsView();
-              appTokenSettingsView.setExpireInSeconds(settings.getExpireInSeconds());
-              return appTokenSettingsView;
+              AppTokenSettingsDto appTokenSettingsDto = new AppTokenSettingsDto();
+              appTokenSettingsDto.setExpireInSeconds(settings.getExpireInSeconds());
+              return appTokenSettingsDto;
             });
   }
 
@@ -116,16 +116,16 @@ public class ApplicationSettingsController {
       path = "/svgSettings",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<AppSvgSettingsView> updateTokenSettings(
-      @RequestBody AppSvgSettingsView appSvgSettingsView) {
+  public Mono<AppSvgSettingsDto> updateTokenSettings(
+      @RequestBody AppSvgSettingsDto appSvgSettingsDto) {
     ApplicationSettings.SvgImageGenerationSettings svgImageGenerationSettings =
         new ApplicationSettings.SvgImageGenerationSettings();
 
-    svgImageGenerationSettings.setUseLimitation(appSvgSettingsView.isUseLimit());
+    svgImageGenerationSettings.setUseLimitation(appSvgSettingsDto.isUseLimit());
     svgImageGenerationSettings.setMaxNumberOfColors(
-        appSvgSettingsView.getNumberOfColorLimitation());
+        appSvgSettingsDto.getNumberOfColorLimitation());
     svgImageGenerationSettings.setMaxSupportedImageSize(
-        appSvgSettingsView.getImageSizeLimitation());
+        appSvgSettingsDto.getImageSizeLimitation());
 
     return this.applicationSettingsService
         .setSvgSettingsInAsync(svgImageGenerationSettings)

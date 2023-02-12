@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
+package com.acrocontext.reactive.domain.dto;
 
-package com.acrocontext.reactive.domain;
-
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 
 /**
- * Date 11/25/17
+ * Date 12/24/17
  *
  * @author Nam Seob Seo
  */
 @Data
-public class AppTokenSettingsView {
-  @Positive(message = "expire in seconds should be positive integer")
-  private int expireInSeconds;
+public class SvgConvertRequestDto {
+  @NotBlank
+  private String imageFilename;
+  @NotBlank private String imageDataBase64;
+  private int numberOfColors = 16;
 }

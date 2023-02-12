@@ -19,25 +19,18 @@
  * file 'LICENSE.txt', which is part of this source code package.
  */
 
-package com.acrocontext.reactive.domain;
+package com.acrocontext.reactive.domain.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-
 /**
- * Date 11/26/17
+ * Date 11/23/17
  *
  * @author Nam Seob Seo
  */
 @Data
 @AllArgsConstructor
-public class UserView {
-  @Email
-  private String email;
-  private boolean active;
-  @NotBlank
-  private String creationTime;
+public class GeneralResponseDto {
+  private String message;
 }

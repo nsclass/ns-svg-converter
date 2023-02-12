@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.acrocontext.reactive.domain;
+package com.acrocontext.reactive.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +26,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class SvgConvertRespondView {
+public class SvgConvertRespondDto {
   private String filename;
   private String svgString;
 }

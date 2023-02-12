@@ -26,8 +26,8 @@ import com.acrocontext.domain.ApplicationSettings;
 import com.acrocontext.exceptions.SvgImageGenerationError;
 import com.acrocontext.image.svg.ImageConvertOptions;
 import com.acrocontext.image.svg.ImageSvgConverter;
-import com.acrocontext.reactive.domain.SvgConvertRequestView;
-import com.acrocontext.reactive.domain.SvgConvertRespondView;
+import com.acrocontext.reactive.domain.dto.SvgConvertRequestDto;
+import com.acrocontext.reactive.domain.dto.SvgConvertRespondDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -66,7 +66,7 @@ public class SvgConverterController {
     this.objectMapper = objectMapper;
   }
 
-  private SvgConvertRespondView convertRespondView(SvgConvertRequestView convertRequestView) {
+  private SvgConvertRespondDto convertRespondView(SvgConvertRequestDto convertRequestView) {
     byte[] imageData = createBytesFromBase64(convertRequestView.getImageDataBase64());
     try (InputStream inputStream = new ByteArrayInputStream(imageData)) {
       BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -100,7 +100,7 @@ public class SvgConverterController {
               ((description, current, total, duration) ->
                   System.out.printf("%s, %d/%d, %s%n", description, current, total, duration)));
 
-      return SvgConvertRespondView.builder()
+      return SvgConvertRespondDto.builder()
           .filename(convertRequestView.getImageFilename())
           .svgString(svgString)
           .build();
@@ -121,13 +121,13 @@ public class SvgConverterController {
       path = "/conversion",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<SvgConvertRespondView> convertImage(ServerWebExchange exchange) {
+  public Mono<SvgConvertRespondDto> convertImage(ServerWebExchange exchange) {
     return exchange
             .getRequest()
             .getBody()
             .map(dataBuffer -> dataBuffer.asInputStream(true))
             .reduce(SequenceInputStream::new)
-            .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestView.class))
+            .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestDto.class))
             .map(this::convertRespondView);
   }
 

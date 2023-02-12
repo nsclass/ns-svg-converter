@@ -28,8 +28,8 @@ import com.acrocontext.exceptions.ChangePasswordNotMatchOldPassword;
 import com.acrocontext.exceptions.ChangePasswordUserNotFound;
 import com.acrocontext.exceptions.GeneralUserNotFound;
 import com.acrocontext.provider.CustomPasswordProvider;
-import com.acrocontext.reactive.domain.GeneralResponseView;
-import com.acrocontext.reactive.domain.UserView;
+import com.acrocontext.reactive.domain.dto.GeneralResponseDto;
+import com.acrocontext.reactive.domain.dto.UserDto;
 import com.acrocontext.reactive.services.BeanValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -67,18 +67,18 @@ public class UserController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<UserView> getUser(@PathVariable String username) {
+  public Mono<UserDto> getUser(@PathVariable String username) {
 
     return userService
         .findUserByEmail(username)
         .map(
-            user -> new UserView(
+            user -> new UserDto(
                 user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString()));
   }
 
   @PreAuthorize("hasRole('MEMBER')")
   @GetMapping(path = "/operations/profile", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<UserView> getUserProfile() {
+  public Mono<UserDto> getUserProfile() {
 
     return ReactiveSecurityContextHolder.getContext()
         .flatMap(
@@ -91,7 +91,7 @@ public class UserController {
         .switchIfEmpty(Mono.error(new GeneralUserNotFound("Failed to find a user")))
         .map(
             user -> {
-              return new UserView(
+              return new UserDto(
                   user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString());
             });
   }
@@ -100,7 +100,7 @@ public class UserController {
       path = "/register",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<UserView> addUser(@RequestBody UserRegistration userRegistration) {
+  public Mono<UserDto> addUser(@RequestBody UserRegistration userRegistration) {
 
     BeanValidationException exception = validatorService.validate(userRegistration);
     if (exception != null) return Mono.error(exception);
@@ -108,7 +108,7 @@ public class UserController {
     return userService
         .registerUser(userRegistration)
         .map(
-            user -> new UserView(
+            user -> new UserDto(
                 user.getEmail(), user.isActive(), user.getCreatedUtcDateTime().toString()));
   }
 
@@ -116,7 +116,7 @@ public class UserController {
       path = "/operations/password",
       consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<GeneralResponseView> changePassword(ServerWebExchange exchange) {
+  public Mono<GeneralResponseDto> changePassword(ServerWebExchange exchange) {
 
     Mono<MultiValueMap<String, String>> data = exchange.getFormData();
     return data.flatMap(
@@ -146,7 +146,7 @@ public class UserController {
                           new ChangePasswordNotMatchOldPassword("Invalid user/password"));
                     }
                   })
-              .map(user -> new GeneralResponseView("Successfully changed a password"));
+              .map(user -> new GeneralResponseDto("Successfully changed a password"));
         });
   }
 }

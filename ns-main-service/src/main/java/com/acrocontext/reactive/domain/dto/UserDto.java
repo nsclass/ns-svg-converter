@@ -14,18 +14,30 @@
  * limitations under the License.
  */
 
-package com.acrocontext.reactive.domain;
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
 
+package com.acrocontext.reactive.domain.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+
 /**
- * Date 12/25/17
+ * Date 11/26/17
  *
  * @author Nam Seob Seo
  */
 @Data
-public class AppSvgSettingsView {
-  private boolean useLimit;
-  private int numberOfColorLimitation;
-  private int imageSizeLimitation;
+@AllArgsConstructor
+public class UserDto {
+  @Email
+  private String email;
+  private boolean active;
+  @NotBlank
+  private String creationTime;
 }
