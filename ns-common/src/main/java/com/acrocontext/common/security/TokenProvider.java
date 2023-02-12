@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.common.security;
 
 import com.acrocontext.common.services.ApplicationSettingsService;
@@ -28,6 +22,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,16 +34,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
 @Slf4j
 @Component
 @EnableConfigurationProperties
 public class TokenProvider {
+
   @Value("${app.name}")
   private String appName;
 
@@ -59,10 +53,14 @@ public class TokenProvider {
     return getClaimsFromToken(token).map(Claims::getSubject);
   }
 
-
   private SecretKey createKey() {
-    return Keys.hmacShaKeyFor(applicationSettingsService.getTokenSettingsInCache().getSecret().getBytes(StandardCharsets.UTF_8));
+    return Keys.hmacShaKeyFor(
+        applicationSettingsService
+            .getTokenSettingsInCache()
+            .getSecret()
+            .getBytes(StandardCharsets.UTF_8));
   }
+
   public String generateToken(String username) {
     return Jwts.builder()
         .setIssuer(appName)
@@ -72,12 +70,11 @@ public class TokenProvider {
         .signWith(createKey())
         .compact();
   }
+
   public Mono<Claims> getClaimsFromToken(String token) {
     try {
       var parser = Jwts.parserBuilder().setSigningKey(createKey()).build();
-      Claims claims = parser
-              .parseClaimsJws(token)
-              .getBody();
+      Claims claims = parser.parseClaimsJws(token).getBody();
 
       return Mono.just(claims);
     } catch (ExpiredJwtException e) {

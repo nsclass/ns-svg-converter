@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.model;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +26,7 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class InterNode {
+
   private final double[] point;
 
   public double valueAt(int idx) {

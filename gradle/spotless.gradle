@@ -1,0 +1,21 @@
+spotless {
+    // optional: limit format enforcement to just the files changed by this feature branch
+    // ratchetFrom 'origin/main'
+
+    format 'misc', {
+        // define the files to apply `misc` to
+        target '*.gradle', '*.md', '.gitignore'
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    java {
+        // Choose one of these formatters.
+        googleJavaFormat('1.15.0')   // has its own section below
+        formatAnnotations()  // fixes formatting of type annotations, see below
+
+        licenseHeaderFile "${project.rootDir}/gradle/license.txt" // or licenseHeaderFile
+    }
+}

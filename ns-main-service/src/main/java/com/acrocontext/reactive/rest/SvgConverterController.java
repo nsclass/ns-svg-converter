@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive.rest;
 
 import com.acrocontext.common.services.ApplicationSettingsService;
@@ -29,6 +23,12 @@ import com.acrocontext.image.svg.ImageSvgConverter;
 import com.acrocontext.reactive.domain.dto.SvgConvertRequestDto;
 import com.acrocontext.reactive.domain.dto.SvgConvertRespondDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
+import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,13 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.SequenceInputStream;
 
 /**
  * Date 12/24/17
@@ -52,8 +45,11 @@ import java.io.SequenceInputStream;
 @RestController
 @RequestMapping("/api/v1/svg")
 public class SvgConverterController {
+
   private final ImageSvgConverter imageSvgConverter;
+
   private final ApplicationSettingsService applicationSettingsService;
+
   private final ObjectMapper objectMapper;
 
   @Autowired
@@ -123,12 +119,12 @@ public class SvgConverterController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public Mono<SvgConvertRespondDto> convertImage(ServerWebExchange exchange) {
     return exchange
-            .getRequest()
-            .getBody()
-            .map(dataBuffer -> dataBuffer.asInputStream(true))
-            .reduce(SequenceInputStream::new)
-            .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestDto.class))
-            .map(this::convertRespondView);
+        .getRequest()
+        .getBody()
+        .map(dataBuffer -> dataBuffer.asInputStream(true))
+        .reduce(SequenceInputStream::new)
+        .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestDto.class))
+        .map(this::convertRespondView);
   }
 
   private static byte[] createBytesFromBase64(String data) {

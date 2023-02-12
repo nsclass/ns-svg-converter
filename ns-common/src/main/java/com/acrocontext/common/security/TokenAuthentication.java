@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.common.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -27,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class TokenAuthentication extends AbstractAuthenticationToken {
 
   private final String token;
+
   private final UserDetails userDetails;
 
   public TokenAuthentication(UserDetails userDetails, String token) {

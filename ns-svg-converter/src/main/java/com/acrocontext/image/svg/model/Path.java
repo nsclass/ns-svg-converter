@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.model;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-
-import java.util.List;
 
 /**
  * Date 12/24/17
@@ -29,6 +27,7 @@ import java.util.List;
 @Value
 @AllArgsConstructor
 public class Path {
+
   private final List<Integer[]> path;
 
   public Integer[] indexAt(int idx) {

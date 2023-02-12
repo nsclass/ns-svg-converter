@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.process;
 
 import com.acrocontext.image.svg.model.Path;
 import com.acrocontext.image.svg.model.ScanPath;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -36,15 +34,18 @@ public class ScanPathGenerator {
   private static final byte[] PATH_SCAN_DIR_LOOKUP = {
     0, 0, 3, 0, 1, 0, 3, 0, 0, 3, 3, 1, 0, 3, 0, 0
   };
+
   private static final boolean[] PATH_SCAN_HOLE_PATH_LOOKUP = {
     false, false, false, false, false, false, false, true, false, false, false, true, false, true,
     true, false
   };
-  // PATH_SCAN_COMBINED_LOOKUP[ arr[py][px] ][ dir ] = [nextArrayPyPx, nextDir, deltaPx, deltaPy];
+
+  // PATH_SCAN_COMBINED_LOOKUP[ arr[py][px] ][ dir ] = [nextArrayPyPx, nextDir, deltaPx,
+  // deltaPy];
   private static final byte[][][] PATH_SCAN_COMBINED_LOOKUP = {
-    {
-      {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}
-    }, // arr[py][px]==0 is invalid
+    {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}}, // arr[py][px]==0
+    // is
+    // invalid
     {{0, 1, 0, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 2, -1, 0}},
     {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 1, 0, -1}, {0, 0, 1, 0}},
     {{0, 0, 1, 0}, {-1, -1, -1, -1}, {0, 2, -1, 0}, {-1, -1, -1, -1}},
@@ -59,17 +60,19 @@ public class ScanPathGenerator {
     {{0, 0, 1, 0}, {-1, -1, -1, -1}, {0, 2, -1, 0}, {-1, -1, -1, -1}},
     {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 1, 0, -1}, {0, 0, 1, 0}},
     {{0, 1, 0, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {0, 2, -1, 0}},
-    {
-      {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}
-    } // arr[py][px]==15 is invalid
+    {{-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}, {-1, -1, -1, -1}} // arr[py][px]==15
+    // is
+    // invalid
   };
-  // 3. Walking through an edge node array, discarding edge node types 0 and 15 and creating paths
+
+  // 3. Walking through an edge node array, discarding edge node types 0 and 15 and
+  // creating paths
   // from the rest.
   // Walk directions (dir): 0 > ; 1 ^ ; 2 < ; 3 v
   // Edge node types ( ▓:light or 1; ░:dark or 0 )
-  // ░░  ▓░  ░▓  ▓▓  ░░  ▓░  ░▓  ▓▓  ░░  ▓░  ░▓  ▓▓  ░░  ▓░  ░▓  ▓▓
-  // ░░  ░░  ░░  ░░  ░▓  ░▓  ░▓  ░▓  ▓░  ▓░  ▓░  ▓░  ▓▓  ▓▓  ▓▓  ▓▓
-  // 0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
+  // ░░ ▓░ ░▓ ▓▓ ░░ ▓░ ░▓ ▓▓ ░░ ▓░ ░▓ ▓▓ ░░ ▓░ ░▓ ▓▓
+  // ░░ ░░ ░░ ░░ ░▓ ░▓ ░▓ ░▓ ▓░ ▓░ ▓░ ▓░ ▓▓ ▓▓ ▓▓ ▓▓
+  // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
   //
   private static ScanPath createScanPath(int[][] layer, float pathOmit) {
 
@@ -106,7 +109,8 @@ public class ScanPathGenerator {
         List<Integer[]> thisPath = new ArrayList<>();
         boolean pathFinished = false;
 
-        // fill paths will be drawn, but hole paths are also required to remove unnecessary edge
+        // fill paths will be drawn, but hole paths are also required to remove
+        // unnecessary edge
         // nodes
         int dir = PATH_SCAN_DIR_LOOKUP[layer[py][px]];
         boolean holePath = PATH_SCAN_HOLE_PATH_LOOKUP[layer[py][px]];
@@ -123,7 +127,8 @@ public class ScanPathGenerator {
 
           thisPath.add(thisPoint);
 
-          // Next: look up the replacement, direction and coordinate changes = clear this cell, turn
+          // Next: look up the replacement, direction and coordinate changes =
+          // clear this cell, turn
           // if required, walk forward
           byte[] lookupRow = PATH_SCAN_COMBINED_LOOKUP[layer[py][px]][dir];
           layer[py][px] = lookupRow[0];
@@ -146,12 +151,16 @@ public class ScanPathGenerator {
 
   // 3. Batch createScanPath
   public ScanPath[] createBatchScanPath(int[][][] layers, float pathOmit) {
-    var tasks = IntStream.range(0, layers.length)
-        .mapToObj(
-          idx -> (Supplier<ParallelOperationUtils.ExecuteItem<ScanPath>>) () -> {
-            ScanPath scanPath = createScanPath(layers[idx], pathOmit);
-            return new ParallelOperationUtils.ExecuteItem<>(idx, scanPath);
-          }).toList();
+    var tasks =
+        IntStream.range(0, layers.length)
+            .mapToObj(
+                idx ->
+                    (Supplier<ParallelOperationUtils.ExecuteItem<ScanPath>>)
+                        () -> {
+                          ScanPath scanPath = createScanPath(layers[idx], pathOmit);
+                          return new ParallelOperationUtils.ExecuteItem<>(idx, scanPath);
+                        })
+            .toList();
 
     return ParallelOperationUtils.execute(new ScanPath[0], tasks);
   }

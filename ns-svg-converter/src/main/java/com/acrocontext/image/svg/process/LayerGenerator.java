@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.process;
 
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -28,11 +26,12 @@ import java.util.function.Supplier;
  * @author Nam Seob Seo
  */
 public class LayerGenerator {
+
   // 2. Layer separation and edge detection
   // Edge node types ( ▓:light or 1; ░:dark or 0 )
-  // 12  ░░  ▓░  ░▓  ▓▓  ░░  ▓░  ░▓  ▓▓  ░░  ▓░  ░▓  ▓▓  ░░  ▓░  ░▓  ▓▓
-  // 48  ░░  ░░  ░░  ░░  ░▓  ░▓  ░▓  ░▓  ▓░  ▓░  ▓░  ▓░  ▓▓  ▓▓  ▓▓  ▓▓
-  //     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
+  // 12 ░░ ▓░ ░▓ ▓▓ ░░ ▓░ ░▓ ▓▓ ░░ ▓░ ░▓ ▓▓ ░░ ▓░ ░▓ ▓▓
+  // 48 ░░ ░░ ░░ ░░ ░▓ ░▓ ░▓ ░▓ ▓░ ▓░ ▓░ ▓░ ▓▓ ▓▓ ▓▓ ▓▓
+  // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
   //
   public int[][][] layering(int[][] paletteColors, byte[][] palette) {
     // Creating layers for each indexed color in arr

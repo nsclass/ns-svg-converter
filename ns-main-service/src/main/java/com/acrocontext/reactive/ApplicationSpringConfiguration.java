@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive;
+
+import static org.springframework.http.MediaType.TEXT_HTML;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 
 import com.acrocontext.NSDomainSpringConfiguration;
 import com.acrocontext.cassandra.NSCassandraSpringConfiguration;
@@ -37,9 +34,6 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.springframework.http.MediaType.TEXT_HTML;
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-
 @Configuration
 @Import({
   NSDomainSpringConfiguration.class,
@@ -50,6 +44,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 @ComponentScan(basePackageClasses = ApplicationSpringConfiguration.class)
 @EnableWebFlux
 public class ApplicationSpringConfiguration {
+
   @Value("classpath:/static/index.html")
   private Resource indexHtml;
 

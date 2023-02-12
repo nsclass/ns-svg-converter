@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.process;
 
 import com.acrocontext.image.svg.model.InterNode;
@@ -22,7 +21,6 @@ import com.acrocontext.image.svg.model.InterNodeListLayers;
 import com.acrocontext.image.svg.model.Path;
 import com.acrocontext.image.svg.model.ScanPath;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -97,29 +95,38 @@ public class InterNodeGenerator {
     return nodes;
   }
 
-  // 4. interpolating between path points for nodes with 8 directions ( E, SE, S, SW, W, NW, N, NE )
+  // 4. interpolating between path points for nodes with 8 directions ( E, SE, S, SW, W,
+  // NW, N, NE )
   private static InterNodeList[] createInterNodeList(ScanPath scanPath) {
     // paths loop
-    var tasks = IntStream.range(0, scanPath.getScanPath().size())
-        .mapToObj(
-            idx -> (Supplier<ParallelOperationUtils.ExecuteItem<InterNodeList>>) () -> {
-              InterNodeList interNodeList =
-                  new InterNodeList(createInterNode(scanPath.getScanPath().get(idx)));
-              return new ParallelOperationUtils.ExecuteItem<>(idx, interNodeList);
-            }).toList();
+    var tasks =
+        IntStream.range(0, scanPath.getScanPath().size())
+            .mapToObj(
+                idx ->
+                    (Supplier<ParallelOperationUtils.ExecuteItem<InterNodeList>>)
+                        () -> {
+                          InterNodeList interNodeList =
+                              new InterNodeList(createInterNode(scanPath.getScanPath().get(idx)));
+                          return new ParallelOperationUtils.ExecuteItem<>(idx, interNodeList);
+                        })
+            .toList();
 
     return ParallelOperationUtils.execute(new InterNodeList[0], tasks);
   } // End of createInterNodeList()
 
   // 4. Batch interpolation
   public InterNodeListLayers[] createInterNodeListLayers(ScanPath[] scanPaths) {
-    var tasks = IntStream.range(0, scanPaths.length)
-        .mapToObj(
-            idx -> (Supplier<ParallelOperationUtils.ExecuteItem<InterNodeListLayers>>) () -> {
-              InterNodeListLayers interNodeListLayers =
-                  new InterNodeListLayers(createInterNodeList(scanPaths[idx]));
-              return new ParallelOperationUtils.ExecuteItem<>(idx, interNodeListLayers);
-            }).toList();
+    var tasks =
+        IntStream.range(0, scanPaths.length)
+            .mapToObj(
+                idx ->
+                    (Supplier<ParallelOperationUtils.ExecuteItem<InterNodeListLayers>>)
+                        () -> {
+                          InterNodeListLayers interNodeListLayers =
+                              new InterNodeListLayers(createInterNodeList(scanPaths[idx]));
+                          return new ParallelOperationUtils.ExecuteItem<>(idx, interNodeListLayers);
+                        })
+            .toList();
 
     return ParallelOperationUtils.execute(new InterNodeListLayers[0], tasks);
   }

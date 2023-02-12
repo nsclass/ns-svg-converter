@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.common.security;
 
 import com.acrocontext.common.provider.CustomJsonProvider;
 import com.acrocontext.common.services.ApplicationSettingsService;
+import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -38,14 +33,14 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-
 @Component
 @EnableConfigurationProperties
 public class TokenAuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
 
   private final TokenProvider tokenProvider;
+
   private final CustomJsonProvider objectMapper;
+
   private final ApplicationSettingsService applicationSettingsService;
 
   @Autowired

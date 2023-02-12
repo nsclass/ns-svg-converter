@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.process;
 
 import com.acrocontext.image.svg.ImageConvertOptions;
 import com.acrocontext.image.svg.model.ImageData;
 import com.acrocontext.image.svg.utils.ParallelOperationUtils;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Date 12/23/17
@@ -33,6 +31,7 @@ import java.util.stream.IntStream;
  */
 @Slf4j
 public class ColorQuantizator {
+
   // 1. Color quantization repeated "cycles" times, based on K-means clustering
   // https://en.wikipedia.org/wiki/Color_quantization
   // https://en.wikipedia.org/wiki/K-means_clustering
@@ -41,7 +40,8 @@ public class ColorQuantizator {
     float minColorRatio = options.getMinColorRatio();
     int cycles = options.getColorQuantCycles();
 
-    // Creating indexed color array indexedDataArray which has a boundary filled with -1 in every
+    // Creating indexed color array indexedDataArray which has a boundary filled with
+    // -1 in every
     // direction
     int[][] indexedDataArray = new int[imageData.getHeight() + 2][imageData.getWidth() + 2];
 
@@ -94,7 +94,8 @@ public class ColorQuantizator {
                 ((double) (paletteAcc[k][4])
                     / (double) (imageData.getWidth() * imageData.getHeight()));
 
-        // Randomizing a color, if there are too few pixels and there will be a new cycle
+        // Randomizing a color, if there are too few pixels and there will be a
+        // new cycle
         if ((ratio < minColorRatio) && (loopIdx < (cycles - 1))) {
           palette[k][0] = (byte) (-128 + Math.floor(Math.random() * 255));
           palette[k][1] = (byte) (-128 + Math.floor(Math.random() * 255));
@@ -139,19 +140,22 @@ public class ColorQuantizator {
 
       int idx = ((row * imageData.getWidth()) + col) * 4;
 
-      // find closest color from palette by measuring (rectilinear) color distance between this
+      // find closest color from palette by measuring (rectilinear) color distance
+      // between this
       // pixel and all palette colors
       int cdl = 256 + 256 + 256 + 256;
       int ci = 0;
       for (int paletteIdx = 0; paletteIdx < palette.length; paletteIdx++) {
 
-        // In my experience, https://en.wikipedia.org/wiki/Rectilinear_distance works better than
+        // In my experience, https://en.wikipedia.org/wiki/Rectilinear_distance
+        // works better than
         // https://en.wikipedia.org/wiki/Euclidean_distance
         int c1 = Math.abs(palette[paletteIdx][0] - imageData.dataAt(idx));
         int c2 = Math.abs(palette[paletteIdx][1] - imageData.dataAt(idx + 1));
         int c3 = Math.abs(palette[paletteIdx][2] - imageData.dataAt(idx + 2));
         int c4 = Math.abs(palette[paletteIdx][3] - imageData.dataAt(idx + 3));
-        int cd = c1 + c2 + c3 + (c4 * 4); // weighted alpha seems to help images with transparency
+        int cd = c1 + c2 + c3 + (c4 * 4); // weighted alpha seems to help images
+        // with transparency
 
         // Remember this color if this is the closest yet
         if (cd < cdl) {

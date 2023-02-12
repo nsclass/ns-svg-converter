@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.process;
 
 import com.acrocontext.image.svg.ImageConvertOptions;
@@ -25,8 +24,10 @@ import com.acrocontext.image.svg.model.ImageData;
  * @author Nam Seob Seo
  */
 public class PaletteGenerator {
+
   public byte[][] generatePalette(ImageData imageData, ImageConvertOptions options) {
-    // Use custom palette if pal is defined or sample or generate custom length palette
+    // Use custom palette if pal is defined or sample or generate custom length
+    // palette
     if (options.isColorSampling()) {
       return samplePalette(options.getNumberOfColors(), imageData);
     } else {
@@ -34,7 +35,8 @@ public class PaletteGenerator {
     }
   }
 
-  // Generating a palette with numberOfColors, array[numberOfColors][4] where [i][0] = R ; [i][1] =
+  // Generating a palette with numberOfColors, array[numberOfColors][4] where [i][0] = R
+  // ; [i][1] =
   // G ; [i][2] = B ; [i][3] = A
   private static byte[][] generatePalette(int numberOfColors) {
     byte[][] palette = new byte[numberOfColors][4];
@@ -51,13 +53,20 @@ public class PaletteGenerator {
 
     } else {
       // RGB color cube
-      int colorCubeCount =
-          (int)
-              Math.floor(
-                  Math.pow(
-                      numberOfColors,
-                      1.0 / 3.0)); // Number of points on each edge on the RGB color cube
-      int colorStep = (int) Math.floor(255 / (colorCubeCount - 1)); // distance between points
+      int colorCubeCount = (int) Math.floor(Math.pow(numberOfColors, 1.0 / 3.0)); // Number
+      // of
+      // points
+      // on
+      // each
+      // edge
+      // on
+      // the
+      // RGB
+      // color
+      // cube
+      int colorStep = (int) Math.floor(255 / (colorCubeCount - 1)); // distance
+      // between
+      // points
       int colorCount = 0;
       for (int redIdx = 0; redIdx < colorCubeCount; redIdx++) {
         for (int greenIdx = 0; greenIdx < colorCubeCount; greenIdx++) {

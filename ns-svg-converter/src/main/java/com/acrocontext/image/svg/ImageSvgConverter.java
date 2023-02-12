@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg;
 
 import com.acrocontext.image.svg.model.ImageData;
@@ -28,12 +27,6 @@ import com.acrocontext.image.svg.process.ScanPathGenerator;
 import com.acrocontext.image.svg.process.TracePathGenerator;
 import com.acrocontext.image.svg.utils.OperationManager;
 import com.acrocontext.image.svg.utils.OperationProgressListener;
-import lombok.Data;
-import lombok.Value;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,6 +34,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.imageio.ImageIO;
+import lombok.Data;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * Date 12/21/17
@@ -53,15 +51,23 @@ public class ImageSvgConverter {
 
   @Data
   private static class ImageSvgConvertCtx {
+
     private final ImageConvertOptions options;
+
     private ImageData imageData;
+
     private int[][] paletteColors;
+
     private byte[][] palette;
+
     private int[][][] rawLayers;
 
     private IndexedImage indexedImage;
+
     private String svgString;
+
     private com.acrocontext.image.svg.model.ScanPath[] batchPathScan;
+
     private InterNodeListLayers[] batchInterNodes;
 
     public ImageSvgConvertCtx(ImageConvertOptions options) {
@@ -104,18 +110,23 @@ public class ImageSvgConverter {
   // Container for the color-indexed image before and traceData after vectorizing
   @Value
   static class IndexedImage {
+
     int width;
+
     int height;
+
     int[][] paletteColors; // array[x][y] of palette colors
+
     byte[][] palette; // array[paletteLength][4] RGBA color palette
+
     TracePathLayers[] layers; // traceData
 
     IndexedImage(int[][] paletteColors, byte[][] palette, TracePathLayers[] layers) {
       this.paletteColors = paletteColors;
       this.palette = palette;
       this.width = paletteColors[0].length - 2;
-      this.height =
-          paletteColors.length - 2; // Color quantization adds +2 to the original width and height
+      this.height = paletteColors.length - 2; // Color quantization adds +2 to the
+      // original width and height
       this.layers = layers;
     }
 
@@ -185,11 +196,14 @@ public class ImageSvgConverter {
     return new ImageData(width, height, data);
   }
 
-  // The bitShift method in loadImageData creates signed bytes where -1 -> 255 unsigned ; -128 ->
+  // The bitShift method in loadImageData creates signed bytes where -1 -> 255 unsigned
+  // ; -128 ->
   // 128 unsigned ;
-  // 127 -> 127 unsigned ; 0 -> 0 unsigned ; These will be converted to -128 (representing 0
+  // 127 -> 127 unsigned ; 0 -> 0 unsigned ; These will be converted to -128
+  // (representing 0
   // unsigned) ...
-  // 127 (representing 255 unsigned) and toSvgColorStr will add +128 to create RGB values 0..255
+  // 127 (representing 255 unsigned) and toSvgColorStr will add +128 to create RGB
+  // values 0..255
   private static byte byteTrans(byte b) {
     if (b < 0) {
       return (byte) (b + 128);
@@ -200,7 +214,7 @@ public class ImageSvgConverter {
 
   ////////////////////////////////////////////////////////////
   //
-  //  User friendly functions
+  // User friendly functions
   //
   ////////////////////////////////////////////////////////////
 
@@ -314,7 +328,7 @@ public class ImageSvgConverter {
 
   ////////////////////////////////////////////////////////////
   //
-  //  SVG Drawing functions
+  // SVG Drawing functions
   //
   ////////////////////////////////////////////////////////////
 

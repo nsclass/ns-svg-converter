@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive.dao.cassandra;
 
 import com.acrocontext.cassandra.dao.AdminDataRepository;
@@ -29,21 +23,25 @@ import com.acrocontext.common.dao.UserDao;
 import com.acrocontext.common.provider.CustomJsonProvider;
 import com.acrocontext.common.services.RoleService;
 import com.acrocontext.domain.User;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
 @Repository
 @Profile({"dao_cassandra", "default"})
 public class UserDaoImpl implements UserDao {
+
   private final CustomJsonProvider jsonProvider;
+
   private final CassandraDomainDataFactory domainDataFactory;
+
   private final CommonDataRepository commonDataRepository;
+
   private final AdminDataRepository adminDataRepository;
+
   private final RoleService roleService;
 
   @Autowired

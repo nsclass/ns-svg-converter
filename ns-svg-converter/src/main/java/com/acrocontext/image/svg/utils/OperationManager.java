@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.image.svg.utils;
 
 import java.time.Duration;
@@ -31,7 +30,7 @@ public class OperationManager<T> {
 
   private final OperationProgressListener progressListener;
 
-  private record OperationCommand<T>(String description, Function<T, T> function) { }
+  private record OperationCommand<T>(String description, Function<T, T> function) {}
 
   public OperationManager(OperationProgressListener listener) {
     this.progressListener = listener;
@@ -53,10 +52,7 @@ public class OperationManager<T> {
       operationCommand.function.apply(context);
       Instant end = Instant.now();
       progressListener.onProgressInfo(
-"Done: " + operationCommand.description(),
-          idx,
-          totalCount,
-          Duration.between(start, end));
+          "Done: " + operationCommand.description(), idx, totalCount, Duration.between(start, end));
 
       ++idx;
     }

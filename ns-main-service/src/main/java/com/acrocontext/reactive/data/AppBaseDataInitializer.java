@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive.data;
 
 import com.acrocontext.cassandra.dao.AdminDataRepository;
@@ -28,20 +22,23 @@ import com.acrocontext.domain.Role;
 import com.acrocontext.domain.User;
 import com.acrocontext.factory.NSDomainFactory;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Slf4j
 @Service
 @Profile({"dao_cassandra", "default"})
 public class AppBaseDataInitializer {
+
   private final AdminDataRepository adminDataRepository;
+
   private final CassandraDomainDataFactory cassandraDomainDataFactory;
+
   private final NSDomainFactory nsDomainFactory;
+
   private final RoleService roleService;
 
   @Autowired
@@ -82,7 +79,8 @@ public class AppBaseDataInitializer {
         .flatMap(
             data -> {
               return adminDataRepository
-                  .findByRowKey(cassandraDomainDataFactory.getUserPartitionKey(adminUser.getEmail()))
+                  .findByRowKey(
+                      cassandraDomainDataFactory.getUserPartitionKey(adminUser.getEmail()))
                   .switchIfEmpty(adminDataRepository.save(data));
             })
         .subscribe(value -> log.info("Admin user: " + value.getPartitionKey()));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive.domain.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 
 /**
  * Date 11/26/17
@@ -35,9 +28,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserDto {
-  @Email
-  private String email;
+
+  @Email private String email;
+
   private boolean active;
-  @NotBlank
-  private String creationTime;
+
+  @NotBlank private String creationTime;
 }

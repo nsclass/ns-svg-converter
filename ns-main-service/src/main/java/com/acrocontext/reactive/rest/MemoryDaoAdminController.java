@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.reactive.rest;
 
 import com.acrocontext.common.services.ApplicationSettingsService;
@@ -37,7 +36,9 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/v1/admin")
 @Profile("dao_memory")
 public class MemoryDaoAdminController {
+
   private final UserDaoMemoryImpl userDaoMemory;
+
   private final ApplicationSettingsService applicationSettingsService;
 
   @Autowired
@@ -52,8 +53,11 @@ public class MemoryDaoAdminController {
   public Mono<String> clearData() {
     userDaoMemory.clearData();
 
-    return applicationSettingsService.setTokenSettingsInAsync(new ApplicationSettings.TokenSettings())
-            .then(applicationSettingsService.setSvgSettingsInAsync(new ApplicationSettings.SvgImageGenerationSettings()))
-            .then(Mono.just("success"));
+    return applicationSettingsService
+        .setTokenSettingsInAsync(new ApplicationSettings.TokenSettings())
+        .then(
+            applicationSettingsService.setSvgSettingsInAsync(
+                new ApplicationSettings.SvgImageGenerationSettings()))
+        .then(Mono.just("success"));
   }
 }

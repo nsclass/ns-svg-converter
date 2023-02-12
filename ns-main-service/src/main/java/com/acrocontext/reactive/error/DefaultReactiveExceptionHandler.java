@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive.error;
 
 import com.acrocontext.exceptions.BeanValidationException;
@@ -26,6 +20,8 @@ import com.acrocontext.exceptions.ChangePasswordExceptionBase;
 import com.acrocontext.exceptions.SvgImageGenerationError;
 import com.acrocontext.exceptions.TokenAuthExceptionBase;
 import com.acrocontext.exceptions.UserRegistrationExceptionBase;
+import java.util.Map;
+import java.util.concurrent.CompletionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
@@ -42,9 +38,6 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
-import java.util.concurrent.CompletionException;
 
 @Slf4j
 @Component

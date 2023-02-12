@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.common.security;
 
 import com.acrocontext.common.services.CustomUserDetailService;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -43,14 +39,13 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 public class TokenAuthenticationWebFilter implements WebFilter {
+
   private static final String TOKEN = "Token";
 
   private final CustomUserDetailService userDetailService;
+
   private final TokenProvider tokenProvider;
 
   private final DefaultTokenProtectionMatcher tokenProtectionMatcher =
@@ -80,17 +75,16 @@ public class TokenAuthenticationWebFilter implements WebFilter {
     return tokenProvider
         .getUsernameFromToken(token)
         .flatMap(
-            username -> userDetailService
-              .findByUsername(username)
-              .map(
-                  userDetails -> new TokenAuthentication(userDetails, token))
-              .switchIfEmpty(
-                  Mono.error(new AccessDeniedException("Invalid Authentication Token"))));
+            username ->
+                userDetailService
+                    .findByUsername(username)
+                    .map(userDetails -> new TokenAuthentication(userDetails, token))
+                    .switchIfEmpty(
+                        Mono.error(new AccessDeniedException("Invalid Authentication Token"))));
   }
 
   @Override
-  @NonNull
-  public Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
+  @NonNull public Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
     return this.permitAllPatternMatcher
         .matches(exchange)
         .flatMap(

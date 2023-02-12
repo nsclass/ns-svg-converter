@@ -33,6 +33,7 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'org.graalvm.buildtools.native' version "${graalvmBuildToolVersion}"
+    id "com.diffplug.spotless" version "${spotlessVersion}"
 }
 
 apply from: file('gradle/bdd.gradle')
@@ -49,6 +50,8 @@ wrapper {
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: "com.diffplug.spotless"
+    apply from: file('../gradle/spotless.gradle')
 
     sourceCompatibility = 17
     targetCompatibility = 17

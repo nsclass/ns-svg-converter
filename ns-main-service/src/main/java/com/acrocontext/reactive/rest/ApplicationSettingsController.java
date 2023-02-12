@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 package com.acrocontext.reactive.rest;
 
 import com.acrocontext.common.services.ApplicationSettingsService;
 import com.acrocontext.domain.ApplicationSettings;
+import com.acrocontext.reactive.domain.ApplicationConstants;
 import com.acrocontext.reactive.domain.dto.AppSettingsDto;
 import com.acrocontext.reactive.domain.dto.AppSvgSettingsDto;
 import com.acrocontext.reactive.domain.dto.AppTokenSettingsDto;
-import com.acrocontext.reactive.domain.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -122,10 +116,8 @@ public class ApplicationSettingsController {
         new ApplicationSettings.SvgImageGenerationSettings();
 
     svgImageGenerationSettings.setUseLimitation(appSvgSettingsDto.isUseLimit());
-    svgImageGenerationSettings.setMaxNumberOfColors(
-        appSvgSettingsDto.getNumberOfColorLimitation());
-    svgImageGenerationSettings.setMaxSupportedImageSize(
-        appSvgSettingsDto.getImageSizeLimitation());
+    svgImageGenerationSettings.setMaxNumberOfColors(appSvgSettingsDto.getNumberOfColorLimitation());
+    svgImageGenerationSettings.setMaxSupportedImageSize(appSvgSettingsDto.getImageSizeLimitation());
 
     return this.applicationSettingsService
         .setSvgSettingsInAsync(svgImageGenerationSettings)

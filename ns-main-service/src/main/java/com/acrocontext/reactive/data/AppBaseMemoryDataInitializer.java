@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-present, Nam Seob Seo
+ * Copyright 2017-2023, Nam Seob Seo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.acrocontext.reactive.data;
 
 import com.acrocontext.common.dao.UserDao;
@@ -23,7 +22,6 @@ import com.acrocontext.factory.NSDomainFactory;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
 
 /**
  * Date 12/25/17
@@ -35,7 +33,9 @@ import org.springframework.stereotype.Service;
 public class AppBaseMemoryDataInitializer {
 
   private final NSDomainFactory nsDomainFactory;
+
   private final RoleService roleService;
+
   private final UserDao userDao;
 
   public AppBaseMemoryDataInitializer(
