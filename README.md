@@ -68,6 +68,19 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 http://localhost:8080/
 ```
 
+### Swagger UI ###
+Supporting Swagger API documentation
+
+- Swagger API docs
+```bash
+http://localhost:8080/v3/api-docs
+```
+
+- Swagger UI
+```bash
+http://localhost:8080/swagger-ui.html
+```
+
 ### Docker Container Image ###
 
 This project provides a Dockerfile to run an application in Docker container environment and Kubernetes cluster.

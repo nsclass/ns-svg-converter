@@ -70,6 +70,9 @@ public class SecurityConfiguration {
             .addPattern(HttpMethod.GET, "/static/css/*")
             .addPattern(HttpMethod.GET, "/static/js/*")
             .addPattern(HttpMethod.GET, "/static/media/*")
+            // Enabling swagger ui
+            .addPattern(HttpMethod.GET, "/v3/api-docs/**")
+            .addPattern(HttpMethod.GET, "/webjars/swagger-ui/**")
             .build();
 
     return authenticationBuilder

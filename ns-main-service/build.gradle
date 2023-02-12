@@ -38,6 +38,7 @@ dependencies {
     implementation project(':ns-svg-converter')
     // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2'
 }
 
 task createKeystore(type: CreateKeyStoreTask) {
