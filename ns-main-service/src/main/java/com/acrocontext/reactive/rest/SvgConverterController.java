@@ -62,7 +62,7 @@ public class SvgConverterController {
     this.objectMapper = objectMapper;
   }
 
-  private SvgConvertRespondDto convertRespondView(SvgConvertRequestDto convertRequestView) {
+  private SvgConvertRespondDto convert(SvgConvertRequestDto convertRequestView) {
     byte[] imageData = createBytesFromBase64(convertRequestView.getImageDataBase64());
     try (InputStream inputStream = new ByteArrayInputStream(imageData)) {
       BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -124,7 +124,7 @@ public class SvgConverterController {
         .map(dataBuffer -> dataBuffer.asInputStream(true))
         .reduce(SequenceInputStream::new)
         .map(inputStream -> toRequestBody(inputStream, SvgConvertRequestDto.class))
-        .map(this::convertRespondView);
+        .map(this::convert);
   }
 
   private static byte[] createBytesFromBase64(String data) {
