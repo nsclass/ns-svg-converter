@@ -41,7 +41,7 @@ $ ./gradlew clean build
 ```
 
 * Google formatting for backend application
-- Applied spotless plugin to format code with Google and automatic copyright string.
+Applied spotless plugin to format code with Google and automatic copyright string.
 
 ```bash
 $ ./gradlew spotlessApply                         
