@@ -10,7 +10,7 @@ Main purpose of this project is to demonstrate building a reactive web applicati
 - React UI application with Spring boot framework
 - WebFlux based REST API design
 - Security with JWT token
-- Swagger API documentation
+- Open API documentation
 - Cassandra data access
 - Java Bean validation
 - Dockerizing application
@@ -83,7 +83,7 @@ http://localhost:8080/
 ### Swagger UI ###
 Supporting Swagger API documentation
 
-- Swagger API docs
+- Open API docs
 ```bash
 http://localhost:8080/v3/api-docs
 ```
