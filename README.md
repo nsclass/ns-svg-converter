@@ -80,8 +80,8 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
 http://localhost:8080/
 ```
 
-### Swagger UI ###
-Supporting Swagger API documentation
+### Open API and Swagger UI ###
+Supporting Open API documentation
 
 - Open API docs
 ```bash
