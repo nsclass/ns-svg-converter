@@ -8,6 +8,7 @@ Main purpose of this project is to demonstrate building a reactive web applicati
 
 #### Main Features
 - React UI application with Spring boot framework
+- WebFlux based REST API design
 - Security with JWT token
 - Swagger API documentation
 - Cassandra data access
