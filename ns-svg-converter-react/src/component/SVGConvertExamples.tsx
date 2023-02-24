@@ -4,7 +4,13 @@ import svgLogoSVG from "../assets/images/samples/SVG_logo.svg"
 import spiderJPG from "../assets/images/samples/spider.jpg"
 import spiderSVG from "../assets/images/samples/spider.jpg.svg"
 
-const SVGSample = ({imageName, originalImage, convertedSvg}) => {
+type Props = {
+    imageName: string;
+    originalImage: string;
+    convertedSvg: string;
+}
+
+const SVGSample = ({imageName, originalImage, convertedSvg} : Props) => {
   return (
     <div className="row pb-5 col-lg-12 text-center">
       <div className="col-md-2 col-sm-2"/>

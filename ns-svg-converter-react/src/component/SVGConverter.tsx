@@ -1,10 +1,17 @@
-import React, {useCallback, useState} from "react"
+import React, {ErrorInfo, useCallback, useState} from "react"
 import axios from "axios"
 
-const SVGConvertingView = ({imageFilename, loading, svgData, errorMsg}) => {
+type Props = {
+  imageFilename: string;
+  loading: boolean;
+  svgData?: string;
+  errorMsg?: string;
+}
+
+const SVGConvertingView = ({imageFilename, loading, svgData, errorMsg} : Props) => {
   const downloadSvgFile = () => {
     const element = document.createElement("a")
-    const file = new Blob([svgData], {type: "text/plain"})
+    const file = new Blob([svgData || ""], {type: "text/plain"})
     element.href = URL.createObjectURL(file)
     element.download = `${imageFilename}.svg`
     document.body.appendChild(element) // Required for this to work in FireFox
@@ -35,7 +42,7 @@ const SVGConvertingView = ({imageFilename, loading, svgData, errorMsg}) => {
     return null
   }
 
-  const convertSvgToBase64ImgString = (SVG) => {
+  const convertSvgToBase64ImgString = (SVG: string) => {
     const base64 = btoa(SVG);
     return `data:image/svg+xml;base64,${base64}`
   }
@@ -53,10 +60,15 @@ const SVGConvertingView = ({imageFilename, loading, svgData, errorMsg}) => {
   )
 }
 
-export const SVGConverter = ({imageFilename, imageData}) => {
+type SvgProps = {
+  imageFilename: string;
+  imageData: string;
+}
+
+export const SVGConverter = ({imageFilename, imageData}: SvgProps) => {
   const [loading, setLoading] = useState(false)
-  const [svgData, setSVGData] = useState()
-  const [errorMsg, setErrorMsg] = useState()
+  const [svgData, setSVGData] = useState<string>()
+  const [errorMsg, setErrorMsg] = useState<string>()
 
   const convertSvg = useCallback(async () => {
     try {
@@ -66,13 +78,13 @@ export const SVGConverter = ({imageFilename, imageData}) => {
         numberOfColors: 16,
       }
 
-      setSVGData(null)
+      setSVGData(undefined)
       setLoading(true)
-      setErrorMsg(null)
+      setErrorMsg(undefined)
 
       const {data} = await axios.put("/api/v1/svg/conversion", requestData)
       setSVGData(data.svgString)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
 
       let message = error.message
