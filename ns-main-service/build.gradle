@@ -41,16 +41,18 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${springDocOpenApiUIVersion}"
 }
 
-task createKeystore(type: CreateKeyStoreTask) {
+tasks.register('createKeystore', CreateKeyStoreTask) {
     keyStoreAlias = "svg-converter"
     keyStoreDName = "CN=NSEO, OU=NSEO, O=NSEO, L=ICN, ST=SE, C=KR"
 }
 
-task exportCertificate(type: ExportCertificateTask, dependsOn: createKeystore) {
+tasks.register('exportCertificate', ExportCertificateTask) {
+    dependsOn createKeystore
     keyStoreAlias = "svg-converter"
 }
 
-task importCertificate(type: ImportCertificateTask, dependsOn: exportCertificate) {
+tasks.register('importCertificate', ImportCertificateTask) {
+    dependsOn exportCertificate
     keyStoreAlias = "svg-converter"
 }
 

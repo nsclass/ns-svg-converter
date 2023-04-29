@@ -1,4 +1,4 @@
-import React, {ErrorInfo, useCallback, useState} from "react"
+import React, { useCallback, useState} from "react"
 import axios from "axios"
 
 type Props = {
@@ -49,7 +49,7 @@ const SVGConvertingView = ({imageFilename, loading, svgData, errorMsg} : Props) 
 
   return (
     <div className="mx-auto">
-      <img src={convertSvgToBase64ImgString(svgData)}/>
+      <img alt = 'converting svg' src={convertSvgToBase64ImgString(svgData)}/>
       <div className="portfolio-caption">
         <h4>Converted SVG image</h4>
         <button className="btn btn-success" onClick={(e) => downloadSvgFile()}>
@@ -110,7 +110,7 @@ export const SVGConverter = ({imageFilename, imageData}: SvgProps) => {
     <>
       <div className="row col-lg-12 text-center">
         <div className="mx-auto">
-          <img className="img-fluid" src={imageData}/>
+          <img alt = 'portfolio' className="img-fluid" src={imageData}/>
           <div className="portfolio-caption">
             <h4>Original image</h4>
             <button className="btn btn-success" onClick={(e) => convertSvg()}>

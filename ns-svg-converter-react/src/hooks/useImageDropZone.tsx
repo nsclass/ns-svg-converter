@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useCallback, useState} from "react"
+import React, { useCallback, useState} from "react"
 import {useDropzone} from "react-dropzone"
 
 import "../assets/css/dropzone.css"
@@ -6,7 +6,7 @@ import "../assets/css/dropzone.css"
 export const useImageDropZone = (): [string, string, React.FC<{}>] => {
   const [filename, setFilename] = useState("")
   const [fileContent, setFileContent] = useState("")
-  const [errorMessage, setErrorMessage] = useState<string>()
+  const [, setErrorMessage] = useState<string>()
 
   const ImageDropZone = () => {
     const loadFile = (file: File) => {

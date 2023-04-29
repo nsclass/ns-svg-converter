@@ -93,7 +93,7 @@ subprojects {
 
 
 def reactProjectDir = "$projectDir/ns-svg-converter-react"
-task buildReact(type: Exec) {
+tasks.register('buildReact', Exec) {
     workingDir = "$reactProjectDir"
     group = 'react'
     commandLine "yarn", "build"
@@ -102,15 +102,16 @@ task buildReact(type: Exec) {
 
 def springBootStaticDir = "$projectDir/ns-main-service/src/main/resources/static"
 
-task deleteWebStaticFiles(type: Delete) {
+tasks.register('deleteWebStaticFiles', Delete) {
     doLast {
         project.delete(files("$springBootStaticDir"))
     }
 }
 
 
-task deployReactDist(dependsOn: ['buildReact', 'deleteWebStaticFiles']) {
+tasks.register('deployReactDist') {
     group = 'react'
+    dependsOn buildReact, deleteWebStaticFiles
     doLast {
         copy {
             from "$reactProjectDir/build"
