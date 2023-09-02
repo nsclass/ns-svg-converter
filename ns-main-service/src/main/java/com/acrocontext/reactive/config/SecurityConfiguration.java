@@ -77,16 +77,13 @@ public class SecurityConfiguration {
 
     return authenticationBuilder
         .configure(httpSecurity, permitAllPatternMatcher)
-        .csrf()
-        .disable()
-        .authorizeExchange()
-        .pathMatchers(HttpMethod.GET, "/api/v1/users/{username}")
-        .access(this::allowSelfOrAdmin)
-        .and()
-        .authorizeExchange()
-        .anyExchange()
-        .permitAll()
-        .and()
+        .csrf(ServerHttpSecurity.CsrfSpec::disable)
+        .authorizeExchange(
+            exchange ->
+                exchange
+                    .pathMatchers(HttpMethod.GET, "/api/v1/users/{username}")
+                    .access(this::allowSelfOrAdmin))
+        .authorizeExchange(exchange -> exchange.anyExchange().permitAll())
         .build();
   }
 }
