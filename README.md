@@ -18,15 +18,15 @@ Main purpose of this project is to demonstrate building a reactive web applicati
 
 For data access layer, it is configured to use memory based DAO by default but user can easily enable the Cassandra DAO by setting the active profile as dao_cassandra in application.yml file.
 
-For automatic integration tests, this project is using Ruby Cucumber framework.
+This project is using Ruby Cucumber framework for integration tests.
 
 ### Compile Project ###
 
-This application is using a Gradle as a build system and minimum required JDK is Java 17.
+Gradle is used for building application. Minimum required Java is JDK17.
 
 * Compiling UI project
 
-The following gradle task will build and deploy the React application into Java backend project.
+The following gradle task will build and deploy the React application to Java backend project.
 
 ```bash
 $ ./gradlew deployReactDist
@@ -35,7 +35,7 @@ $ ./gradlew deployReactDist
 Compiling React UI application
 
 ```bash
-# cd ns-svg-converter-react
+$ cd ns-svg-converter-react
 $ yarn build
 ``` 
 
@@ -59,7 +59,7 @@ $ ./gradlew spotlessApply
 ```bash
 $ ./gradlew clean
 $ ./gradlew deployReactDist build
-$ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
+$ java -jar ns-main-service/build/libs/ns-main-service-0.1.0-SNAPSHOT.jar
 ```
 
 * Application log
@@ -71,7 +71,7 @@ $ java -jar ns-main-service/build/libs/ns-main-service-0.0.1-SNAPSHOT.jar
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
- :: Spring Boot ::                (v3.0.0) 
+ :: Spring Boot ::                (v3.1.3) 
 ```
 
 * Browsing the application
@@ -81,7 +81,7 @@ http://localhost:8080/
 ```
 
 ### Open API and Swagger UI ###
-Supporting Open API documentation
+Supporting Open API
 
 - Open API docs
 ```bash
@@ -114,7 +114,7 @@ $ docker run --rm -d --name=[name] -p 8080:8080 [image name]
 
 This project is using cucumber BDD testing framework.
 
-In order to run the test, Ruby should be installed.
+Ruby should be installed to execute cucumber tests.
 
 * Running test
 
