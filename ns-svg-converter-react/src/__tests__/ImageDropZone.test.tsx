@@ -18,7 +18,7 @@
  * @jest-environment jsdom
  */
 
-import {expect, test} from "@jest/globals"
+import {expect, test} from "vitest"
 import {renderHook} from "@testing-library/react";
 import {useImageDropZone} from "../hooks/useImageDropZone";
 
