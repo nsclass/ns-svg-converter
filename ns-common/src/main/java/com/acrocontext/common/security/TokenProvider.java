@@ -63,18 +63,18 @@ public class TokenProvider {
 
   public String generateToken(String username) {
     return Jwts.builder()
-        .setIssuer(appName)
-        .setSubject(username)
-        .setIssuedAt(generateCurrentDate())
-        .setExpiration(generateExpirationDate())
+        .issuer(appName)
+        .subject(username)
+        .issuedAt(generateCurrentDate())
+        .expiration(generateExpirationDate())
         .signWith(createKey())
         .compact();
   }
 
   public Mono<Claims> getClaimsFromToken(String token) {
     try {
-      var parser = Jwts.parserBuilder().setSigningKey(createKey()).build();
-      Claims claims = parser.parseClaimsJws(token).getBody();
+      var parser = Jwts.parser().verifyWith(createKey()).build();
+      Claims claims = parser.parseSignedClaims(token).getPayload();
 
       return Mono.just(claims);
     } catch (ExpiredJwtException e) {
